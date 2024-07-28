@@ -1,0 +1,8 @@
+#!/bin/bash
+cd `dirname $0`
+cd ../
+rm -rf public
+mkdir public
+npm run b2
+HOST=https://electerm.html5beta.com npm run b1
+# vercel --prod
