@@ -8,7 +8,7 @@ function tokenLimitExceeded (user: User): boolean {
 }
 
 export default async function token (req: VercelRequest, res: VercelResponse): Promise<void> {
-  const user = await verifyJwtAndCheckId(req, res)
+  const user = await verifyJwtAndCheckId(req, res) as User
   if (user === null) {
     return
   }

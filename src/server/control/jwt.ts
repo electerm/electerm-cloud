@@ -1,7 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import jwt from 'jsonwebtoken'
-import { UserModel } from '../models/db'
+import { UserModel, AdminUserModel } from '../models/db'
 import { User } from '../models/user-model'
+import { AdminUser } from '../models/admin-user-model'
 
 interface JwtPayload {
   id: string
@@ -9,7 +10,7 @@ interface JwtPayload {
 
 const jwtSecret = process.env.JWT_SECRET ?? ''
 
-export async function verifyJwtAndCheckId (req: VercelRequest, res: VercelResponse): Promise<User | null> {
+export async function verifyJwtAndCheckId (req: VercelRequest, res: VercelResponse, isAdmin: boolean = false): Promise<User | AdminUser | null> {
   try {
     const jwtSecret = process.env.JWT_SECRET ?? ''
     const authHeader = req.headers.authorization
@@ -33,8 +34,8 @@ export async function verifyJwtAndCheckId (req: VercelRequest, res: VercelRespon
 
     const decodedPayload = jwt.verify(token, jwtSecret) as JwtPayload
     const { id } = decodedPayload
-
-    const user = await UserModel.get({ id })
+    const Cls = isAdmin ? AdminUserModel : UserModel
+    const user = await Cls.get({ id })
     if (user === undefined || user === null) {
       res.status(401).send('JWT: User not found')
       return null

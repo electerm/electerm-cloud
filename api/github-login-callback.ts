@@ -5,13 +5,14 @@ import { User } from '../src/server/models/user-model'
 
 export default async function githubLogin (req: VercelRequest, res: VercelResponse): Promise<void> {
   const {
-    code
+    code, state
   } = req.query
   if (typeof code !== 'string') {
     res.status(400).send('code is required')
     return
   }
-  const user = await handleGitHubLogin(code)
+  const isAdmin = state === 'admin'
+  const user = await handleGitHubLogin(code, isAdmin)
     .catch((err) => {
       console.log(err)
       res.status(500).send('github login error: ' + (err as Error).message)
@@ -22,6 +23,8 @@ export default async function githubLogin (req: VercelRequest, res: VercelRespon
     return
   }
   const token = sign((user as User).id)
+  const tokenName = isAdmin ? 'adminToken' : 'token'
+  const redirectUrl = isAdmin ? '/admin' : '/'
   const html = `
 <!DOCTYPE html>
 <html>
@@ -31,9 +34,9 @@ export default async function githubLogin (req: VercelRequest, res: VercelRespon
 <body>
 <div style="text-align: center; padding: 30px 10px;">Loading...</div>
 <script>
-  localStorage.setItem('token', '${token}');
+  localStorage.setItem('${tokenName}', '${token}');
   setTimeout(() => {
-    window.location.href = '/'
+    window.location.href = '${redirectUrl}'
   }, 1000)
 </script>
 

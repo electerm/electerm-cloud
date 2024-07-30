@@ -1,7 +1,8 @@
 // github-login-handler.ts
 import axios from 'axios'
-import { UserModel } from '../models/db'
+import { UserModel, AdminUserModel } from '../models/db'
 import { User } from '../models/user-model'
+import { AdminUser } from '../models/admin-user-model'
 import { createToken } from './token'
 import { createData } from './data-control'
 import { SocksProxyAgent } from 'socks-proxy-agent'
@@ -49,21 +50,28 @@ async function getGitHubUser (accessToken: string): Promise<GitHubUser> {
   return response.data
 }
 
-async function findOrCreateUser (githubUser: GitHubUser): Promise<User> {
+async function findOrCreateUser (githubUser: GitHubUser, isAdmin: boolean): Promise<User | AdminUser> {
   // Try to find the user by GitHub ID
-  const id = 'github-' + githubUser.id
-  const user = await UserModel.get({ id })
+  const id = 'github-' + githubUser.login
+  const Cls = isAdmin ? AdminUserModel : UserModel
+  const user = await Cls.get({ id })
   if (user === undefined || user === null) {
     // If user doesn't exist, create a new one
-    const data = await createData('')
+    const data = await createData('', id)
     const token = await createToken(id, data.id)
-    return await UserModel.create({
+    const obj = {
       id,
-      githubId: githubUser.id,
+      githubId: githubUser.id + '',
       name: githubUser.name ?? githubUser.login,
       githubLogin: githubUser.login,
       email: githubUser.email,
-      avatarUrl: githubUser.avatar_url,
+      avatarUrl: githubUser.avatar_url
+    }
+    if (isAdmin) {
+      return await AdminUserModel.create(obj)
+    }
+    return await UserModel.create({
+      ...obj,
       tokenIds: token.id,
       dataIds: data.id
     })
@@ -72,8 +80,8 @@ async function findOrCreateUser (githubUser: GitHubUser): Promise<User> {
   }
 }
 
-export async function handleGitHubLogin (code: string): Promise<User> {
+export async function handleGitHubLogin (code: string, isAdmin: boolean = false): Promise<User | AdminUser> {
   const accessToken = await getGitHubAccessToken(code)
   const githubUser = await getGitHubUser(accessToken)
-  return await findOrCreateUser(githubUser)
+  return await findOrCreateUser(githubUser, isAdmin)
 }

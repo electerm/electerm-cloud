@@ -5,6 +5,7 @@ import { Item } from 'dynamoose/dist/Item'
 export interface Data extends Item {
   id: string
   iv: string
+  userId: string
   data: string
 }
 
@@ -14,6 +15,9 @@ export const dataSchema = {
     hashKey: true
   },
   data: {
+    type: String
+  },
+  userId: {
     type: String
   },
   iv: {

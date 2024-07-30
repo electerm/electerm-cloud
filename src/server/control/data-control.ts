@@ -3,11 +3,12 @@ import { Data } from '../models/data-model'
 import { nanoid } from 'nanoid'
 import { enc, dec } from './enc'
 
-export async function createData (data: string): Promise<Data> {
+export async function createData (data: string, userId: string): Promise<Data> {
   const { encrypted, iv } = await enc(data)
   return await DataModel.create({
     id: nanoid(),
     data: encrypted,
+    userId,
     iv
   })
 }

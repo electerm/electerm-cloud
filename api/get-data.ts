@@ -1,9 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { verifyJwtAndCheckId } from '../src/server/control/jwt'
 import { getData } from '../src/server/control/data-control'
+import { User } from '../src/server/models/user-model'
 
 export default async function getDataRoute (req: VercelRequest, res: VercelResponse): Promise<void> {
-  const user = await verifyJwtAndCheckId(req, res)
+  const user = await verifyJwtAndCheckId(req, res) as User
   if (user === null) {
     return
   }

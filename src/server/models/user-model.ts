@@ -1,24 +1,22 @@
 // user-model.ts
-import { Item } from 'dynamoose/dist/Item'
+import { AdminUser, adminUserSchema } from './admin-user-model'
 
-export interface User extends Item {
-  id: string
-  githubId: string
-  name: string
-  email: string
-  githubLogin: string
-  avatarUrl?: string
+export interface User extends AdminUser {
   tokenIds: string
   dataIds: string
   tokenLimit: number
+  status: string
 }
 
-export const userSchema = {
+export const userSchema = Object.assign({}, adminUserSchema, {
   id: {
     type: String,
     hashKey: true
   },
   name: {
+    type: String
+  },
+  githubId: {
     type: String
   },
   githubLogin: {
@@ -36,14 +34,14 @@ export const userSchema = {
   },
   tokenLimit: {
     type: Number,
-    default: 3
+    default: 1
   },
   dataIds: {
     type: String,
     default: ''
+  },
+  status: {
+    type: String,
+    default: 'active'
   }
-}
-
-export const userSchemaOptions = {
-  timestamps: true
-}
+})
