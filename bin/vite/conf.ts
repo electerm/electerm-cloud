@@ -19,7 +19,8 @@ export default defineConfig({
     outDir: resolve(cwd, 'public'),
     rollupOptions: {
       input: {
-        app: resolve(cwd, 'src/client/entry/app.tsx')
+        app: resolve(cwd, 'src/client/entry/app.tsx'),
+        admin: resolve(cwd, 'src/client/entry/admin.tsx')
       },
       external: [
         'react',

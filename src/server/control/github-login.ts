@@ -76,6 +76,14 @@ async function findOrCreateUser (githubUser: GitHubUser, isAdmin: boolean): Prom
       dataIds: data.id
     })
   } else {
+    if (user.email !== githubUser.email) {
+      await Cls.update({ id }, {
+        name: githubUser.name ?? githubUser.login,
+        githubId: githubUser.id + '',
+        email: githubUser.email,
+        avatarUrl: githubUser.avatar_url
+      })
+    }
     return user
   }
 }

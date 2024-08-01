@@ -20,7 +20,7 @@ declare global {
   var viteInst: any
 }
 
-function handleIndex(req: express.Request, res: express.Response) {
+function handleIndex (req: express.Request, res: express.Response) {
   res.render('index', {
     dev: true,
     cssUrl: '/app.bundle.css',
@@ -32,6 +32,20 @@ function handleIndex(req: express.Request, res: express.Response) {
     siteName: 'electerm cloud'
   })
 }
+
+function handleAdmin (req: express.Request, res: express.Response) {
+  res.render('index', {
+    dev: true,
+    cssUrl: '/admin.bundle.css',
+    jsUrl: '/src/client/entry/admin.tsx',
+    loginUrl: `https://github.com/login/oauth/authorize?client_id=${cid}&redirect_uri=${redirectUrl}&state=admin`
+    ,
+    desc: 'electerm cloud: sync your electerm data to cloud',
+    keywords: 'electerm, electerm-cloud',
+    siteName: 'electerm cloud'
+  })
+}
+
 
 async function createServer(): Promise<void> {
   const app: express.Application = express()
@@ -53,6 +67,7 @@ async function createServer(): Promise<void> {
   app.set('view engine', 'pug')
   app.use(vite.middlewares)
   app.get('/', handleIndex)
+  app.get('/admin', handleAdmin)
   route(app)
 
   app.listen(devPort, host, () => {
