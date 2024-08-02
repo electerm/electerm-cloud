@@ -6,7 +6,8 @@ import {
   Spin
 } from 'antd'
 import {
-  CloseCircleFilled
+  CloseCircleFilled,
+  EditOutlined
 } from '@ant-design/icons'
 
 import { UserDef } from './interface'
@@ -22,10 +23,12 @@ export default function Users (props: any): JSX.Element {
   const {
     id,
     name,
+    tokenLimit,
     tokensCount,
     avatarUrl,
     email,
-    githubLogin
+    githubLogin,
+    status
   } = user as UserDef
 
   function del (): void {
@@ -44,7 +47,8 @@ export default function Users (props: any): JSX.Element {
     title: name,
     description: (
       <div>
-        <span>Tokens: {tokensCount},</span>
+        <span>Status: {status},</span>
+        <span className='mg1l'>Tokens: {tokensCount}/{tokenLimit},</span>
         <span className='mg1l'> Email: {email},</span>
         <span className='mg1l'>
           Github: <a target='_blank' rel='noreferrer' href={githubUrl}>{githubUrl}</a>
@@ -57,6 +61,10 @@ export default function Users (props: any): JSX.Element {
         >
           <CloseCircleFilled className='mg1l pointer' />
         </Popconfirm>
+        <EditOutlined
+          className='mg1l pointer'
+          onClick={() => props.onSelectEdit(user)}
+        />
       </div>
     )
   }

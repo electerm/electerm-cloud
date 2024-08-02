@@ -10,7 +10,18 @@ export async function listUsers (start: string, limit: number): Promise<Object> 
     .limit(limit)
     .exec()
   return {
-    users,
+    users: users.map((user: User) => {
+      return {
+        id: user.id,
+        name: user.name,
+        tokenLimit: user.tokenLimit,
+        tokensCount: user.tokenIds.split(',').length,
+        email: user.email,
+        githubLogin: user.githubLogin,
+        avatarUrl: user.avatarUrl,
+        status: user.status
+      }
+    }),
     count: users.count,
     lastKey: users.lastKey
   }

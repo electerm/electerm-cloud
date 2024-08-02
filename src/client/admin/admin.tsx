@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {
   Button,
-  message
+  message,
+  Form
 } from 'antd'
 import {
   LogoutOutlined,
@@ -16,7 +17,10 @@ import Users from './users'
 import { UserDef } from './interface'
 
 export default function Admin (props: any): JSX.Element {
+  const [form] = Form.useForm()
   const [loading, setLoading] = useState('')
+  const [editing, setEditing] = useState('')
+  const [editingUserId, setEditingUserId] = useState('')
   const [users, setUsers] = useState<UserDef[]>([])
   const {
     user,
@@ -25,7 +29,7 @@ export default function Admin (props: any): JSX.Element {
 
   function getUsers (): void {
     setLoading('all')
-    fetch('/api/token', {}, 'GET')
+    fetch('/api/user', {}, 'GET')
       .then((res) => {
         setLoading('')
         setUsers(res.users)
@@ -39,7 +43,7 @@ export default function Admin (props: any): JSX.Element {
 
   function delUser (id: string): void {
     setLoading(id)
-    fetch('/api/users', {}, 'DELETE')
+    fetch('/api/user', {}, 'DELETE')
       .then(() => {
         setLoading('')
         setUsers(users.filter(d => d.id !== id))
@@ -51,11 +55,49 @@ export default function Admin (props: any): JSX.Element {
       })
   }
 
+  function onSave (id: string, update: Object): void {
+    setEditing(id)
+    fetch('/api/user', { id, update }, 'PATCH')
+      .then(() => {
+        setEditing('')
+        setEditingUserId('')
+        setUsers(users.map(d => {
+          if (d.id === id) {
+            return {
+              ...d,
+              ...update
+            }
+          }
+          return d
+        }))
+        void message.success('update user successful')
+      })
+      .catch(e => {
+        setEditing('')
+        console.log(e)
+        void message.error('update user failed')
+      })
+  }
+
+  function onSelectEdit (user: UserDef): void {
+    setEditingUserId(user.id)
+  }
+
+  function onCancel (): void {
+    setEditingUserId('')
+  }
+
   const githubUrl = `https://github.com/${user.githubLogin as string}`
   const usersProps = {
     users,
     delUser,
-    loading
+    form,
+    loading,
+    editing,
+    editingUserId,
+    onSave,
+    onSelectEdit,
+    onCancel
   }
 
   useEffect(() => {

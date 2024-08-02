@@ -1,6 +1,7 @@
 import React from 'react'
 import User from './user'
 import { UserDef } from './interface'
+import UserForm from './user-form'
 import { Spin } from 'antd'
 
 export default function Users (props: any): JSX.Element {
@@ -13,10 +14,25 @@ export default function Users (props: any): JSX.Element {
       <Spin spinning={isLoading}>
         {
           props.users.map((user: UserDef, i: number) => {
+            if (props.editingUserId === user.id) {
+              return (
+                <div key={user.id}>
+                  <UserForm
+                    user={user}
+                    onSave={props.onSave}
+                    editing={props.editing}
+                    onCancel={props.onCancel}
+                    form={props.form}
+                  />
+                </div>
+              )
+            }
+
             const itemProps = {
               user,
               delUser: props.delUser,
-              loading: props.loading
+              loading: props.loading,
+              onSelectEdit: props.onSelectEdit
             }
             return (
               <User
