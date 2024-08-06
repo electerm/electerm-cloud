@@ -9,7 +9,7 @@ interface UserFormProps {
   user: UserDef | null
   onSave: (id: string, update: Object) => void
   onCancel: () => void
-  form: FormInstance,
+  form: FormInstance
   editing: string
 }
 

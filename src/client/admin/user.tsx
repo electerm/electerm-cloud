@@ -44,7 +44,23 @@ export default function Users (props: any): JSX.Element {
     avatar: (
       <Avatar src={avatarUrl} />
     ),
-    title: name,
+    title: (
+      <div>
+        <span>{name}</span>
+        <Popconfirm
+          title='Are you sure to delete? '
+          onConfirm={del}
+          okText='Yes'
+          cancelText='No'
+        >
+          <CloseCircleFilled className='mg3l pointer' />
+        </Popconfirm>
+        <EditOutlined
+          className='mg1l pointer'
+          onClick={() => props.onSelectEdit(user)}
+        />
+      </div>
+    ),
     description: (
       <div>
         <span>Status: {status},</span>
@@ -53,18 +69,7 @@ export default function Users (props: any): JSX.Element {
         <span className='mg1l'>
           Github: <a target='_blank' rel='noreferrer' href={githubUrl}>{githubUrl}</a>
         </span>
-        <Popconfirm
-          title='Are you sure to delete? '
-          onConfirm={del}
-          okText='Yes'
-          cancelText='No'
-        >
-          <CloseCircleFilled className='mg1l pointer' />
-        </Popconfirm>
-        <EditOutlined
-          className='mg1l pointer'
-          onClick={() => props.onSelectEdit(user)}
-        />
+
       </div>
     )
   }

@@ -19,14 +19,14 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
     id
   } = req.body
   if (method === 'GET') {
-    const ids = user.tokenIds.split(',').map(d => decode(d))
+    const ids = user.tokenIds.split(',')
     const tokens = await listTokens(ids)
     res.send({
       tokens
     })
     return
   }
-  const tokenId = decode(id)
+  const tokenId = id !== undefined ? decode(id) : ''
   function handleError (err: Error): void {
     console.log(err)
     res.status(500).send(err.message)
@@ -47,7 +47,7 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
       res.status(403).send('token limit exceeded')
       return
     }
-    const token = await newToken(user, tokenId).catch(handleError)
+    const token = await newToken(user, user.id).catch(handleError)
     res.send({
       token
     })

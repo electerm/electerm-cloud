@@ -17,7 +17,7 @@ export default async function admin (req: VercelRequest, res: VercelResponse): P
   }
 
   // Extract parameters from request
-  const { func, params } = req.body
+  const { func, params, tableName = 'AdminUser' } = req.body
 
   if (func === undefined || !Array.isArray(params)) {
     res.status(400).send('Bad Request: tableName and params are required')
@@ -25,7 +25,7 @@ export default async function admin (req: VercelRequest, res: VercelResponse): P
   }
 
   // Call dbOperation from control/admin.ts
-  const result = await dbOperation(func, params)
+  const result = await dbOperation(tableName, func, params)
     .catch((err) => {
       console.log(err)
       res.status(500).send(err.message)

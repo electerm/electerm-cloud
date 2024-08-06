@@ -13,9 +13,9 @@ export default function Tokens (props: any): JSX.Element {
         <span className='fleft'>Tokens</span>
         <span className='fright'>
           <Button
-            type='primary'
             onClick={props.handleAdd}
             loading={disable}
+            size='small'
             icon={<PlusCircleFilled />}
           >
             New Token

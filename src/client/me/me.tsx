@@ -4,17 +4,14 @@ import {
   Modal,
   message
 } from 'antd'
-import {
-  LogoutOutlined,
-  UserOutlined,
-  MailFilled,
-  GithubFilled
-} from '@ant-design/icons'
 import fetch from '../common/fetch'
 import downLoadJson from '../common/download'
-import Links from './links'
-import Footer from './footer'
+import Links from '../common/links'
+import Footer from '../common/footer'
 import Tokens from './tokens'
+import Logout from '../common/logout'
+import UserInfo from '../common/user-info'
+import Logo from '../common/logo'
 import { TokenDef, TokenDef1 } from './interface'
 
 export default function Me (props: any): JSX.Element {
@@ -103,7 +100,7 @@ export default function Me (props: any): JSX.Element {
       .catch(e => {
         setLoading('')
         console.log(e)
-        void message.error('regenerate token failed')
+        void message.error(e.message)
       })
   }
 
@@ -124,7 +121,7 @@ export default function Me (props: any): JSX.Element {
 
   function getTokens (): void {
     setLoading('all')
-    fetch('/api/token', {}, 'GET')
+    fetch('/api/token', undefined, 'GET')
       .then((res) => {
         setLoading('')
         setTokens(res.tokens.map((t: TokenDef) => {
@@ -180,7 +177,6 @@ export default function Me (props: any): JSX.Element {
     void message.success('Data Copied')
   }
 
-  const githubUrl = `https://github.com/${user.githubLogin as string}`
   const tokensProps = {
     tokens,
     reToken,
@@ -198,38 +194,12 @@ export default function Me (props: any): JSX.Element {
 
   return (
     <div className='wrap pd2x'>
-      <div className='pd1b alignright'>
-        <Button
-          type='primary'
-          onClick={handleLogout}
-          icon={<LogoutOutlined />}
-        >
-          Logout
-        </Button>
-      </div>
-      <h1>Electerm Cloud <sup className='color-red font14'>Beta</sup></h1>
-      <div className='pd2y content'>
-        <div className='pd1y'>
-          <img src={user.avatarUrl} alt='' className='avatar iblock' />
-        </div>
-        <div>
-          <UserOutlined /> Name: <b>{user.name}</b>
-        </div>
-        <div>
-          <MailFilled /> Email: <b>{user.email}</b>
-        </div>
-        <div className='pd3b'>
-          <GithubFilled /> Github: <b><a target='_blank' rel='noreferrer' href={githubUrl}>{githubUrl}</a></b>
-        </div>
+      <Logout handleLogout={handleLogout} />
+      <UserInfo user={user} />
+      <div className='pd2y'>
         <Tokens {...tokensProps} />
       </div>
-      <div className='pd3y'>
-        <img
-          src='https://electerm.html5beta.com/electerm.png'
-          alt=''
-          className='logo iblock'
-        />
-      </div>
+      <Logo />
       <Links />
       <Footer />
     </div>

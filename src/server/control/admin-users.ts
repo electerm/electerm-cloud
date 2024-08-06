@@ -1,14 +1,25 @@
 import { UserModel, DataModel, TokenModel } from '../models/db'
 import { User } from '../models/user-model'
 
-export async function listUsers (start: string, limit: number): Promise<Object> {
-  const users = await UserModel
-    .scan()
-    .startAt({
-      id: start
-    })
-    .limit(limit)
-    .exec()
+export async function listUsers (start: string, limit: number, id: string): Promise<Object> {
+  if (id !== '') {
+    const user = await UserModel.get(id)
+    return {
+      user
+    }
+  }
+  const users = start === ''
+    ? await UserModel
+      .scan()
+      .limit(limit)
+      .exec()
+    : await UserModel
+      .scan()
+      .startAt({
+        id: start
+      })
+      .limit(limit)
+      .exec()
   return {
     users: users.map((user: User) => {
       return {

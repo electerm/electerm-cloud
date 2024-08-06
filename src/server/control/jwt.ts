@@ -12,7 +12,6 @@ const jwtSecret = process.env.JWT_SECRET ?? ''
 
 export async function verifyJwtAndCheckId (req: VercelRequest, res: VercelResponse, isAdmin: boolean = false): Promise<User | AdminUser | null> {
   try {
-    const jwtSecret = process.env.JWT_SECRET ?? ''
     const authHeader = req.headers.authorization
 
     if (authHeader === undefined || authHeader === '') {
@@ -54,12 +53,13 @@ export function sign (id: string): string {
     {
       id
     },
-    process.env.JWT_SECRET as string,
+    jwtSecret,
     { expiresIn: '120y' }
   )
 }
 
 export function decode (code: string): string {
+  console.log('code, jwtSecret', code, jwtSecret)
   const decodedPayload = jwt.verify(code, jwtSecret) as JwtPayload
   const { id } = decodedPayload
   return id

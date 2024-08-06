@@ -60,87 +60,89 @@ export default function Tokens (props: any): JSX.Element {
   }
   const loading = props.loading === id
   const cls = even as boolean
-    ? 'pd1b token-item even'
-    : 'pd1b token-item'
+    ? 'pd2 token-item even'
+    : 'pd2 token-item'
   return (
     <Spin spinning={loading}>
       <div className={cls}>
-        <span>Last Use Time: {dayjs(lastUseTime).format('YYYY-MM-DD HH:mm:ss')}</span>
-        <span className='mg1l'>Use Count: {useCount}</span>
-      </div>
-      <div className='pd1b wordbreak'>
-        <span className='mg1r mg1b'>Access Token:</span>
-        {
-          show
-            ? <span>{id}</span>
-            : <span>{id.slice(0, 5)}*****</span>
-        }
-        {
-          show
-            ? <EyeInvisibleOutlined
-                className='pointer mg1l'
-                onClick={toggle}
-              />
-            : <EyeFilled
-                className='pointer mg1l'
-                onClick={toggle}
-              />
-        }
-        <p>
-          <Button
-            onClick={copy}
-            className='mg1r mg1b'
-            size='small'
-            icon={<CopyOutlined />}
-          >
-            Copy
-          </Button>
-          <Popconfirm
-            title='Are you sure to regenerate? Old token will be deleted.'
-            onConfirm={re}
-            okText='Yes'
-            cancelText='No'
-          >
+        <div className='pd1b'>
+          <span>Last Use Time: <b>{dayjs(lastUseTime).format('YYYY-MM-DD HH:mm:ss')}</b></span>
+          <span className='mg1l'>Use Count: <b>{useCount}</b></span>
+        </div>
+        <div className='pd1b wordbreak'>
+          <span className='mg1r mg1b'>Access Token:</span>
+          {
+            show
+              ? <span>{id}</span>
+              : <span>{id.slice(0, 5)}*****</span>
+          }
+          {
+            show
+              ? <EyeInvisibleOutlined
+                  className='pointer mg1l'
+                  onClick={toggle}
+                />
+              : <EyeFilled
+                  className='pointer mg1l'
+                  onClick={toggle}
+                />
+          }
+          <div className='pd1y'>
             <Button
+              onClick={copy}
               className='mg1r mg1b'
               size='small'
-              icon={<ReloadOutlined />}
+              icon={<CopyOutlined />}
             >
-              Regenerate
+              Copy
             </Button>
-          </Popconfirm>
-          <Popconfirm
-            title='Are you sure to delete? Data associated with this token will be deleted.'
-            onConfirm={del}
-            okText='Yes'
-            cancelText='No'
-          >
+            <Popconfirm
+              title='Are you sure to regenerate? Old token will be deleted.'
+              onConfirm={re}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button
+                className='mg1r mg1b'
+                size='small'
+                icon={<ReloadOutlined />}
+              >
+                Regenerate
+              </Button>
+            </Popconfirm>
+            <Popconfirm
+              title='Are you sure to delete? Data associated with this token will be deleted.'
+              onConfirm={del}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button
+                className='mg1r mg1b'
+                size='small'
+                icon={<CloseCircleFilled />}
+              >
+                Delete
+              </Button>
+            </Popconfirm>
             <Button
-              className='mg1r mg1b'
+              type='dashed'
+              onClick={preview}
               size='small'
-              icon={<CloseCircleFilled />}
+              className='mg1r mg1b'
             >
-              Delete
+              Preview Data
             </Button>
-          </Popconfirm>
-          <Button
-            type='dashed'
-            onClick={preview}
-            size='small'
-            className='mg1r mg1b'
-          >
-            Preview Data
-          </Button>
-          <Button
-            type='dashed'
-            onClick={download}
-            size='small'
-            className='mg1r mg1b'
-            icon={<DownloadOutlined />}
-          >
-            Download Data
-          </Button>
-        </p>
+            <Button
+              type='dashed'
+              onClick={download}
+              size='small'
+              className='mg1r mg1b'
+              icon={<DownloadOutlined />}
+            >
+              Download Data
+            </Button>
+          </div>
+        </div>
       </div>
     </Spin>
   )

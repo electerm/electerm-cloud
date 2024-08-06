@@ -57,7 +57,7 @@ export default function Links (): JSX.Element {
       <div className='pd2y'>
         {
           links.map(item => (
-            <div key={item.url}>
+            <div key={item.url} className='pd1b'>
               <a target='_blank' rel='noreferrer' href={item.url}>{item.title}</a>
             </div>
           ))

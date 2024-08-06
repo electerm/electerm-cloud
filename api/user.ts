@@ -22,7 +22,8 @@ export default async function userHandler (req: VercelRequest, res: VercelRespon
   if (method === 'GET') {
     const start = req.query.start as string ?? ''
     const limit = Number(req.query.limit as string ?? 10)
-    const result = await listUsers(start, limit).catch(handleError)
+    const id = req.query.id as string ?? ''
+    const result = await listUsers(start, limit, id).catch(handleError)
     res.send(result)
     return
   }

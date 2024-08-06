@@ -34,7 +34,7 @@ function handleIndex (req: express.Request, res: express.Response) {
 }
 
 function handleAdmin (req: express.Request, res: express.Response) {
-  res.render('index', {
+  res.render('admin', {
     dev: true,
     cssUrl: '/admin.bundle.css',
     jsUrl: '/src/client/entry/admin.tsx',
@@ -65,10 +65,11 @@ async function createServer(): Promise<void> {
   // app.use(express.static(staticPath))
   app.set('views', viewPath)
   app.set('view engine', 'pug')
-  app.use(vite.middlewares)
+
   app.get('/', handleIndex)
   app.get('/admin', handleAdmin)
   route(app)
+  app.use(vite.middlewares)
 
   app.listen(devPort, host, () => {
     console.log(`server started at ${h}`)

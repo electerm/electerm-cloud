@@ -1,10 +1,8 @@
 // the final fetch wrapper
-const jwtKey = 'token'
-
 function getToken (): string {
-  return window.localStorage.getItem(
-    jwtKey
-  ) ?? ''
+  const isAdminPage = window.location.pathname.includes('/admin')
+  const jwtKey = isAdminPage ? 'adminToken' : 'token'
+  return window.localStorage.getItem(jwtKey) ?? ''
 }
 
 function getHeader (): Object {
@@ -20,11 +18,11 @@ function getHeader (): Object {
 //   return false
 // }
 
-export default async function fetch (url: string, data: Object = {}, method: string = 'POST'): Promise<any> {
+export default async function fetch (url: string, data: Object | undefined = undefined, method: string = 'POST'): Promise<any> {
   return await window.fetch(url, {
     method,
     headers: getHeader() as any,
-    body: JSON.stringify(data)
+    body: data !== undefined ? JSON.stringify(data) : undefined
   })
     .then(async res => {
       if (res.status > 304) {

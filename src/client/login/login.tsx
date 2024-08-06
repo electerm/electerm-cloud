@@ -11,8 +11,8 @@ import {
 import fetch from '../common/fetch'
 import Me from '../me/me'
 import AgreeMent from './agreement'
-import Links from '../me/links'
-import Footer from '../me/footer'
+import Links from '../common/links'
+import Footer from '../common/footer'
 
 declare global {
   interface Window {

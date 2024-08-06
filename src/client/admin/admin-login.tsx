@@ -7,8 +7,8 @@ import {
   Spin
 } from 'antd'
 import fetch from '../common/fetch'
-import Links from '../me/links'
-import Footer from '../me/footer'
+import Links from '../common/links'
+import Footer from '../common/footer'
 import Admin from './admin'
 
 declare global {

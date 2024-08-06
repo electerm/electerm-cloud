@@ -19,7 +19,10 @@
     "s": "node bin/server.mjs",
     "bb": "NODE_ENV=production vite build --config bin/vite/conf.js",
     "lint": "./node_modules/.bin/ts-standard",
-    "fix": "./node_modules/.bin/ts-standard --fix"
+    "fix": "./node_modules/.bin/ts-standard --fix",
+    "init": "node -r dotenv/config bin/admin-init.js",
+    "cdb": "node -r dotenv/config bin/admin-clear-db.js",
+    "adu": "node -r dotenv/config bin/admin-add-users.js"
   },
   "keywords": [],
   "author": "",
