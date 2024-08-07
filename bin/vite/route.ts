@@ -24,7 +24,7 @@ function convertToExpressHandler (vercelHandler: VercelHandler) {
 
 export default function (app: Application) {
   app.post('/api/get-data', convertToExpressHandler(getData))
-  app.post('/api/sync', convertToExpressHandler(sync))
+  app.all('/api/sync', convertToExpressHandler(sync))
   app.get('/api/github-login-callback', convertToExpressHandler(githubLogin))
   app.all('/api/user', convertToExpressHandler(user))
   app.all('/api/token', convertToExpressHandler(token))

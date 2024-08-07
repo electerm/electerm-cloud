@@ -34,9 +34,11 @@ export default function Admin (props: any): JSX.Element {
         setLoading('')
         setUsers(oldUsers => [...oldUsers, ...res.users])
         setCount(res.count)
-        if (res.lastKey !== undefined) {
-          setStart(res.lastKey)
-        }
+        setStart(
+          res.lastKey !== undefined
+            ? res.lastKey.id
+            : ''
+        )
       })
       .catch(e => {
         setLoading('')
@@ -61,7 +63,7 @@ export default function Admin (props: any): JSX.Element {
 
   function delUser (id: string): void {
     setLoading(id)
-    fetch('/api/user', {}, 'DELETE')
+    fetch('/api/user', { id }, 'DELETE')
       .then(() => {
         setLoading('')
         setUsers(users.filter(d => d.id !== id))

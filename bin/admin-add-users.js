@@ -9,7 +9,7 @@ const apiUrl = `${url}/api/admin`
 const generateUserData = (index) => {
   const username = `testuser_${index}`
   return {
-    _id: `github-${username}`,
+    id: `github-${username}`,
     name: username,
     email: `${username}@example.com`,
     githubId: username,
@@ -20,13 +20,14 @@ const generateUserData = (index) => {
 
 async function createUser (userData, token) {
   const response = await axios.post(
-    `${apiUrl}/api/admin`,
+    apiUrl,
     {
       tableName: 'User',
       func: 'create',
       params: [userData]
     },
     {
+      proxy: false,
       auth: {
         username: adminUser,
         password: adminPass

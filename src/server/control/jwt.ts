@@ -59,7 +59,7 @@ export function sign (id: string): string {
 }
 
 export function decode (code: string): string {
-  console.log('code, jwtSecret', code, jwtSecret)
+  // console.log('code, jwtSecret', code, jwtSecret)
   const decodedPayload = jwt.verify(code, jwtSecret) as JwtPayload
   const { id } = decodedPayload
   return id
@@ -68,7 +68,6 @@ export function decode (code: string): string {
 export async function verifyJwt (req: VercelRequest, res: VercelResponse): Promise<string | null> {
   try {
     const authHeader = req.headers.authorization
-
     if (authHeader === undefined || authHeader === '') {
       res.status(401).send('No authorization header found')
       return null

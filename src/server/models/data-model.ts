@@ -15,7 +15,8 @@ export const dataSchema = {
     hashKey: true
   },
   data: {
-    type: String
+    type: String,
+    default: '{}'
   },
   userId: {
     type: String

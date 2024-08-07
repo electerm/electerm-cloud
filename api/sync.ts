@@ -3,7 +3,7 @@ import { updateData, getData } from '../src/server/control/data-control'
 import { verifyJwt } from '../src/server/control/jwt'
 import { getToken } from '../src/server/control/token'
 
-export default async function handler (req: VercelRequest, res: VercelResponse): Promise<void> {
+export default async function syncHandler (req: VercelRequest, res: VercelResponse): Promise<void> {
   const {
     method = ''
   } = req
@@ -17,13 +17,14 @@ export default async function handler (req: VercelRequest, res: VercelResponse):
     return
   }
   const id = await verifyJwt(req, res)
+  console.log('id', id)
   if (id === null) {
     return
   }
   const token = await getToken(id)
   const { dataId } = token
   if (method === 'PUT') {
-    const data = await updateData(dataId, req.body)
+    const data = await updateData(dataId, JSON.stringify(req.body))
     res.send(data)
   } else {
     const data = await getData(dataId)

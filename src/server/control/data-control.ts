@@ -13,13 +13,17 @@ export async function createData (data: string, userId: string): Promise<Data> {
   })
 }
 
-export async function getData (id: string): Promise<Data> {
+export async function getData (id: string): Promise<{ id: string, data: string, userId: string }> {
   const data = await DataModel.get(id)
-  if (data.data !== '') {
+  if (data.data !== '{}') {
     const decryptedData = await dec(data.data, data.iv)
     data.data = decryptedData
   }
-  return data
+  return {
+    id: data.id,
+    data: data.data,
+    userId: data.userId
+  }
 }
 
 export async function updateData (id: string, data: string): Promise<Data> {

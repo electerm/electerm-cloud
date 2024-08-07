@@ -57,7 +57,7 @@ async function findOrCreateUser (githubUser: GitHubUser, isAdmin: boolean): Prom
   const user = await Cls.get({ id })
   if (user === undefined || user === null) {
     // If user doesn't exist, create a new one
-    const data = await createData('', id)
+    const data = await createData('{}', id)
     const token = await createToken(id, data.id)
     const obj = {
       id,

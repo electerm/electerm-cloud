@@ -140,10 +140,12 @@ export default function Me (props: any): JSX.Element {
 
   function delToken (id: string): void {
     setLoading(id)
-    fetch('/api/token', {}, 'DELETE')
+    fetch('/api/token', {
+      id
+    }, 'DELETE')
       .then(() => {
         setLoading('')
-        setTokens(tokens.filter(d => d.id !== id))
+        setTokens(tokens => tokens.filter(d => d.id !== id))
       })
       .catch(e => {
         setLoading('')
@@ -158,7 +160,7 @@ export default function Me (props: any): JSX.Element {
       .then(res => {
         setLoading('')
         const newToken = res.token as TokenDef
-        setTokens(tokens.map((d) => {
+        setTokens(tokens => tokens.map((d) => {
           if (d.id === id) {
             return { ...d, ...newToken }
           }

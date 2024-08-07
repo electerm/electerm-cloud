@@ -61,6 +61,7 @@ export default function Login (): JSX.Element {
     if (!agreed) {
       return openAgreement()
     }
+    setLoading(true)
     window.location.href = window.et.loginUrl
   }
 

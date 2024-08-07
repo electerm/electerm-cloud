@@ -31,6 +31,7 @@ export default function Tokens (props: any): JSX.Element {
     id,
     lastUseTime,
     useCount,
+    dataId,
     show
   } = token as TokenDef1
 
@@ -52,11 +53,11 @@ export default function Tokens (props: any): JSX.Element {
   }
 
   function preview (): void {
-    previewData(id)
+    previewData(dataId)
   }
 
   function download (): void {
-    downloadData(id)
+    downloadData(dataId)
   }
   const loading = props.loading === id
   const cls = even as boolean

@@ -40,8 +40,12 @@ export async function listUsers (start: string, limit: number, id: string): Prom
 
 export async function delUser (userId: string): Promise<void> {
   const user = await UserModel.get(userId)
-  await DataModel.batchDelete(user.dataIds.split(','))
-  await TokenModel.batchDelete(user.tokenIds.split(','))
+  if (user.dataIds !== '') {
+    await DataModel.batchDelete(user.dataIds.split(','))
+  }
+  if (user.tokenIds !== '') {
+    await TokenModel.batchDelete(user.tokenIds.split(','))
+  }
   return await UserModel.delete(userId)
 }
 

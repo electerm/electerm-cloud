@@ -34,7 +34,7 @@ export const enc = async function (
 export const dec = async function (
   encrypted: string = '',
   ivStr: string,
-  password: string = process.env.ENCRYPTION_SECRET_KEY as string,
+  password: string = process.env.JWT_SECRET as string,
   algorithm: string = algorithmDefault
 ): Promise<string> {
   const iv = Buffer.from(ivStr, 'hex')

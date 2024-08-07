@@ -39,6 +39,10 @@ export default function Users (props: any): JSX.Element {
       )
     }
   }
+  function handleChange (e: any): void {
+    console.log('e', e)
+    props.onChangeSearch(e.target.value)
+  }
   return (
     <div className='users pd1y'>
       <h2 className='fix'>
@@ -48,7 +52,7 @@ export default function Users (props: any): JSX.Element {
         <Input.Search
           placeholder='Search user by id'
           value={props.txt}
-          onChange={(e) => props.onChangeSearch(e.target.value)}
+          onChange={handleChange}
           onPressEnter={props.handleSearchUser}
           enterButton
           onSearch={props.handleSearchUser}
