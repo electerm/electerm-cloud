@@ -11,7 +11,7 @@ const viewPath = resolve(cwd, 'src/server/views')
 const devPort: number = Number(env.SERVER_DEV_PORT) || 5678
 const host: string = env.SERVER_HOST || '127.0.0.1'
 const h: string = `http://${host}:${devPort}`
-const cid = env.GITHUB_CLIENT_ID
+const cid = env.CLIENT_ID
 const redirectUrl = encodeURIComponent(`http://127.0.0.1:${devPort}/api/github-login-callback`)
 
 console.log(redirectUrl)

@@ -1,4 +1,4 @@
-
+require('dotenv').config()
 const { buildPug } = require('./build-bug.js')
 const { resolve } = require('path')
 const { cwd, env } = require('./common.js')
@@ -7,8 +7,9 @@ const { mkdirSync } = require('fs')
 async function main () {
   const from = resolve(cwd, 'src/server/views/index.pug')
   const to = resolve(cwd, 'public/index.html')
-  const cid = env.GITHUB_CLIENT_ID_PROD
-  const redirectUrl = encodeURIComponent('http://electerm-cloud.html5beta.com/api/github-login-callback')
+  const cid = env.CLIENT_ID_PROD
+  console.log('cid, cid', cid)
+  const redirectUrl = encodeURIComponent('https://electerm-cloud.html5beta.com/api/github-login-callback')
 
   await buildPug(from, to, {
     dev: false,

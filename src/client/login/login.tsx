@@ -66,7 +66,7 @@ export default function Login (): JSX.Element {
   }
 
   function handleLogout (): void {
-    localStorage.removeItem('tokenElecterm')
+    localStorage.removeItem('token')
     setUser(null)
   }
 

@@ -5,6 +5,7 @@
   "scripts": {
     "start": "npm run c",
     "d": "vercel dev",
+    "v": "vercel --prod",
     "b": "./bin/build",
     "tb": "./bin/build-only",
     "b1": "node bin/build-all.js",

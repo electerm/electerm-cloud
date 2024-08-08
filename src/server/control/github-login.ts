@@ -17,8 +17,9 @@ interface GitHubUser {
   avatar_url: string
 }
 
-const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID
-const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET
+const clientId = process.env.CLIENT_ID
+const secret = process.env.CLIENT_SECRET
+const adminLogin = process.env.ADMIN_GITHUB_LOGIN
 
 function extendOptions (): undefined | { httpsAgent: any } {
   const proxy = process.env.PROXY ?? false
@@ -33,8 +34,8 @@ function extendOptions (): undefined | { httpsAgent: any } {
 
 async function getGitHubAccessToken (code: string): Promise<string> {
   const response = await axios.post('https://github.com/login/oauth/access_token', {
-    client_id: GITHUB_CLIENT_ID,
-    client_secret: GITHUB_CLIENT_SECRET,
+    client_id: clientId,
+    client_secret: secret,
     code
   }, {
     headers: { Accept: 'application/json' },
@@ -54,6 +55,9 @@ async function findOrCreateUser (githubUser: GitHubUser, isAdmin: boolean): Prom
   // Try to find the user by GitHub ID
   const id = 'github-' + githubUser.login
   const Cls = isAdmin ? AdminUserModel : UserModel
+  if (isAdmin && adminLogin !== githubUser.login) {
+    throw new Error('Invalid admin login')
+  }
   const user = await Cls.get({ id })
   if (user === undefined || user === null) {
     // If user doesn't exist, create a new one

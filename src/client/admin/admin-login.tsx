@@ -37,11 +37,12 @@ export default function AdminLogin (): JSX.Element {
   }
 
   function handleLogin (): void {
+    setLoading(true)
     window.location.href = window.et.loginUrl
   }
 
   function handleLogout (): void {
-    localStorage.removeItem('tokenElecterm')
+    localStorage.removeItem('adminToken')
     setUser(null)
   }
 
