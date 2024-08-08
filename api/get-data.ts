@@ -1,0 +1,24 @@
+import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { verifyJwtAndCheckId } from '../src/server/control/jwt'
+import { getData } from '../src/server/control/data-control'
+import { User } from '../src/server/models/user-model'
+
+export default async function getDataRoute (req: VercelRequest, res: VercelResponse): Promise<void> {
+  const user = await verifyJwtAndCheckId(req, res) as User
+  if (user === null) {
+    return
+  }
+  const {
+    id
+  } = req.body
+  // a1emKlOxTZfnJInHwbEx1
+  console.log(user.dataIds, id)
+  if (!user.dataIds.includes(id)) {
+    res.status(403).send('data id not match')
+    return
+  }
+  const data = await getData(id)
+  res.send({
+    text: data.data
+  })
+}

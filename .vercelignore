@@ -1,0 +1,16 @@
+/temp/
+/*.html
+/*.js
+/favicon.ico
+/LICENSE
+/pm2.yaml
+/README.md
+/*.sh
+/update
+/bin
+/releases
+/data
+/views
+/res
+/.env
+sample.env
