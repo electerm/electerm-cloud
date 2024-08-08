@@ -23,23 +23,27 @@ export default defineConfig({
         admin: resolve(cwd, 'src/client/entry/admin.tsx')
       },
       external: [
-        'react',
-        'react-dom',
         'universe-bg',
         'three'
       ],
       output: {
-        format: 'umd',
-        entryFileNames: `[name].bundle.js`,
-        chunkFileNames: '[name].[hash].bundle.js',
-        assetFileNames: `[name].bundle[extname]`,
-        dir: resolve(cwd, 'public'),
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'universe-bg': 'UniverseBg',
-          three: 'THREE'
-        }
+        inlineDynamicImports: false,
+        manualChunks: {
+          'react-dom': ['react-dom'],
+          dayjs: ['dayjs'],
+          'ant-icons': ['@ant-design/icons'],
+          react: ['react']
+        },
+        format: 'esm',
+        entryFileNames: `js/[name].bundle.js`,
+        chunkFileNames: 'chunks/[name].[hash].bundle.js',
+        assetFileNames: chunkInfo => {
+          const { name = '' } = chunkInfo
+          return name.endsWith('.css')
+            ? `css/${name}`
+            : `images/${name}`
+        },
+        dir: resolve(cwd, 'public')
       }
     }
   },

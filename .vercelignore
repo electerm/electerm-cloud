@@ -7,11 +7,10 @@
 /README.md
 /*.sh
 /update
-/build
+/bin
 /releases
 /data
 /views
-/src
 /res
 /.env
 sample.env

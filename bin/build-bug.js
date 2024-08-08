@@ -1,10 +1,10 @@
 /**
  * build common files with react module in it
  */
-import fs from 'fs/promises'
-import pug from 'pug'
+const fs = require('fs/promises')
+const pug = require('pug')
 
-export const buildPug = async (from, to, data) => {
+exports.buildPug = async (from, to, data) => {
   const pugContent = await fs.readFile(from, 'utf8')
   const htmlContent = pug.render(pugContent, {
     filename: from,

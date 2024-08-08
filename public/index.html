@@ -1,0 +1,37 @@
+<!DOCTYPE html><html><head><title>electerm cloud</title><meta name="description" content="electerm cloud: sync your electerm data to cloud"><meta name="keywords" content="electerm, electerm-cloud"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="author" content="ZHAO Xudong"><link rel="icon" href="https://electerm.html5beta.com/favicon.ico" type="image/x-icon"><style>body {
+  background: #ffffff;
+}
+#content-loading {
+  text-align: center;
+  padding: 30px 10px;
+}
+.pd3 {
+  padding: 15px;
+}
+.iblock {
+  display: inline-block;
+}</style><link rel="stylesheet" href="/css/style.css"></head><body><div id="content-loading"><div class="pd3"><img class="iblock" src="https://electerm.html5beta.com/electerm.png" alt="" height="80"></div><div class="pd3">loading...</div></div><div id="container"></div><script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script><script>window.et = {
+  loginUrl: 'https://github.com/login/oauth/authorize?client_id=undefined&redirect_uri=http%3A%2F%2Felecterm-cloud.html5beta.com%2Fapi%2Fgithub-login-callback'
+}</script><script type="importmap">{
+  "imports": {
+    "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
+    "universe-bg": "//unpkg.com/universe-bg/dist/universe-bg.mjs"
+  }
+}</script><script type="module">import UniverseBg from 'universe-bg'
+window.x = new UniverseBg({
+  className: 'animate',
+  // shootingStarCount: 150,
+  // starCount: 1000,
+  // starSize: 30,
+  shootingStarSize: 0.4,
+  shootingStarColor: 0x666666,
+  starColor: 0x666666,
+  bgColor: 0xffffff
+  // starDistance: 80,
+  // shootingStarDistance: 40
+})
+</script><script src="/js/app.bundle.js" type="module"></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NT5W8GL31W"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-NT5W8GL31W');</script></body></html>
