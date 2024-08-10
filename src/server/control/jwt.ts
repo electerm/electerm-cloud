@@ -54,7 +54,10 @@ export function sign (id: string): string {
       id
     },
     jwtSecret,
-    { expiresIn: '120y' }
+    {
+      expiresIn: '120y',
+      algorithm: 'HS256'
+    }
   )
 }
 

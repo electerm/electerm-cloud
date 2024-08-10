@@ -4,6 +4,10 @@ import { User } from '../src/server/models/user-model'
 
 export default async function getUser (req: VercelRequest, res: VercelResponse): Promise<void> {
   const user = await verifyJwtAndCheckId(req, res) as User
+  if (process.env.STOP_SERVICE_MSG !== undefined) {
+    res.status(503).send(process.env.STOP_SERVICE_MSG)
+    return
+  }
   if (user === null) {
     return
   }

@@ -8,6 +8,10 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
     method = ''
   } = req
   const arr = ['GET', 'PUT', 'POST']
+  if (process.env.STOP_SERVICE_MSG !== undefined) {
+    res.status(503).send(process.env.STOP_SERVICE_MSG)
+    return
+  }
   if (!arr.includes(method)) {
     res.status(404).send('404 not found')
     return
