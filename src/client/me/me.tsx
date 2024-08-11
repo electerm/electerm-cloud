@@ -33,13 +33,9 @@ export default function Me (props: any): JSX.Element {
       title: 'Preview',
       content: (
         <div>
-          <p>
-            <pre>
-              <code>
-                {JSON.stringify(text, null, 2)}
-              </code>
-            </pre>
-          </p>
+          <div className='wordbreak pd1 data-preview-wrap'>
+            {text}
+          </div>
           <p>
             <Button
               onClick={() => downloadData()}

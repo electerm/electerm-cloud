@@ -16,13 +16,13 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
     res.status(404).send('404 not found')
     return
   }
-  if (method === 'POST') {
-    res.send('test ok')
-    return
-  }
   const id = await verifyJwt(req, res)
   console.log('id', id)
   if (id === null) {
+    return
+  }
+  if (method === 'POST') {
+    res.send('test ok')
     return
   }
   const token = await getToken(id)
@@ -32,6 +32,7 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
     res.send(data)
   } else {
     const data = await getData(dataId)
-    res.send(data)
+    console.log('data', data)
+    res.send(data.data)
   }
 }

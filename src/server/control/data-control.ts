@@ -26,12 +26,13 @@ export async function getData (id: string): Promise<{ id: string, data: string, 
   }
 }
 
-export async function updateData (id: string, data: string): Promise<Data> {
+export async function updateData (id: string, data: string): Promise<string> {
   const { encrypted, iv } = await enc(data)
-  return await DataModel.update({
+  await DataModel.update({
     id
   }, {
     data: encrypted,
     iv
   })
+  return 'ok'
 }

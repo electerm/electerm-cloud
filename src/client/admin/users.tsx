@@ -40,7 +40,6 @@ export default function Users (props: any): JSX.Element {
     }
   }
   function handleChange (e: any): void {
-    console.log('e', e)
     props.onChangeSearch(e.target.value)
   }
   return (

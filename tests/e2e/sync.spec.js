@@ -26,7 +26,8 @@ describe('/api/sync', () => {
     })
     expect(!!r.id).toEqual(true)
     const r1 = await createRequest('GET', null)
-    expect(r1.data).toEqual(JSON.stringify({ a: 1 }))
+    console.log(r1)
+    expect(r1.a).toEqual(1)
   })
 
   it('post', async () => {

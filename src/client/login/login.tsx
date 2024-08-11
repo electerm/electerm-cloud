@@ -32,7 +32,7 @@ export default function Login (): JSX.Element {
     await fetch('/api/get-user')
       .then(res => {
         setUser(res.user)
-        console.log(res)
+        // console.log(res)
       })
       .catch(e => {
         console.log(e)
