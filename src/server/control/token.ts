@@ -55,6 +55,7 @@ export async function listTokens (ids: string[]): Promise<Object[]> {
       id: sign(d.id),
       lastUseTime: d.lastUseTime,
       useCount: d.useCount,
+      name: d.name,
       dataId: d.dataId
     }
   })
