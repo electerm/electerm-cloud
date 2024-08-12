@@ -32,7 +32,8 @@ export default function Tokens (props: any): JSX.Element {
     lastUseTime,
     useCount,
     dataId,
-    show
+    show,
+    name
   } = token as TokenDef1
 
   function copy (): void {
@@ -67,6 +68,7 @@ export default function Tokens (props: any): JSX.Element {
     <Spin spinning={loading}>
       <div className={cls}>
         <div className='pd1b'>
+          <b className='color-blue mg1r font14'>{name ?? 'Token noname'}</b>
           <span>Last Use Time: <b>{dayjs(lastUseTime).format('YYYY-MM-DD HH:mm:ss')}</b></span>
           <span className='mg1l'>Use Count: <b>{useCount}</b></span>
         </div>

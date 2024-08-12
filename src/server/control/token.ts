@@ -17,10 +17,11 @@ export async function createToken (userId: string, dataId: string): Promise<Toke
   })
 }
 
-export async function newToken (user: User, userId: string): Promise<Token> {
+export async function newToken (user: User, userId: string, name: string): Promise<Token> {
   const data = await createData('{}', userId)
   const token = await TokenModel.create({
     id: nanoid(),
+    name,
     userId,
     useCount: 0,
     dataId: data.id,

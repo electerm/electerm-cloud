@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {
   Button,
   Modal,
+  Input,
   message
 } from 'antd'
 import fetch from '../common/fetch'
@@ -16,6 +17,7 @@ import { TokenDef, TokenDef1 } from './interface'
 
 export default function Me (props: any): JSX.Element {
   const [txt, setTxt] = useState('')
+  const [tokenName, setTokenName] = useState('')
   const [loading, setLoading] = useState('')
   const [tokens, setTokens] = useState<TokenDef1[]>([])
   const {
@@ -77,9 +79,35 @@ export default function Me (props: any): JSX.Element {
       })
   }
 
+  function onChangeTokenName (e: any): void {
+    setTokenName(e.target.value)
+  }
+
+  function renderTokenNameInput (): JSX.Element {
+    return (
+      <div>
+        <Input
+          onChange={onChangeTokenName}
+          placeholder='Token name'
+        />
+      </div>
+    )
+  }
+
   function handleAdd (): void {
+    setTokenName('')
+    Modal.confirm({
+      title: 'Create a new token',
+      content: renderTokenNameInput(),
+      onOk: addToken
+    })
+  }
+
+  function addToken (): void {
     setLoading('add')
-    fetch('/api/token', {}, 'POST')
+    fetch('/api/token', {
+      name: tokenName
+    }, 'POST')
       .then(res => {
         setLoading('')
         const newToken = res.token as TokenDef

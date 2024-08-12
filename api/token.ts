@@ -16,7 +16,8 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
     method
   } = req
   const {
-    id
+    id,
+    name
   } = req.body
   if (method === 'GET') {
     const ids = user.tokenIds.split(',')
@@ -47,7 +48,11 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
       res.status(403).send('token limit exceeded')
       return
     }
-    const token = await newToken(user, user.id).catch(handleError)
+    if (name.length > 120) {
+      res.status(400).send('name too long')
+      return
+    }
+    const token = await newToken(user, user.id, name).catch(handleError)
     res.send({
       token
     })
