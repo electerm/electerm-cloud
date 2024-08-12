@@ -30,6 +30,7 @@ export async function newToken (user: User, userId: string): Promise<Token> {
     tokenIds: user.tokenIds.split(',').concat([token.id]).join(','),
     dataIds: user.dataIds.split(',').concat([data.id]).join(',')
   })
+  token.id = sign(token.id)
   return token
 }
 
