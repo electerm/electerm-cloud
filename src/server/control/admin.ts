@@ -2,20 +2,29 @@ import {
   AdminUserModel,
   UserModel,
   TokenModel,
-  DataModel
+  DataModel,
+  StaticsModel
 } from '../models/db'
 
 const models = {
   AdminUser: AdminUserModel,
   User: UserModel,
   Token: TokenModel,
-  Data: DataModel
+  Data: DataModel,
+  Statics: StaticsModel
 }
 
-async function clearDb (Model: typeof AdminUserModel | typeof UserModel | typeof TokenModel | typeof DataModel): Promise<any> {
+async function clearDb (
+  Model: typeof AdminUserModel |
+  typeof UserModel |
+  typeof TokenModel |
+  typeof DataModel |
+  typeof StaticsModel
+): Promise<any> {
   const allItems = await Model.scan().attributes(['id']).exec()
   const ids = allItems.map(item => item.id)
-  return await Model.batchDelete(ids)
+  await Model.batchDelete(ids)
+  return 'done'
 }
 
 export async function dbOperation (tableName: string, func: string, params: any[]): Promise<any> {
@@ -33,7 +42,8 @@ export async function dbOperation (tableName: string, func: string, params: any[
     case 'update':
       return (Model as typeof AdminUserModel).update(params[0], params[1])
     case 'delete':
-      return Model.delete(params[0])
+      await Model.delete(params[0])
+      return 'done'
     case 'list':
       return await Model.scan().exec()
     case 'clear':

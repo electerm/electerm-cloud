@@ -5,6 +5,7 @@ import { User, userSchema } from './user-model'
 import { AdminUser, adminUserSchema } from './admin-user-model'
 import { Token, tokenSchema } from './token-model'
 import { Data, dataSchema } from './data-model'
+import { Statics, staticsSchema } from './statics-model'
 
 // Common schema options
 const commonSchemaOptions = {
@@ -31,4 +32,7 @@ export const TokenModel = dynamoose.model<Token>('Token', tokenSchemaInstance, {
 })
 export const DataModel = dynamoose.model<Data>('Data', dataSchemaInstance, {
   tableName: tableNamePrefix + 'Data'
+})
+export const StaticsModel = dynamoose.model<Statics>('Statics', staticsSchema, {
+  tableName: tableNamePrefix + 'Statics'
 })

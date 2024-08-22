@@ -11,10 +11,12 @@ import { UserDef } from './interface'
 import Logout from '../common/logout'
 import UserInfo from '../common/user-info'
 import Logo from '../common/logo'
+import Statics from './statics'
 
 export default function Admin (props: any): JSX.Element {
   const [form] = Form.useForm()
   const [loading, setLoading] = useState('')
+  const [statics, setStatics] = useState({})
   const [editing, setEditing] = useState('')
   const [count, setCount] = useState(0)
   const [start, setStart] = useState('')
@@ -44,6 +46,16 @@ export default function Admin (props: any): JSX.Element {
         setLoading('')
         console.log(e)
         void message.error('get token list failed')
+      })
+  }
+
+  function getStatics (): void {
+    fetch('/api/statics', undefined, 'GET')
+      .then((res) => {
+        setStatics(res)
+      })
+      .catch(e => {
+        console.log(e)
       })
   }
 
@@ -137,12 +149,14 @@ export default function Admin (props: any): JSX.Element {
 
   useEffect(() => {
     void getUsers()
+    void getStatics()
   }, [])
 
   return (
     <div className='wrap pd2x'>
       <Logout handleLogout={handleLogout} />
       <UserInfo user={user} />
+      <Statics statics={statics} />
       <Users {...usersProps} />
       <Logo />
       <Links />

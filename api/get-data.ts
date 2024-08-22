@@ -11,8 +11,6 @@ export default async function getDataRoute (req: VercelRequest, res: VercelRespo
   const {
     id
   } = req.body
-  // a1emKlOxTZfnJInHwbEx1
-  console.log(user.dataIds, id)
   if (!user.dataIds.includes(id)) {
     res.status(403).send('data id not match')
     return

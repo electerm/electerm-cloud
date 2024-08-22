@@ -21,6 +21,8 @@
     "init": "node -r dotenv/config bin/admin-init.js",
     "cdb": "node -r dotenv/config bin/admin-clear-db.js",
     "adu": "node -r dotenv/config bin/admin-add-users.js",
+    "st": "node -r dotenv/config bin/admin-statics.js",
+    "cl": "node -r dotenv/config bin/admin-db-clean.js",
     "test": "jest"
   },
   "keywords": [],

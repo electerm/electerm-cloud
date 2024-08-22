@@ -17,7 +17,6 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
     return
   }
   const id = await verifyJwt(req, res)
-  console.log('id', id)
   if (id === null) {
     return
   }
@@ -32,7 +31,6 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
     res.send(data)
   } else {
     const data = await getData(dataId)
-    console.log('data', data)
     res.send(data.data)
   }
 }

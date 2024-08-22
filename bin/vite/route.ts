@@ -6,6 +6,7 @@ import admin from '../../api/admin'
 import getAdminUser from '../../api/get-admin-user'
 import getUser from '../../api/get-user'
 import user from '../../api/user'
+import statics from '../../api/statics'
 import { Request, Response, Application } from 'express'
 import { VercelRequest, VercelResponse } from '@vercel/node'
 
@@ -32,4 +33,5 @@ export default function (app: Application) {
   app.post('/api/token', convertToExpressHandler(token))
   app.post('/api/admin', convertToExpressHandler(admin))
   app.post('/api/get-admin-user', convertToExpressHandler(getAdminUser))
+  app.get('/api/statics', convertToExpressHandler(statics))
 }

@@ -6,6 +6,7 @@ import { User } from '../models/user-model'
 import { Token } from '../models/token-model'
 import { sign } from './jwt'
 import { createData } from './data-control'
+import { updateStatics } from './statics'
 
 export async function createToken (userId: string, dataId: string): Promise<Token> {
   return await TokenModel.create({
@@ -27,6 +28,7 @@ export async function newToken (user: User, userId: string, name: string): Promi
     dataId: data.id,
     lastUseTime: new Date()
   })
+  await updateStatics('tokenCount', 1)
   await UserModel.update({ id: user.id }, {
     tokenIds: user.tokenIds.split(',').concat([token.id]).join(','),
     dataIds: user.dataIds.split(',').concat([data.id]).join(',')
@@ -43,6 +45,7 @@ export async function getToken (id: string): Promise<Token> {
     lastUseTime: new Date(),
     useCount: token.useCount + 1
   })
+  await updateStatics('tokenUseCount', 1)
   return token
 }
 
@@ -70,6 +73,7 @@ export async function delToken (id: string, user: User): Promise<void> {
     tokenIds: newTokenIds,
     dataIds: newDataIds
   })
+  await updateStatics('tokenCount', -1)
   await TokenModel.delete(id)
 }
 

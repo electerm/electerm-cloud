@@ -6,6 +6,7 @@ import { AdminUser } from '../models/admin-user-model'
 import { createToken } from './token'
 import { createData } from './data-control'
 import { SocksProxyAgent } from 'socks-proxy-agent'
+import { updateStatics } from './statics'
 
 axios.defaults.proxy = false
 
@@ -58,7 +59,7 @@ async function findOrCreateUser (githubUser: GitHubUser, isAdmin: boolean): Prom
   if (isAdmin && adminLogin !== githubUser.login) {
     throw new Error('Invalid admin login')
   }
-  const user = await Cls.get({ id })
+  let user = await Cls.get({ id })
   if (user === undefined || user === null) {
     // If user doesn't exist, create a new one
     const data = await createData('{}', id)
@@ -74,11 +75,15 @@ async function findOrCreateUser (githubUser: GitHubUser, isAdmin: boolean): Prom
     if (isAdmin) {
       return await AdminUserModel.create(obj)
     }
-    return await UserModel.create({
+
+    user = await UserModel.create({
       ...obj,
       tokenIds: token.id,
       dataIds: data.id
     })
+    await updateStatics('userCount', 1)
+    await updateStatics('tokenCount', 1)
+    return user
   } else {
     if (user.email !== githubUser.email) {
       await Cls.update({ id }, {
