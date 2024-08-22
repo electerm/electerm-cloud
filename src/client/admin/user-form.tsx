@@ -14,7 +14,7 @@ interface UserFormProps {
 }
 
 export default function UserForm (props: UserFormProps): JSX.Element | null {
-  const { user, onSave, form, editing } = props
+  const { user, onSave, form } = props
 
   if (user === null) {
     return null

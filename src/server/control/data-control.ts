@@ -2,7 +2,6 @@ import { DataModel } from '../models/db'
 import { Data } from '../models/data-model'
 import { nanoid } from 'nanoid'
 import { enc, dec } from './enc'
-import { updateStatics } from './statics'
 
 export async function createData (data: string, userId: string): Promise<Data> {
   const { encrypted, iv } = await enc(data)
@@ -16,7 +15,6 @@ export async function createData (data: string, userId: string): Promise<Data> {
 
 export async function getData (id: string): Promise<{ id: string, data: string, userId: string }> {
   const data = await DataModel.get(id)
-  await updateStatics('tokenUseCount', 1)
   if (data.data !== '{}') {
     const decryptedData = await dec(data.data, data.iv)
     data.data = decryptedData
@@ -36,6 +34,5 @@ export async function updateData (id: string, data: string): Promise<string> {
     data: encrypted,
     iv
   })
-  await updateStatics('tokenUseCount', 1)
   return 'ok'
 }
