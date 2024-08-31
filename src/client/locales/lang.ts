@@ -6,7 +6,7 @@ export function getBrowserLanguage (): string {
   }
 
   // Get the browser's language
-  const browserLang = navigator.language || (navigator as any).userLanguage
+  const browserLang = window.navigator.language || (navigator as any).userLanguage
 
   if (!browserLang) {
     return defaultLanguage

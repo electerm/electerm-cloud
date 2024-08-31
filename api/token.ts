@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { verifyJwtAndCheckId, decode } from '../src/server/control/jwt'
-import { listTokens, delToken, reToken, newToken } from '../src/server/control/token'
+import { listTokens, delToken, reToken, newToken, editTokenName } from '../src/server/control/token'
 import { User } from '../src/server/models/user-model'
 
 function tokenLimitExceeded (user: User): boolean {
@@ -32,13 +32,21 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
     console.log(err)
     res.status(500).send(err.message)
   }
-
+  if (name !== undefined && name.length > 120) {
+    res.status(400).send('name too long')
+    return
+  }
   if (method === 'DELETE') {
     await delToken(tokenId, user).catch(handleError)
     res.send({
       ok: true
     })
   } else if (method === 'PATCH') {
+    if (name !== undefined) {
+      const r = await editTokenName(tokenId, name).catch(handleError)
+      res.send(r)
+      return
+    }
     const token = await reToken(tokenId, user).catch(handleError)
     res.send({
       token
@@ -46,10 +54,6 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
   } else if (method === 'POST') {
     if (tokenLimitExceeded(user)) {
       res.status(403).send('token limit exceeded')
-      return
-    }
-    if (name.length > 120) {
-      res.status(400).send('name too long')
       return
     }
     const token = await newToken(user, user.id, name).catch(handleError)

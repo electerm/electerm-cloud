@@ -51,7 +51,7 @@ export async function getToken (id: string): Promise<Token> {
 
 export async function listTokens (ids: string[]): Promise<Object[]> {
   const arr = await TokenModel.batchGet(ids, {
-    attributes: ['id', 'lastUseTime', 'useCount', 'dataId']
+    attributes: ['id', 'lastUseTime', 'useCount', 'dataId', 'name']
   })
   return arr.map(d => {
     return {
@@ -91,4 +91,11 @@ export async function reToken (id: string, user: User): Promise<Object> {
     useCount: obj.useCount,
     dataId: obj.dataId
   }
+}
+
+export async function editTokenName (id: string, name: string): Promise<string> {
+  await TokenModel.update({ id }, {
+    name
+  })
+  return 'ok'
 }
