@@ -11,7 +11,8 @@ import {
   ReloadOutlined,
   EyeFilled,
   EyeInvisibleOutlined,
-  DownloadOutlined
+  DownloadOutlined,
+  EditOutlined
 } from '@ant-design/icons'
 import dayjs from 'dayjs'
 
@@ -25,7 +26,8 @@ export default function Tokens (props: any): JSX.Element {
     toggleTokenShow,
     even,
     downloadData,
-    previewData
+    previewData,
+    onEdit
   } = props
   const {
     id,
@@ -60,6 +62,10 @@ export default function Tokens (props: any): JSX.Element {
   function download (): void {
     downloadData(dataId)
   }
+
+  function openEdit (): void {
+    onEdit(id, name)
+  }
   const loading = props.loading === id
   const cls = even as boolean
     ? 'pd2 token-item even'
@@ -68,7 +74,13 @@ export default function Tokens (props: any): JSX.Element {
     <Spin spinning={loading}>
       <div className={cls}>
         <div className='pd1b'>
-          <b className='color-blue mg1r font14'>{name ?? 'Token noname'}</b>
+          <span className='token-name-wrap mg2r'>
+            <b className='color-blue mg1r font14'>{name ?? 'Token noname'}</b>
+            <EditOutlined
+              className='pointer edit-token-icon'
+              onClick={openEdit}
+            />
+          </span>
           <span>Last Use Time: <b>{dayjs(lastUseTime).format('YYYY-MM-DD HH:mm:ss')}</b></span>
           <span className='mg1l'>Use Count: <b>{useCount}</b></span>
         </div>

@@ -93,9 +93,9 @@ export async function reToken (id: string, user: User): Promise<Object> {
   }
 }
 
-export async function editTokenName (id: string, name: string): Promise<string> {
+export async function editTokenName (id: string, name: string): Promise<Object> {
   await TokenModel.update({ id }, {
     name
   })
-  return 'ok'
+  return { result: 'ok' }
 }

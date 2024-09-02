@@ -33,6 +33,7 @@ export default function Tokens (props: any): JSX.Element {
               loading: props.loading,
               downloadData: props.downloadData,
               previewData: props.previewData,
+              onEdit: props.onEdit,
               even: i % 2 === 0
             }
             return (

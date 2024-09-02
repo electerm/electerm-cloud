@@ -14,6 +14,7 @@ import Logout from '../common/logout'
 import UserInfo from '../common/user-info'
 import Logo from '../common/logo'
 import { TokenDef, TokenDef1 } from './interface'
+import './token.styl'
 
 export default function Me (props: any): JSX.Element {
   const [txt, setTxt] = useState('')
@@ -84,12 +85,15 @@ export default function Me (props: any): JSX.Element {
     tokenNameRef.current = v
   }
 
-  function renderTokenNameInput (): JSX.Element {
+  function renderTokenNameInput (name: string = ''): JSX.Element {
+    tokenNameRef.current = name
     return (
       <div>
         <Input
           onChange={onChangeTokenName}
           placeholder='Token name'
+          defaultValue={name}
+          autoFocus
         />
       </div>
     )
@@ -98,7 +102,7 @@ export default function Me (props: any): JSX.Element {
   function handleAdd (): void {
     Modal.confirm({
       title: 'Create a new token',
-      content: renderTokenNameInput(),
+      content: renderTokenNameInput(''),
       onOk: addToken
     })
   }
@@ -198,9 +202,39 @@ export default function Me (props: any): JSX.Element {
       })
   }
 
+  function editToken (id: string): void {
+    setLoading(id)
+    const name = tokenNameRef.current
+    fetch('/api/token', { id, name }, 'PATCH')
+      .then(res => {
+        setLoading('')
+        setTokens(tokens => tokens.map((d) => {
+          if (d.id === id) {
+            return { ...d, name }
+          }
+          return d
+        }))
+      })
+      .catch(e => {
+        setLoading('')
+        console.log(e)
+        void message.error('edit token name failed')
+      })
+  }
+
   function copyData (): void {
     void navigator.clipboard.writeText(txt)
     void message.success('Data Copied')
+  }
+
+  function onEdit (id: string, name: string): void {
+    Modal.confirm({
+      title: 'Edit token',
+      content: renderTokenNameInput(name),
+      onOk: () => {
+        editToken(id)
+      }
+    })
   }
 
   const tokensProps = {
@@ -211,7 +245,8 @@ export default function Me (props: any): JSX.Element {
     toggleTokenShow,
     downloadData: download,
     previewData: preview,
-    handleAdd
+    handleAdd,
+    onEdit
   }
 
   useEffect(() => {
