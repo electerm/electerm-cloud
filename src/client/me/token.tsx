@@ -12,6 +12,7 @@ import {
   EyeFilled,
   EyeInvisibleOutlined,
   DownloadOutlined,
+  JavaScriptOutlined,
   EditOutlined
 } from '@ant-design/icons'
 import dayjs from 'dayjs'
@@ -144,6 +145,7 @@ export default function Tokens (props: any): JSX.Element {
               onClick={preview}
               size='small'
               className='mg1r mg1b'
+              icon={<JavaScriptOutlined />}
             >
               Preview Data
             </Button>
