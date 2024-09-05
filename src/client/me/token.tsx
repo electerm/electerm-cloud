@@ -16,8 +16,8 @@ import {
   EditOutlined
 } from '@ant-design/icons'
 import dayjs from 'dayjs'
-
 import { TokenDef1 } from './interface'
+import { t } from '../locales/lang'
 
 export default function Tokens (props: any): JSX.Element {
   const {
@@ -82,15 +82,15 @@ export default function Tokens (props: any): JSX.Element {
               onClick={openEdit}
             />
           </span>
-          <span>Last Use Time: <b>{dayjs(lastUseTime).format('YYYY-MM-DD HH:mm:ss')}</b></span>
-          <span className='mg1l'>Use Count: <b>{useCount}</b></span>
+          <span>{t('lastUseTime')}: <b>{dayjs(lastUseTime).format('YYYY-MM-DD HH:mm:ss')}</b></span>
+          <span className='mg1l'>{t('useCount')}: <b>{useCount}</b></span>
         </div>
         <div className='pd1b wordbreak'>
-          <span className='mg1r mg1b'>Access Token:</span>
+          <span className='mg1r mg1b'>{t('accessToken')}:</span>
           {
             show
-              ? <span>{id}</span>
-              : <span>{id.slice(0, 5)}*****</span>
+              ? <span className='color-grey'>{id}</span>
+              : <span className='color-grey'>{id.slice(0, 5)}*****</span>
           }
           {
             show
@@ -110,10 +110,10 @@ export default function Tokens (props: any): JSX.Element {
               size='small'
               icon={<CopyOutlined />}
             >
-              Copy
+              {t('copy')}
             </Button>
             <Popconfirm
-              title='Are you sure to regenerate? Old token will be deleted.'
+              title={t('areYouSureToDelete')}
               onConfirm={re}
               okText='Yes'
               cancelText='No'
@@ -123,11 +123,11 @@ export default function Tokens (props: any): JSX.Element {
                 size='small'
                 icon={<ReloadOutlined />}
               >
-                Regenerate
+                {t('regenerate')}
               </Button>
             </Popconfirm>
             <Popconfirm
-              title='Are you sure to delete? Data associated with this token will be deleted.'
+              title={t('areYouSureToRegenerate')}
               onConfirm={del}
               okText='Yes'
               cancelText='No'
@@ -137,7 +137,7 @@ export default function Tokens (props: any): JSX.Element {
                 size='small'
                 icon={<CloseCircleFilled />}
               >
-                Delete
+                {t('delete')}
               </Button>
             </Popconfirm>
             <Button
@@ -147,7 +147,7 @@ export default function Tokens (props: any): JSX.Element {
               className='mg1r mg1b'
               icon={<JavaScriptOutlined />}
             >
-              Preview Data
+              {t('previewData')}
             </Button>
             <Button
               type='dashed'
@@ -156,7 +156,7 @@ export default function Tokens (props: any): JSX.Element {
               className='mg1r mg1b'
               icon={<DownloadOutlined />}
             >
-              Download Data
+              {t('downloadData')}
             </Button>
           </div>
         </div>

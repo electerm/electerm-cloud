@@ -14,6 +14,7 @@ import Logout from '../common/logout'
 import UserInfo from '../common/user-info'
 import Logo from '../common/logo'
 import { TokenDef, TokenDef1 } from './interface'
+import { t } from '../locales/lang'
 import './token.styl'
 
 export default function Me (props: any): JSX.Element {
@@ -91,7 +92,7 @@ export default function Me (props: any): JSX.Element {
       <div>
         <Input
           onChange={onChangeTokenName}
-          placeholder='Token name'
+          placeholder={t('tokenName')}
           defaultValue={name}
           autoFocus
         />
@@ -103,6 +104,8 @@ export default function Me (props: any): JSX.Element {
     Modal.confirm({
       title: 'Create a new token',
       content: renderTokenNameInput(''),
+      okText: t('save'),
+      cancelText: t('cancel'),
       onOk: addToken
     })
   }

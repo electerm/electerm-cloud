@@ -13,6 +13,8 @@ import Me from '../me/me'
 import AgreeMent from './agreement'
 import Links from '../common/links'
 import Footer from '../common/footer'
+import LangSelect from '../locales/lang-select'
+import { t } from '../locales/lang'
 
 declare global {
   interface Window {
@@ -88,13 +90,16 @@ export default function Login (): JSX.Element {
   }
   return (
     <div className='wrap'>
+      <div className='pd1y'>
+        <LangSelect />
+      </div>
       <div className='pd3y'>
         <img
           src='https://electerm.html5beta.com/electerm.png'
           alt=''
         />
         <p className='pd1y'>
-          Electerm Cloud: sync your electerm data to cloud
+          {t('electermCloud')}
         </p>
       </div>
       <Spin spinning={loading}>
@@ -105,18 +110,18 @@ export default function Login (): JSX.Element {
             onClick={handleLogin}
             size='large'
           >
-            Login with GitHub
+            {t('loginWithGitHub')}
           </Button>
           <p>
             <Checkbox onChange={openAgreement} checked={agreed}>
-              I have read and agree to the agreement
+              {t('agreeToTerms')}
             </Checkbox>
             <span className='mg1l'>
               <span
                 onClick={openAgreement}
                 className='pointer'
               >
-                Agreement
+                {t('agreement')}
               </span>
             </span>
           </p>

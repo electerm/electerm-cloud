@@ -3,6 +3,7 @@ import Token from './token'
 import { TokenDef } from './interface'
 import { Spin, Button } from 'antd'
 import { PlusCircleFilled } from '@ant-design/icons'
+import { t } from '../locales/lang'
 
 export default function Tokens (props: any): JSX.Element {
   const isLoading = props.loading === 'all'
@@ -10,7 +11,7 @@ export default function Tokens (props: any): JSX.Element {
   return (
     <div className='tokens pd1y'>
       <h2 className='fix'>
-        <span className='fleft'>Tokens</span>
+        <span className='fleft'>{t('tokens')}</span>
         <span className='fright'>
           <Button
             onClick={props.handleAdd}
@@ -18,13 +19,13 @@ export default function Tokens (props: any): JSX.Element {
             size='small'
             icon={<PlusCircleFilled />}
           >
-            New Token
+            {t('createNewToken')}
           </Button>
         </span>
       </h2>
       <Spin spinning={isLoading}>
         {
-          props.tokens.map((token: TokenDef, i) => {
+          props.tokens.map((token: TokenDef, i: number) => {
             const itemProps = {
               token,
               reToken: props.reToken,
