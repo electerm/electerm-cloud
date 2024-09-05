@@ -14,7 +14,7 @@ export default function LangSelect (): JSX.Element {
     window.location.reload()
   }
   const sleProps = {
-    defaultValue: lang,
+    value: lang,
     onChange: handleChange
   }
   return (
