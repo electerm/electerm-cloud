@@ -32,5 +32,6 @@ If you do not agree with these terms, please do not use this application. By cli
   copy: 'Copy',
   tokens: 'Tokens',
   email: 'Email',
-  name: 'Name'
+  name: 'Name',
+  download: 'Download'
 }

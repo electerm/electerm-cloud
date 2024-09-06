@@ -17,6 +17,35 @@ import { TokenDef, TokenDef1 } from './interface'
 import { t } from '../locales/lang'
 import './token.styl'
 
+interface JsonType {
+  [key: string]: any
+}
+
+function parseNestedJSON (obj: Object | string | null): Object | string | null {
+  if (typeof obj !== 'object' || obj === null) {
+    // Try to parse strings that look like JSON
+    if (typeof obj === 'string' && (obj.startsWith('{') || obj.startsWith('['))) {
+      try {
+        return parseNestedJSON(JSON.parse(obj))
+      } catch (e) {
+        // If parsing fails, return the original string
+        return obj
+      }
+    }
+    return obj
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(item => parseNestedJSON(item))
+  }
+
+  const result: JsonType = {}
+  for (const [key, value] of Object.entries(obj)) {
+    result[key] = parseNestedJSON(value)
+  }
+  return result
+}
+
 export default function Me (props: any): JSX.Element {
   const [txt, setTxt] = useState('')
   const tokenNameRef = useRef('')
@@ -33,24 +62,27 @@ export default function Me (props: any): JSX.Element {
 
   function onPreview (text: string): void {
     setTxt(text)
+    const prettyStr = JSON.stringify(parseNestedJSON(JSON.parse(text)), null, 2)
     Modal.info({
-      title: 'Preview',
+      title: t('previewData'),
       content: (
         <div>
           <div className='wordbreak pd1 data-preview-wrap'>
-            {text}
+            <pre>
+              {prettyStr}
+            </pre>
           </div>
           <p>
             <Button
               onClick={() => downloadData()}
             >
-              Download
+              {t('download')}
             </Button>
             <Button
               onClick={copyData}
               className='mg1l'
             >
-              Copy
+              {t('copy')}
             </Button>
           </p>
         </div>

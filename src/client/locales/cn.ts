@@ -36,5 +36,6 @@ export const cn: Lang = {
   status: '状态',
   tokens: '访问令牌',
   email: '电子邮件',
-  name: '姓名'
+  name: '姓名',
+  download: '下载'
 }

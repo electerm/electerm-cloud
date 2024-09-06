@@ -22,9 +22,26 @@ function createRequest (method, data) {
 describe('/api/sync', () => {
   it('put/get', async () => {
     const r = await createRequest('PUT', {
-      a: 1
+      id: 'xx',
+      a: 1,
+      b: 'ddfsadsfsdfsdfsdfsdfsdfsdfdsffffffffffffffffffffffffffffssdfsdffsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsfsdfsdfsdfsdfsdfsdfsdfsdfsfsdfsdfsdfsdfsdfsfsdfsdfsfdsfsdfsdfsdfsfsfsdfdsfsdfsdfsdfsdfsdfsdfsdfdsfsdfsdfsdfdsfsdfsdfsdfsdfsdfdsfdsfsdfsdfsdfsdfsdfsdfdsfsdfdsfdsf',
+      c: [1, 2, 3],
+      d: {
+        e: 1,
+        f: '2'
+      },
+      f: {
+        g: 1,
+        h: {
+          i: JSON.stringify({
+            j: 1,
+            k: 'ddfsadsfsdfsdfsdfsdfsdfsdfdsffffffffffffffffffffffffffffssdfsdffsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsfsdfsdfsdfsdfsdfsdfsdfsdfsfsdfsdfsdfsdfsdfsfsdfsdfsfdsfsdfsdfsdfsfsfsdfdsfsdfsdfsdfsdfsdfsdfsdfdsfsdfsdfsdfdsfsdfsdfsdfsdfsdfdsfdsfsdfsdfsdfsdfsdfsdfdsfsdfdsfdsf'
+          })
+        }
+      }
     })
-    expect(!!r.id).toEqual(true)
+    console.log('r', r)
+    expect(r).toEqual('ok')
     const r1 = await createRequest('GET', null)
     console.log(r1)
     expect(r1.a).toEqual(1)
