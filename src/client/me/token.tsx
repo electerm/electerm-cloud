@@ -82,28 +82,34 @@ export default function Tokens (props: any): JSX.Element {
               onClick={openEdit}
             />
           </span>
-          <span>{t('lastUseTime')}: <b>{dayjs(lastUseTime).format('YYYY-MM-DD HH:mm:ss')}</b></span>
-          <span className='mg1l'>{t('useCount')}: <b>{useCount}</b></span>
+          <span>
+            <span className='font13 color-grey mg1r'>{t('lastUseTime')}:</span>
+            <b>{dayjs(lastUseTime).format('YYYY-MM-DD HH:mm:ss')}</b>
+          </span>
+          <span className='mg1l'>
+            <span className='font13 color-grey mg1r'>{t('useCount')}:</span>
+            <b>{useCount}</b>
+          </span>
         </div>
-        <div className='pd1b wordbreak'>
+        <div className='pd1b wordbreak token-str'>
           <span className='mg1r mg1b'>{t('accessToken')}:</span>
           {
             show
               ? <span className='color-grey'>{id}</span>
-              : <span className='color-grey'>{id.slice(0, 5)}*****</span>
+              : <span className='color-grey'>{id.slice(0, 3)}...{id.slice(-3)}</span>
           }
           {
             show
               ? <EyeInvisibleOutlined
-                  className='pointer mg1l'
+                  className='pointer mg1l token-control'
                   onClick={toggle}
                 />
               : <EyeFilled
-                  className='pointer mg1l'
+                  className='pointer mg1l token-control'
                   onClick={toggle}
                 />
           }
-          <div className='pd1y'>
+          <div className='pd1y token-control'>
             <Button
               onClick={copy}
               className='mg1r mg1b'
