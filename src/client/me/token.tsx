@@ -76,7 +76,7 @@ export default function Tokens (props: any): JSX.Element {
       <div className={cls}>
         <div className='pd1b'>
           <span className='token-name-wrap mg2r'>
-            <b className='color-blue mg1r font14'>{name ?? 'Token noname'}</b>
+            <b className='color-blue mg1r font16'>{name ?? 'Token noname'}</b>
             <EditOutlined
               className='pointer edit-token-icon'
               onClick={openEdit}
