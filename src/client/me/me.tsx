@@ -18,7 +18,8 @@ import { t } from '../locales/lang'
 import './token.styl'
 import {
   CopyOutlined,
-  DownloadOutlined
+  DownloadOutlined,
+  JavaScriptOutlined
 } from '@ant-design/icons'
 
 interface JsonType {
@@ -69,6 +70,7 @@ export default function Me (props: any): JSX.Element {
     const prettyStr = JSON.stringify(parseNestedJSON(JSON.parse(text)), null, 2)
     Modal.info({
       title: t('previewData'),
+      icon: <JavaScriptOutlined />,
       content: (
         <div>
           <div className='wordbreak pd1 data-preview-wrap'>
