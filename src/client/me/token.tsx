@@ -96,7 +96,7 @@ export default function Tokens (props: any): JSX.Element {
           {
             show
               ? <span className='color-grey'>{id}</span>
-              : <span className='color-grey'>{id.slice(0, 3)}...{id.slice(-3)}</span>
+              : <span className='color-grey'>{id.slice(0, 42)}...{id.slice(-3)}</span>
           }
           {
             show

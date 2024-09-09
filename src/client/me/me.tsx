@@ -16,6 +16,10 @@ import Logo from '../common/logo'
 import { TokenDef, TokenDef1 } from './interface'
 import { t } from '../locales/lang'
 import './token.styl'
+import {
+  CopyOutlined,
+  DownloadOutlined
+} from '@ant-design/icons'
 
 interface JsonType {
   [key: string]: any
@@ -75,11 +79,13 @@ export default function Me (props: any): JSX.Element {
           <p>
             <Button
               onClick={() => downloadData()}
+              icon={<DownloadOutlined />}
             >
               {t('download')}
             </Button>
             <Button
               onClick={copyData}
+              icon={<CopyOutlined />}
               className='mg1l'
             >
               {t('copy')}
