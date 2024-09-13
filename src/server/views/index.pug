@@ -22,6 +22,14 @@ html
       .iblock {
         display: inline-block;
       }
+      #animate {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 400px;
+        z-index: -1;
+      }
     - if (!dev)
       link(rel='stylesheet', href=cssUrl)
 
@@ -32,35 +40,34 @@ html
       .pd3
         | loading...
     #container
-    //- script(crossorigin, type='module', src='//unpkg.zhimg.com/react@18/umd/react.production.min.js')
-    //- script(crossorigin, type='module', src='//unpkg.zhimg.com/react-dom@18/umd/react-dom.production.min.js')
-    script(async, src='https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js')
+    #animate
+    script(crossorigin, src='//cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js')
+    script(crossorigin, src='//cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js')
+    //- script(async, src='https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js')
     script.
       window.et = {
         loginUrl: '!{loginUrl}'
       }
-    script(type='importmap').
-      {
-        "imports": {
-          "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
-          "universe-bg": "//unpkg.com/universe-bg/dist/universe-bg.mjs"
-        }
-      }
+    //- script(type='importmap').
+    //-   {
+    //-     "imports": {
+    //-       "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
+    //-       "universe-bg": "//unpkg.com/universe-bg/dist/universe-bg.mjs"
+    //-     }
+    //-   }
     //- script(crossorigin, type='module', src='//unpkg.com/three@0.155.0/build/three.module.js')
     //- script(crossorigin, type='module', src='//unpkg.com/universe-bg/dist/universe-bg.mjs')
-    script(type='module').
-      import UniverseBg from 'universe-bg'
-      window.x = new UniverseBg({
-        className: 'animate',
-        // shootingStarCount: 150,
-        // starCount: 1000,
-        // starSize: 30,
-        shootingStarSize: 0.4,
-        shootingStarColor: 0x666666,
-        starColor: 0x666666,
-        bgColor: 0xffffff
-        // starDistance: 80,
-        // shootingStarDistance: 40
+    script.
+      VANTA.GLOBE({
+        el: "#animate",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        backgroundColor: 0xffffff
       })
 
     - if (dev)
