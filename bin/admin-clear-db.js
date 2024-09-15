@@ -1,9 +1,13 @@
 const axios = require('axios')
 
-const adminUser = process.env.ADMIN_USER
-const adminPass = process.env.ADMIN_PASS
+// const adminUser = process.env.ADMIN_USER
+// const adminPass = process.env.ADMIN_PASS
+// const url = process.env.ADMIN_INIT_DOMAIN
+
+const adminUser = process.env.ADMIN_USER_PROD
+const adminPass = process.env.ADMIN_PASS_PROD
+const url = process.env.ADMIN_INIT_DOMAIN_PROD
 // const adminGithubLogin = process.env.ADMIN_GITHUB_LOGIN
-const url = process.env.ADMIN_INIT_DOMAIN
 
 const apiUrl = `${url}/api/admin` // Replace with your actual domain
 const arr = [
