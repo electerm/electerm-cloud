@@ -80,7 +80,14 @@ export async function delToken (id: string, user: User): Promise<void> {
 export async function reToken (id: string, user: User): Promise<Object> {
   const token = await TokenModel.get(id)
   await TokenModel.delete(id)
-  const obj = await createToken(token.userId, token.dataId)
+  const obj = await TokenModel.create({
+    id: nanoid(),
+    userId: user.id,
+    useCount: token.useCount,
+    dataId: token.dataId,
+    lastUseTime: token.lastUseTime,
+    name: token.name
+  })
   const newTokenIds = user.tokenIds.replace(id, obj.id)
   await UserModel.update({ id: user.id }, {
     tokenIds: newTokenIds
@@ -89,7 +96,8 @@ export async function reToken (id: string, user: User): Promise<Object> {
     id: sign(obj.id),
     lastUseTime: obj.lastUseTime,
     useCount: obj.useCount,
-    dataId: obj.dataId
+    dataId: obj.dataId,
+    name: obj.name
   }
 }
 

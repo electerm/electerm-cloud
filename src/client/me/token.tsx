@@ -119,7 +119,7 @@ export default function Tokens (props: any): JSX.Element {
               {t('copy')}
             </Button>
             <Popconfirm
-              title={t('areYouSureToDelete')}
+              title={t('areYouSureToRegenerate')}
               onConfirm={re}
               okText='Yes'
               cancelText='No'
@@ -133,7 +133,7 @@ export default function Tokens (props: any): JSX.Element {
               </Button>
             </Popconfirm>
             <Popconfirm
-              title={t('areYouSureToRegenerate')}
+              title={t('areYouSureToDelete')}
               onConfirm={del}
               okText='Yes'
               cancelText='No'
