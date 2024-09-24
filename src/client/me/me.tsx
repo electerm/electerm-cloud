@@ -99,24 +99,30 @@ export default function Me (props: any): JSX.Element {
   }
 
   function preview (id: string): void {
+    setLoading(id)
     fetch('/api/get-data', { id })
       .then(res => {
         setTxt(res.text)
         onPreview(res.text)
+        setLoading('')
       })
       .catch(e => {
         console.log(e)
+        setLoading('')
         void message.error('download data failed')
       })
   }
 
   function download (id: string): void {
+    setLoading(id)
     fetch('/api/get-data', { id })
       .then(res => {
         downloadData(res.text)
+        setLoading('')
       })
       .catch(e => {
         console.log(e)
+        setLoading('')
         void message.error('download data failed')
       })
   }
