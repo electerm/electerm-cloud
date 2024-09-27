@@ -21,6 +21,7 @@ import {
   DownloadOutlined,
   JavaScriptOutlined
 } from '@ant-design/icons'
+import AutoFocusInput from '../common/auto-focus-input'
 
 interface JsonType {
   [key: string]: any
@@ -136,8 +137,9 @@ export default function Me (props: any): JSX.Element {
     tokenNameRef.current = name
     return (
       <div>
-        <Input
+        <AutoFocusInput
           onChange={onChangeTokenName}
+          key={Date.now()}
           placeholder={t('tokenName')}
           defaultValue={name}
           autoFocus

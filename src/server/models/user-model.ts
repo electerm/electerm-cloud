@@ -32,6 +32,26 @@ export const userSchema = Object.assign({}, adminUserSchema, {
     type: String,
     default: ''
   },
+  authoredBookIds: {
+    type: String,
+    default: ''
+  },
+  readBookIds: {
+    type: String,
+    default: ''
+  },
+  bookshelfIds: {
+    type: String,
+    default: ''
+  },
+  followingAuthorIds: {
+    type: String,
+    default: ''
+  },
+  followerIds: {
+    type: String,
+    default: ''
+  },
   tokenLimit: {
     type: Number,
     default: 1
