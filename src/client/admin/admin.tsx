@@ -64,7 +64,14 @@ export default function Admin (props: any): JSX.Element {
     fetch(`/api/user?id=${txt}`, undefined, 'GET')
       .then((res) => {
         setLoading('')
-        setUsers([res.user])
+        if (res.user !== undefined) {
+          setUsers([res.user])
+          setCount(1)
+        } else {
+          setUsers([]) // Set to empty array if no user found
+          setCount(0)
+          void message.info('No user found') // Optionally inform the user
+        }
       })
       .catch(e => {
         setLoading('')
@@ -120,13 +127,7 @@ export default function Admin (props: any): JSX.Element {
   }
 
   function onChangeSearch (txt: string): void {
-    setTxt(oldTxt => {
-      if (oldTxt !== txt && txt === '') {
-        getUsers()
-        return txt
-      }
-      return oldTxt
-    })
+    setTxt(txt)
   }
 
   const usersProps = {
