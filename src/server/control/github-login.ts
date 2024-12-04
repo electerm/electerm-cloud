@@ -69,7 +69,7 @@ async function findOrCreateUser (githubUser: GitHubUser, isAdmin: boolean): Prom
       githubId: githubUser.id + '',
       name: githubUser.name ?? githubUser.login,
       githubLogin: githubUser.login,
-      email: githubUser.email,
+      email: githubUser.email ?? '',
       avatarUrl: githubUser.avatar_url
     }
     if (isAdmin) {
