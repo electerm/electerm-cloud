@@ -14,7 +14,7 @@ interface GitHubUser {
   id: string
   login: string
   name: string
-  email: string
+  email: string | null | undefined
   avatar_url: string
 }
 
@@ -85,11 +85,11 @@ async function findOrCreateUser (githubUser: GitHubUser, isAdmin: boolean): Prom
     await updateStatics('tokenCount', 1)
     return user
   } else {
-    if (user.email !== githubUser.email) {
+    if (user.email !== (githubUser.email ?? '')) {
       await Cls.update({ id }, {
         name: githubUser.name ?? githubUser.login,
         githubId: githubUser.id + '',
-        email: githubUser.email,
+        email: githubUser.email ?? '',
         avatarUrl: githubUser.avatar_url
       })
     }
