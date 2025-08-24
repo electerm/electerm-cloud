@@ -38,7 +38,7 @@ jobs:
         run: npm ci
 
       - name: Build site
-        run: cp sample.env .env && npm run build
+        run: cp sample.env .env && npm run b
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
