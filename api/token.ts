@@ -4,7 +4,7 @@ import { listTokens, delToken, reToken, newToken, editTokenName } from '../src/s
 import { User } from '../src/server/models/user-model'
 
 function tokenLimitExceeded (user: User): boolean {
-  return user.tokenIds.split(',').length >= user.tokenLimit
+  return user.tokenIds.split(',').filter(d => d).length >= user.tokenLimit
 }
 
 export default async function token (req: VercelRequest, res: VercelResponse): Promise<void> {

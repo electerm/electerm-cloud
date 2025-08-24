@@ -129,6 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 /temp
+/tmp
 .vercel
 /public
 .DS_Store
