@@ -50,7 +50,7 @@ export async function getToken (id: string): Promise<Token> {
 }
 
 export async function listTokens (ids: string[]): Promise<Object[]> {
-  const arr = await TokenModel.batchGet(ids, {
+  const arr = await TokenModel.batchGet(ids.filter(id => id !== ''), {
     attributes: ['id', 'lastUseTime', 'useCount', 'dataId', 'name']
   })
   return arr.map(d => {

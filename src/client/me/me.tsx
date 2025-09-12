@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import {
   Button,
   Modal,
-  Input,
   message
 } from 'antd'
 import fetch from '../common/fetch'
