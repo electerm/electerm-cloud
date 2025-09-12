@@ -40,7 +40,7 @@ body {
   width: 120vw;
   height: 100vh;
   cursor: pointer;
-  z-index: 0;
+  z-index: -1;
   left: -10vw;
   .left,
   .right {
