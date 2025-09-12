@@ -6,7 +6,7 @@ function formatUser (user: User): Object {
     id: user.id,
     name: user.name,
     tokenLimit: user.tokenLimit,
-    tokensCount: user.tokenIds.split(',').length,
+    tokensCount: user.tokenIds.split(',').filter(t => t !== '').length,
     email: user.email,
     githubLogin: user.githubLogin,
     avatarUrl: user.avatarUrl,

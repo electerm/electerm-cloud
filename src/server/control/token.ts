@@ -30,8 +30,8 @@ export async function newToken (user: User, userId: string, name: string): Promi
   })
   await updateStatics('tokenCount', 1)
   await UserModel.update({ id: user.id }, {
-    tokenIds: user.tokenIds.split(',').concat([token.id]).join(','),
-    dataIds: user.dataIds.split(',').concat([data.id]).join(',')
+    tokenIds: user.tokenIds.split(',').concat([token.id]).filter(t => t !== '').join(','),
+    dataIds: user.dataIds.split(',').concat([data.id]).filter(d => d !== '').join(',')
   })
   token.id = sign(token.id)
   return token
