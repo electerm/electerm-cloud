@@ -1,11 +1,24 @@
 import { UserModel, DataModel, TokenModel } from '../models/db'
 import { User } from '../models/user-model'
 
+function formatUser (user: User): Object {
+  return {
+    id: user.id,
+    name: user.name,
+    tokenLimit: user.tokenLimit,
+    tokensCount: user.tokenIds.split(',').length,
+    email: user.email,
+    githubLogin: user.githubLogin,
+    avatarUrl: user.avatarUrl,
+    status: user.status
+  }
+}
+
 export async function listUsers (start: string, limit: number, id: string): Promise<Object> {
   if (id !== '') {
     const user = await UserModel.get(id)
     return {
-      user
+      user: formatUser(user)
     }
   }
   const users = start === ''
@@ -22,16 +35,7 @@ export async function listUsers (start: string, limit: number, id: string): Prom
       .exec()
   return {
     users: users.map((user: User) => {
-      return {
-        id: user.id,
-        name: user.name,
-        tokenLimit: user.tokenLimit,
-        tokensCount: user.tokenIds.split(',').length,
-        email: user.email,
-        githubLogin: user.githubLogin,
-        avatarUrl: user.avatarUrl,
-        status: user.status
-      }
+      return formatUser(user)
     }),
     count: users.count,
     lastKey: users.lastKey
