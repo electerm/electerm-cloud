@@ -6,6 +6,9 @@ export interface User extends AdminUser {
   dataIds: string
   tokenLimit: number
   status: string
+  googleAccountEmail?: string
+  googleId?: string
+  avatarUrlGoogle?: string
 }
 
 export const userSchema = Object.assign({}, adminUserSchema, {
@@ -26,6 +29,15 @@ export const userSchema = Object.assign({}, adminUserSchema, {
     type: String
   },
   avatarUrl: {
+    type: String
+  },
+  googleAccountEmail: {
+    type: String
+  },
+  googleId: {
+    type: String
+  },
+  avatarUrlGoogle: {
     type: String
   },
   tokenIds: {
