@@ -7,6 +7,11 @@ import { Token, tokenSchema } from './token-model'
 import { Data, dataSchema } from './data-model'
 import { Statics, staticsSchema } from './statics-model'
 
+if (process.env.NODE_ENV !== 'production' && process.env.DYNAMO_LOCAL !== 'no') {
+  console.log('Using local DynamoDB instance for development')
+  dynamoose.aws.ddb.local(process.env.DYNAMO_LOCAL)
+}
+
 // Common schema options
 const commonSchemaOptions = {
   timestamps: true
