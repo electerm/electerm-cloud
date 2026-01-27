@@ -133,3 +133,7 @@ dist
 .vercel
 /public
 .DS_Store
+bin/DynamoDBLocal_lib
+dynamodb-local-metadata.json
+shared-local-instance.db
+bin/DynamoDBLocal.jar
