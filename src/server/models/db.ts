@@ -7,6 +7,11 @@ import { Token, tokenSchema } from './token-model'
 import { Data, dataSchema } from './data-model'
 import { Statics, staticsSchema } from './statics-model'
 
+// Configure DynamoDB local
+if (process.env.DYNAMODB_ENDPOINT_URL !== undefined) {
+  dynamoose.aws.ddb.local(process.env.DYNAMODB_ENDPOINT_URL)
+}
+
 // Common schema options
 const commonSchemaOptions = {
   timestamps: true
