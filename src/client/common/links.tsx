@@ -45,10 +45,6 @@ export default function Links (): JSX.Element {
     {
       url: 'https://electerm.html5beta.com/sponsor-electerm.html',
       title: 'Sponsor Electerm'
-    },
-    {
-      url: 'https://github.com/mbadolato/iTerm2-Color-Schemes/tree/master/electerm',
-      title: 'Themes'
     }
   ]
   return (
