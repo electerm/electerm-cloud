@@ -46,6 +46,17 @@ function handleAdmin (req: express.Request, res: express.Response) {
   })
 }
 
+function handleAgreement (req: express.Request, res: express.Response) {
+  res.render('agreement', {
+    dev: true,
+    cssUrl: '/agreement.bundle.css',
+    jsUrl: '/src/client/entry/agreement.tsx',
+    desc: 'electerm cloud agreement',
+    keywords: 'electerm, electerm-cloud',
+    siteName: 'electerm cloud agreement'
+  })
+}
+
 
 async function createServer(): Promise<void> {
   const app: express.Application = express()
@@ -68,6 +79,7 @@ async function createServer(): Promise<void> {
 
   app.get('/', handleIndex)
   app.get('/admin', handleAdmin)
+  app.get('/agreement', handleAgreement)
   route(app)
   app.use(vite.middlewares)
 

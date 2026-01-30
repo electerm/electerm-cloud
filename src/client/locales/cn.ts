@@ -37,5 +37,6 @@ export const cn: Lang = {
   tokens: '访问令牌',
   email: '电子邮件',
   name: '姓名',
+  backToHome: '返回首页',
   download: '下载'
 }

@@ -37,6 +37,22 @@ async function main () {
     keywords: 'electerm, electerm-cloud',
     siteName: 'electerm cloud admin'
   })
+
+  const from2 = resolve(cwd, 'src/server/views/agreement.pug')
+  const to2 = resolve(cwd, 'public/agreement/index.html')
+  mkdirSync(
+    resolve(cwd, 'public/agreement'),
+    { recursive: true }
+  )
+
+  await buildPug(from2, to2, {
+    dev: false,
+    cssUrl: '/css/style.css',
+    jsUrl: '/js/agreement.bundle.js',
+    desc: 'electerm cloud agreement: sync your electerm data to cloud',
+    keywords: 'electerm, electerm-cloud',
+    siteName: 'electerm cloud agreement'
+  })
 }
 
 main()

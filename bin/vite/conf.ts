@@ -20,7 +20,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         app: resolve(cwd, 'src/client/entry/app.tsx'),
-        admin: resolve(cwd, 'src/client/entry/admin.tsx')
+        admin: resolve(cwd, 'src/client/entry/admin.tsx'),
+        agreement: resolve(cwd, 'src/client/entry/agreement.tsx')
       },
       external: [
         'universe-bg',

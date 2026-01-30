@@ -33,5 +33,6 @@ If you do not agree with these terms, please do not use this application. By cli
   tokens: 'Tokens',
   email: 'Email',
   name: 'Name',
+  backToHome: 'Back to Home',
   download: 'Download'
 }

@@ -14,6 +14,7 @@ import AgreeMent from './agreement'
 import Links from '../common/links'
 import Footer from '../common/footer'
 import LangSelect from '../locales/lang-select'
+import Logo from '../common/logo'
 import { t } from '../locales/lang'
 
 declare global {
@@ -93,15 +94,7 @@ export default function Login (): JSX.Element {
       <div className='pd1y'>
         <LangSelect />
       </div>
-      <div className='pd3y'>
-        <img
-          src='https://electerm.html5beta.com/electerm.png'
-          alt=''
-        />
-        <p className='pd1y'>
-          {t('electermCloud')}
-        </p>
-      </div>
+      <Logo />
       <Spin spinning={loading}>
         <div className='pd3y'>
           <Button

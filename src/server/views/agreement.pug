@@ -1,0 +1,45 @@
+doctype html
+html
+  head
+    title #{siteName}
+    meta(name='description', content=desc)
+    meta(name='keywords', content=keywords)
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    meta(name='author' content='ZHAO Xudong')
+    link(rel='icon' href='https://electerm.html5beta.com/favicon.ico' type='image/x-icon')
+    style.
+      body {
+        background: #ffffff;
+      }
+      #content-loading {
+        text-align: center;
+        padding: 30px 10px;
+      }
+      .pd3 {
+        padding: 15px;
+      }
+      .iblock {
+        display: inline-block;
+      }
+    - if (!dev)
+      link(rel='stylesheet', href=cssUrl)
+
+  body
+    #content-loading
+      .pd3
+        img.iblock(src='https://electerm.html5beta.com/electerm.png', alt='', height=80)
+      .pd3
+        | loading...
+    #container
+    - if (dev)
+      script(type='module').
+        import RefreshRuntime from '/@react-refresh'
+        RefreshRuntime.injectIntoGlobalHook(window)
+        window.$RefreshReg$ = () => {}
+        window.$RefreshSig$ = () => (type) => type
+        window.__vite_plugin_react_preamble_installed__ = true
+      script(src='/@vite/client', type='module')
+      script(src=jsUrl, type='module')
+    - else
+      script(src=jsUrl, type='module')
