@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { updateData, getData } from '../src/server/control/data-control'
 import { verifyJwt } from '../src/server/control/jwt'
 import { getToken } from '../src/server/control/token'
+import { UserModel } from '../src/server/models/db'
 
 export default async function syncHandler (req: VercelRequest, res: VercelResponse): Promise<void> {
   const {
@@ -20,12 +21,17 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
   if (id === null) {
     return
   }
+  const token = await getToken(id)
+  const user = await UserModel.get({ id: token.userId })
+  if (user !== undefined && user !== null && user.status === 'disabled') {
+    res.status(403).send('user disabled')
+    return
+  }
+  const { dataId } = token
   if (method === 'POST') {
     res.send('test ok')
     return
   }
-  const token = await getToken(id)
-  const { dataId } = token
   if (method === 'PUT') {
     const data = await updateData(dataId, JSON.stringify(req.body))
     res.send(data)
