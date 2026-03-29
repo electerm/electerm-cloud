@@ -101,7 +101,10 @@ export async function reToken (id: string, user: User): Promise<Object> {
   }
 }
 
-export async function editTokenName (id: string, name: string): Promise<Object> {
+export async function editTokenName (id: string, name: string, user: User): Promise<Object> {
+  if (!user.tokenIds.includes(id)) {
+    throw new Error('Token not found or access denied')
+  }
   await TokenModel.update({ id }, {
     name
   })

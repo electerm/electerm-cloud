@@ -43,7 +43,7 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
     })
   } else if (method === 'PATCH') {
     if (name !== undefined) {
-      const r = await editTokenName(tokenId, name).catch(handleError)
+      const r = await editTokenName(tokenId, name, user).catch(handleError)
       res.send(r)
       return
     }
