@@ -14,7 +14,7 @@ import Admin from './admin'
 declare global {
   interface Window {
     et: {
-      loginUrl: string
+      loginUrl?: string
     }
   }
 }
@@ -38,7 +38,15 @@ export default function AdminLogin (): JSX.Element {
 
   function handleLogin (): void {
     setLoading(true)
-    window.location.href = window.et.loginUrl
+    window.fetch('/api/get-login-url?isAdmin=true')
+      .then(async res => await res.json())
+      .then(data => {
+        window.location.href = data.loginUrl
+      })
+      .catch(e => {
+        console.error(e)
+        setLoading(false)
+      })
   }
 
   function handleLogout (): void {

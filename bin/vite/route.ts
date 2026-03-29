@@ -1,6 +1,7 @@
 import getData from '../../api/get-data'
 import sync from '../../api/sync'
 import githubLogin from '../../api/github-login-callback'
+import getLoginUrl from '../../api/get-login-url'
 import token from '../../api/token'
 import admin from '../../api/admin'
 import getAdminUser from '../../api/get-admin-user'
@@ -27,6 +28,7 @@ export default function (app: Application) {
   app.post('/api/get-data', convertToExpressHandler(getData))
   app.all('/api/sync', convertToExpressHandler(sync))
   app.get('/api/github-login-callback', convertToExpressHandler(githubLogin))
+  app.get('/api/get-login-url', convertToExpressHandler(getLoginUrl))
   app.all('/api/user', convertToExpressHandler(user))
   app.all('/api/token', convertToExpressHandler(token))
   app.post('/api/get-user', convertToExpressHandler(getUser))

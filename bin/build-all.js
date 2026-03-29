@@ -9,13 +9,12 @@ async function main () {
   const to = resolve(cwd, 'public/index.html')
   const cid = env.CLIENT_ID_PROD
   console.log('cid, cid', cid)
-  const redirectUrl = encodeURIComponent('https://electerm-cloud.html5beta.com/api/github-login-callback')
 
   await buildPug(from, to, {
     dev: false,
     cssUrl: '/css/style.css',
     jsUrl: '/js/app.bundle.js',
-    loginUrl: `https://github.com/login/oauth/authorize?client_id=${cid}&redirect_uri=${redirectUrl}`,
+    loginUrl: '',
     desc: 'electerm cloud: sync your electerm data to cloud',
     keywords: 'electerm, electerm-cloud',
     siteName: 'electerm cloud'
@@ -32,7 +31,7 @@ async function main () {
     dev: false,
     cssUrl: '/css/style.css',
     jsUrl: '/js/admin.bundle.js',
-    loginUrl: `https://github.com/login/oauth/authorize?client_id=${cid}&redirect_uri=${redirectUrl}&state=admin`,
+    loginUrl: '',
     desc: 'electerm cloud admin: sync your electerm data to cloud',
     keywords: 'electerm, electerm-cloud',
     siteName: 'electerm cloud admin'

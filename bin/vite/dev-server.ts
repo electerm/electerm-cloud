@@ -11,10 +11,8 @@ const viewPath = resolve(cwd, 'src/server/views')
 const devPort: number = Number(env.SERVER_DEV_PORT) || 5678
 const host: string = env.SERVER_HOST || '127.0.0.1'
 const h: string = `http://${host}:${devPort}`
-const cid = env.CLIENT_ID
-const redirectUrl = encodeURIComponent(`http://127.0.0.1:${devPort}/api/github-login-callback`)
 
-console.log(redirectUrl)
+console.log(encodeURIComponent(`http://127.0.0.1:${devPort}/api/github-login-callback`))
 
 declare global {
   var viteInst: any
@@ -25,8 +23,7 @@ function handleIndex (req: express.Request, res: express.Response) {
     dev: true,
     cssUrl: '/app.bundle.css',
     jsUrl: '/src/client/entry/app.tsx',
-    loginUrl: `https://github.com/login/oauth/authorize?client_id=${cid}&redirect_uri=${redirectUrl}`
-    ,
+    loginUrl: '',
     desc: 'electerm cloud: sync your electerm data to cloud',
     keywords: 'electerm, electerm-cloud',
     siteName: 'electerm cloud'
@@ -38,8 +35,7 @@ function handleAdmin (req: express.Request, res: express.Response) {
     dev: true,
     cssUrl: '/admin.bundle.css',
     jsUrl: '/src/client/entry/admin.tsx',
-    loginUrl: `https://github.com/login/oauth/authorize?client_id=${cid}&redirect_uri=${redirectUrl}&state=admin`
-    ,
+    loginUrl: '',
     desc: 'electerm cloud: sync your electerm data to cloud',
     keywords: 'electerm, electerm-cloud',
     siteName: 'electerm cloud'
@@ -57,7 +53,6 @@ function handleAgreement (req: express.Request, res: express.Response) {
   })
 }
 
-
 async function createServer(): Promise<void> {
   const app: express.Application = express()
   const vite = await createViteServer({
@@ -73,7 +68,6 @@ async function createServer(): Promise<void> {
   app.use(logger('tiny'))
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
-  // app.use(express.static(staticPath))
   app.set('views', viewPath)
   app.set('view engine', 'pug')
 

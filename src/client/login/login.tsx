@@ -20,7 +20,7 @@ import { t } from '../locales/lang'
 declare global {
   interface Window {
     et: {
-      loginUrl: string
+      loginUrl?: string
     }
   }
 }
@@ -35,7 +35,6 @@ export default function Login (): JSX.Element {
     await fetch('/api/get-user')
       .then(res => {
         setUser(res.user)
-        // console.log(res)
       })
       .catch(e => {
         console.log(e)
@@ -65,7 +64,15 @@ export default function Login (): JSX.Element {
       return openAgreement()
     }
     setLoading(true)
-    window.location.href = window.et.loginUrl
+    window.fetch('/api/get-login-url')
+      .then(async res => await res.json())
+      .then(data => {
+        window.location.href = data.loginUrl
+      })
+      .catch(e => {
+        console.error(e)
+        setLoading(false)
+      })
   }
 
   function handleLogout (): void {
