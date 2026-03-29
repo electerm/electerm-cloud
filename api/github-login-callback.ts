@@ -34,9 +34,9 @@ export default async function githubLogin (req: VercelRequest, res: VercelRespon
 <body>
 <div style="text-align: center; padding: 30px 10px;">Loading...</div>
 <script>
-  localStorage.setItem('${tokenName}', '${token}');
+  localStorage.setItem(${JSON.stringify(tokenName)}, ${JSON.stringify(token)});
   setTimeout(() => {
-    window.location.href = '${redirectUrl}'
+    window.location.href = ${JSON.stringify(redirectUrl)}
   }, 1000)
 </script>
 
