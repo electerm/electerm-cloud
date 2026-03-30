@@ -1,3 +1,3 @@
 # electerm-cloud
 
-data cloud service for electerm user
+Data cloud service for electerm user
