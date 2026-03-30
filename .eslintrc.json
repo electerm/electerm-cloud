@@ -1,6 +1,9 @@
 {
-  "extends": ["ts-standard"],
+  "extends": ["standard-with-typescript", "standard-jsx"],
   "rules": {
     "@typescript-eslint/promise-function-async": "off"
+  },
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
   }
 }

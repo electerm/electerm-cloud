@@ -8,17 +8,18 @@ import route from './route'
 const env = process.env
 const cwd = process.cwd()
 const viewPath = resolve(cwd, 'src/server/views')
-const devPort: number = Number(env.SERVER_DEV_PORT) || 5678
-const host: string = env.SERVER_HOST || '127.0.0.1'
+const devPort: number = env.SERVER_DEV_PORT != null && Number(env.SERVER_DEV_PORT) !== 0 ? Number(env.SERVER_DEV_PORT) : 5678
+const host: string = env.SERVER_HOST ?? '127.0.0.1'
 const h: string = `http://${host}:${devPort}`
 
 console.log(encodeURIComponent(`http://127.0.0.1:${devPort}/api/github-login-callback`))
 
 declare global {
+  // eslint-disable-next-line no-var
   var viteInst: any
 }
 
-function handleIndex (req: express.Request, res: express.Response) {
+function handleIndex (req: express.Request, res: express.Response): void {
   res.render('index', {
     dev: true,
     cssUrl: '/app.bundle.css',
@@ -30,7 +31,7 @@ function handleIndex (req: express.Request, res: express.Response) {
   })
 }
 
-function handleAdmin (req: express.Request, res: express.Response) {
+function handleAdmin (req: express.Request, res: express.Response): void {
   res.render('admin', {
     dev: true,
     cssUrl: '/admin.bundle.css',
@@ -42,7 +43,7 @@ function handleAdmin (req: express.Request, res: express.Response) {
   })
 }
 
-function handleAgreement (req: express.Request, res: express.Response) {
+function handleAgreement (req: express.Request, res: express.Response): void {
   res.render('agreement', {
     dev: true,
     cssUrl: '/agreement.bundle.css',
@@ -53,7 +54,7 @@ function handleAgreement (req: express.Request, res: express.Response) {
   })
 }
 
-async function createServer(): Promise<void> {
+async function createServer (): Promise<void> {
   const app: express.Application = express()
   const vite = await createViteServer({
     ...conf,
@@ -82,4 +83,4 @@ async function createServer(): Promise<void> {
   })
 }
 
-createServer()
+void createServer()

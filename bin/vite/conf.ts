@@ -36,7 +36,7 @@ export default defineConfig({
           react: ['react']
         },
         format: 'esm',
-        entryFileNames: `js/[name].bundle.js`,
+        entryFileNames: 'js/[name].bundle.js',
         chunkFileNames: 'chunks/[name].[hash].bundle.js',
         assetFileNames: chunkInfo => {
           const { name = '' } = chunkInfo

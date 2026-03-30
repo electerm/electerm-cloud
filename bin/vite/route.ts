@@ -8,23 +8,22 @@ import getAdminUser from '../../api/get-admin-user'
 import getUser from '../../api/get-user'
 import user from '../../api/user'
 import statics from '../../api/statics'
-import { Request, Response, Application } from 'express'
+import { Request, Response, Application, RequestHandler } from 'express'
 import { VercelRequest, VercelResponse } from '@vercel/node'
 
-type VercelHandler = (req: VercelRequest, res: VercelResponse) => Promise<void>;
+type VercelHandler = (req: VercelRequest, res: VercelResponse) => Promise<void>
 
-function convertToExpressHandler (vercelHandler: VercelHandler) {
-  return async (req: Request, res: Response) => {
-    try {
-      await vercelHandler(req as VercelRequest, res as unknown as VercelResponse)
-    } catch (error) {
-      console.error(error)
-      res.status(500).send('Internal Server Error')
-    }
+function convertToExpressHandler (vercelHandler: VercelHandler): RequestHandler {
+  return (req: Request, res: Response): void => {
+    vercelHandler(req as VercelRequest, res as unknown as VercelResponse)
+      .catch((error: unknown) => {
+        console.error(error)
+        res.status(500).send('Internal Server Error')
+      })
   }
 }
 
-export default function (app: Application) {
+export default function (app: Application): void {
   app.post('/api/get-data', convertToExpressHandler(getData))
   app.all('/api/sync', convertToExpressHandler(sync))
   app.get('/api/github-login-callback', convertToExpressHandler(githubLogin))
