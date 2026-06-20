@@ -175,18 +175,7 @@ async function createServer (): Promise<void> {
   app.set('view engine', 'pug')
 
   // Static files from src/static
-  app.use('/favicon.ico', express.static(resolve(staticPath, 'favicon.ico')))
-  app.use('/favicon-32x32.png', express.static(resolve(staticPath, 'favicon-32x32.png')))
-  app.use('/favicon-16x16.png', express.static(resolve(staticPath, 'favicon-16x16.png')))
-  app.use('/apple-touch-icon.png', express.static(resolve(staticPath, 'apple-touch-icon.png')))
-  app.get('/robots.txt', (_req, res) => {
-    res.type('text/plain')
-    res.sendFile(resolve(staticPath, 'robots.txt'))
-  })
-  app.get('/ai.txt', (_req, res) => {
-    res.type('text/plain')
-    res.sendFile(resolve(staticPath, 'ai.txt'))
-  })
+  app.use(express.static(staticPath))
 
   // Compiled SCSS endpoint for static pages
   app.get('/css/main.css', (_req, res) => {

@@ -9,7 +9,7 @@ require('dotenv').config()
 const { buildPug } = require('./build-bug.js')
 const { resolve } = require('path')
 const { cwd } = require('./common.js')
-const { mkdirSync, writeFileSync, copyFileSync, existsSync, readFileSync } = require('fs')
+const { mkdirSync, writeFileSync, copyFileSync, readFileSync, readdirSync, statSync } = require('fs')
 const stylus = require('stylus')
 
 // Import data (TypeScript files loaded via tsx)
@@ -134,28 +134,13 @@ ${urls}
   console.log('  ✓ public/sitemap.xml')
 }
 
-// Copy static files
-function copyStaticFiles () {
-  const staticDir = resolve(cwd, 'src/static')
-  const publicDir = resolve(cwd, 'public')
-  const files = ['robots.txt', 'ai.txt']
-  files.forEach(f => {
-    const src = resolve(staticDir, f)
-    if (existsSync(src)) {
-      copyFileSync(src, resolve(publicDir, f))
-      console.log(`  ✓ public/${f}`)
-    }
-  })
-}
-
-// Copy favicon files
+// Copy all static files to public/
 function copyFavicons () {
   const staticDir = resolve(cwd, 'src/static')
   const publicDir = resolve(cwd, 'public')
-  const favicons = ['favicon.ico', 'favicon-32x32.png', 'favicon-16x16.png', 'apple-touch-icon.png']
-  favicons.forEach(f => {
+  readdirSync(staticDir).forEach(f => {
     const src = resolve(staticDir, f)
-    if (existsSync(src)) {
+    if (statSync(src).isFile()) {
       copyFileSync(src, resolve(publicDir, f))
       console.log(`  ✓ public/${f}`)
     }
@@ -177,7 +162,6 @@ async function main () {
   buildSitemap()
 
   // Copy static files
-  copyStaticFiles()
   copyFavicons()
 
   console.log('\nStatic pages build complete!\n')
