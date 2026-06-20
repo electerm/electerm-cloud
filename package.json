@@ -30,7 +30,7 @@
   "license": "MIT",
   "devDependencies": {
     "@ant-design/icons": "^5.3.7",
-    "@electerm/electerm-resource": "^2.0.6",
+    "@electerm/electerm-resource": "^2.0.10",
     "@tsconfig/recommended": "^1.0.2",
     "@types/basic-auth": "^1.1.8",
     "@types/express": "^4.17.21",
