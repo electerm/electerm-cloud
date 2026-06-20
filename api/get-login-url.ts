@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 
 const jwtSecret = process.env.JWT_SECRET ?? ''
 const clientId = process.env.CLIENT_ID ?? process.env.CLIENT_ID_PROD ?? ''
-const prodHost = process.env.PROD_HOST ?? 'https://electerm-cloud.html5beta.com'
+const prodHost = process.env.PROD_HOST ?? 'https://sync.electerm.org'
 
 export default async function getLoginUrl (req: VercelRequest, res: VercelResponse): Promise<void> {
   const isAdmin = req.query.isAdmin === 'true'
