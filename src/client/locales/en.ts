@@ -3,7 +3,7 @@ import { Lang } from './interface'
 export const en: Lang = {
   logout: 'Logout',
   loginWithGitHub: 'Login with GitHub',
-  agreeToTerms: 'I have read and agree to the agreement',
+  loginAgreeNotice: 'By logging in, you agree to the',
   agreement: 'Agreement',
   agreementContent: `By using this application, you agree to these terms and conditions. This application allows you to log in with your GitHub account and sync your data.
 

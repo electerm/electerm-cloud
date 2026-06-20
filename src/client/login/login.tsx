@@ -4,13 +4,10 @@ import React, { useEffect, useState, JSX } from 'react'
 import { GithubFilled } from '@ant-design/icons'
 import {
   Button,
-  Checkbox,
-  Modal,
   Spin
 } from 'antd'
 import fetch from '../common/fetch'
 import Me from '../me/me'
-import AgreeMent from './agreement'
 import Links from '../common/links'
 import Footer from '../common/footer'
 import LangSelect from '../locales/lang-select'
@@ -26,7 +23,6 @@ declare global {
 }
 
 export default function Login (): JSX.Element {
-  const [agreed, setAgreed] = useState(false)
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState(null)
 
@@ -42,27 +38,7 @@ export default function Login (): JSX.Element {
     setLoading(false)
   }
 
-  function openAgreement (): void {
-    Modal.confirm({
-      title: 'Agreement',
-      content: <AgreeMent />,
-      okText: 'Agree',
-      cancelText: 'Disagree',
-      onCancel: () => {
-        localStorage.setItem('agreed', 'no')
-        setAgreed(false)
-      },
-      onOk: () => {
-        localStorage.setItem('agreed', 'yes')
-        setAgreed(true)
-      }
-    })
-  }
-
   function handleLogin (): void {
-    if (!agreed) {
-      return openAgreement()
-    }
     setLoading(true)
     window.fetch('/api/get-login-url')
       .then(async res => await res.json())
@@ -83,9 +59,6 @@ export default function Login (): JSX.Element {
   useEffect(() => {
     void getUser()
     document.getElementById('content-loading')?.remove()
-    setAgreed(
-      localStorage.getItem('agreed') === 'yes'
-    )
   }, [])
   if (user !== null) {
     const meProps = {
@@ -112,18 +85,12 @@ export default function Login (): JSX.Element {
           >
             {t('loginWithGitHub')}
           </Button>
-          <p>
-            <Checkbox onChange={openAgreement} checked={agreed}>
-              {t('agreeToTerms')}
-            </Checkbox>
-            <span className='mg1l'>
-              <span
-                onClick={openAgreement}
-                className='pointer'
-              >
-                {t('agreement')}
-              </span>
-            </span>
+          <p className='login-agreement-notice'>
+            {t('loginAgreeNotice')}
+            {' '}
+            <a href='/agreement' target='_blank' rel='noreferrer'>
+              {t('agreement')}
+            </a>
           </p>
         </div>
       </Spin>

@@ -3,7 +3,7 @@ import { Lang } from './interface'
 export const cn: Lang = {
   logout: '注销登录',
   loginWithGitHub: '使用 GitHub账户 登录',
-  agreeToTerms: '我已阅读并同意该协议',
+  loginAgreeNotice: '登录即表示您同意',
   agreement: '使用协议',
   agreementContent: `使用本应用程序，即表示您同意这些条款和条件。本应用程序允许您使用 GitHub 账户登录并同步您的数据。
 

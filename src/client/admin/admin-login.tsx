@@ -71,7 +71,7 @@ export default function AdminLogin (): JSX.Element {
     <div className='wrap'>
       <div className='pd3y'>
         <img
-          src='https://electerm.html5beta.com/electerm.png'
+          src='https://electerm.org/electerm.png'
           alt=''
         />
         <p className='pd1y'>

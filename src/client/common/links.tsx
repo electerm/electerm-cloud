@@ -3,12 +3,16 @@ import React from 'react'
 export default function Links (): JSX.Element {
   const links = [
     {
-      url: 'https://electerm.html5beta.com',
+      url: '/',
       title: 'Home Page'
     },
     {
-      url: 'https://github.com/electerm/electerm',
-      title: 'GitHub'
+      url: 'https://electerm.org',
+      title: 'electerm.org'
+    },
+    {
+      url: 'https://cloud.electerm.org',
+      title: 'electerm online'
     },
     {
       url: 'https://github.com/electerm/electerm-web',
@@ -43,7 +47,7 @@ export default function Links (): JSX.Element {
       title: 'Discussion'
     },
     {
-      url: 'https://electerm.html5beta.com/sponsor-electerm.html',
+      url: 'https://electerm.org/sponsor-electerm.html',
       title: 'Sponsor Electerm'
     }
   ]
