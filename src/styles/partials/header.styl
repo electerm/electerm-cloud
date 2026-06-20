@@ -1,0 +1,90 @@
+// Header styles
+
+.site-header
+  background $color-bg
+  border-bottom 1px solid $color-border
+  position sticky
+  top 0
+  z-index 100
+  backdrop-filter blur(8px)
+  background rgba(255, 255, 255, 0.95)
+
+.header-inner
+  max-width $max-width
+  margin 0 auto
+  padding 0 $spacing-unit * 3
+  display flex
+  align-items center
+  height 56px
+  gap $spacing-unit * 3
+
+.header-logo
+  display flex
+  align-items center
+  gap $spacing-unit
+  text-decoration none
+  color $color-text
+  font-weight 600
+  font-size 1.1rem
+  flex-shrink 0
+
+  &:hover
+    text-decoration none
+    color $color-text
+
+.header-logo-img
+  height 32px
+
+.header-logo-text
+  display flex
+  align-items baseline
+
+  sup
+    font-size 0.65em
+    color $color-primary
+    margin-left 2px
+    font-weight 400
+
+.header-nav
+  display flex
+  align-items center
+  gap $spacing-unit * 2.5
+  flex 1
+
+.header-link
+  color $color-text-light
+  font-size 0.9rem
+  white-space nowrap
+  transition color 0.2s
+
+  &:hover
+    color $color-primary
+    text-decoration none
+
+.header-lang
+  margin-left auto
+  flex-shrink 0
+
+.lang-link
+  font-size 0.85rem
+  color $color-text-lighter
+  padding ($spacing-unit * 0.5) $spacing-unit
+  border 1px solid $color-border
+  border-radius 4px
+  transition all 0.2s
+
+  &:hover
+    color $color-primary
+    border-color $color-primary
+    text-decoration none
+
+@media (max-width: 640px)
+  .header-inner
+    padding 0 $spacing-unit * 1.5
+    gap $spacing-unit
+
+  .header-nav
+    gap $spacing-unit * 1.5
+
+  .header-link
+    font-size 0.8rem

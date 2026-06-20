@@ -1,0 +1,74 @@
+// Footer styles
+
+.site-footer
+  background $color-bg-light
+  border-top 1px solid $color-border
+  margin-top auto
+
+.footer-inner
+  max-width $max-width
+  margin 0 auto
+  padding $spacing-unit * 5 $spacing-unit * 3 $spacing-unit * 3
+
+.footer-sections
+  display grid
+  grid-template-columns repeat(auto-fit, minmax(180px, 1fr))
+  gap $spacing-unit * 4
+  margin-bottom $spacing-unit * 4
+
+.footer-section-title
+  font-size 0.9rem
+  font-weight 600
+  color $color-text
+  margin-bottom $spacing-unit * 1.5
+  text-transform uppercase
+  letter-spacing 0.5px
+
+.footer-links
+  li
+    margin-bottom $spacing-unit
+
+  a
+    color $color-text-light
+    font-size 0.875rem
+    transition color 0.2s
+
+    &:hover
+      color $color-primary
+      text-decoration none
+
+.footer-bottom
+  border-top 1px solid $color-border
+  padding-top $spacing-unit * 2
+  display flex
+  align-items center
+  justify-content space-between
+  flex-wrap wrap
+  gap $spacing-unit
+
+.footer-copy
+  font-size 0.8rem
+  color $color-text-lighter
+
+.footer-legal
+  display flex
+  align-items center
+  gap $spacing-unit
+  font-size 0.8rem
+
+  a
+    color $color-text-lighter
+
+    &:hover
+      color $color-primary
+
+.footer-sep
+  color $color-border
+
+@media (max-width: 640px)
+  .footer-sections
+    grid-template-columns 1fr 1fr
+
+  .footer-bottom
+    flex-direction column
+    align-items flex-start

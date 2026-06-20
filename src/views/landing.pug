@@ -1,0 +1,34 @@
+// Landing page template
+//- Expected variables: landingData, headerLinks, headerUrls, footerSections, siteMeta, consentText, lang, t, cssUrl, canonicalPath
+doctype html
+html(lang=lang === 'cn' ? 'zh-CN' : 'en')
+  head
+    include partials/head
+  body
+    include partials/header
+
+    main.landing-main
+      //- Hero Section
+      section.hero
+        .hero-inner
+          .hero-logo
+            img.hero-logo-img(src='https://electerm.org/electerm.png' alt='electerm' height='120')
+            span.hero-cloud= t(landingData.hero.title)
+          h1.hero-title= t(landingData.hero.subtitle)
+          p.hero-desc= t(landingData.hero.description)
+          .hero-actions
+            a.hero-cta(href='/app')= t(landingData.hero.cta)
+
+      //- Features Section
+      section.features
+        .features-inner
+          h2.section-title= t(landingData.features.title)
+          .features-grid
+            each item in landingData.features.items
+              .feature-card
+                .feature-icon= item.icon
+                h3.feature-title= t(item.title)
+                p.feature-desc= t(item.desc)
+
+    include partials/footer
+    include partials/consent

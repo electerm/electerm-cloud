@@ -1,0 +1,81 @@
+// Cookie consent styles
+
+.cookie-consent
+  position fixed
+  bottom 0
+  left 0
+  right 0
+  background $color-bg
+  border-top 1px solid $color-border
+  box-shadow 0 -4px 12px rgba(0, 0, 0, 0.08)
+  z-index 1000
+  padding $spacing-unit * 2 0
+
+.consent-inner
+  max-width $max-width
+  margin 0 auto
+  padding 0 $spacing-unit * 3
+  display flex
+  align-items center
+  gap $spacing-unit * 3
+  flex-wrap wrap
+
+.consent-text
+  flex 1
+  min-width 200px
+  font-size 0.875rem
+  color $color-text-light
+  line-height 1.5
+
+.consent-links
+  flex-shrink 0
+
+  a
+    font-size 0.85rem
+    color $color-primary
+
+.consent-actions
+  display flex
+  gap $spacing-unit
+  flex-shrink 0
+
+.consent-btn
+  padding $spacing-unit $spacing-unit * 2.5
+  border 1px solid $color-border
+  border-radius 4px
+  font-size 0.85rem
+  cursor pointer
+  transition all 0.2s
+  background $color-bg
+  color $color-text
+
+  &:hover
+    border-color $color-primary
+
+.consent-accept
+  background $color-primary
+  color #fff
+  border-color $color-primary
+
+  &:hover
+    background $color-primary-dark
+    border-color $color-primary-dark
+
+.consent-decline
+  background transparent
+  color $color-text-light
+
+  &:hover
+    background $color-bg-light
+
+@media (max-width: 640px)
+  .consent-inner
+    flex-direction column
+    align-items flex-start
+    gap $spacing-unit * 1.5
+
+  .consent-actions
+    width 100%
+
+    .consent-btn
+      flex 1

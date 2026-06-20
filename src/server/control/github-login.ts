@@ -5,10 +5,7 @@ import { User } from '../models/user-model'
 import { AdminUser } from '../models/admin-user-model'
 import { createToken } from './token'
 import { createData } from './data-control'
-import { SocksProxyAgent } from 'socks-proxy-agent'
 import { updateStatics } from './statics'
-
-axios.defaults.proxy = false
 
 interface GitHubUser {
   id: string
@@ -22,25 +19,13 @@ const clientId = process.env.CLIENT_ID
 const secret = process.env.CLIENT_SECRET
 const adminLogin = process.env.ADMIN_GITHUB_LOGIN
 
-function extendOptions (): undefined | { httpsAgent: any } {
-  const proxy = process.env.PROXY ?? false
-  if (proxy === false) {
-    return
-  }
-  const proxyStr = 'socks5://127.0.0.1:1080' // Replace with your SOCKS5 proxy details
-  // const httpAgent = new SocksProxyAgent(proxyStr)
-  const httpsAgent = new SocksProxyAgent(proxyStr)
-  return { httpsAgent }
-}
-
 async function getGitHubAccessToken (code: string): Promise<string> {
   const response = await axios.post('https://github.com/login/oauth/access_token', {
     client_id: clientId,
     client_secret: secret,
     code
   }, {
-    headers: { Accept: 'application/json' },
-    ...extendOptions()
+    headers: { Accept: 'application/json' }
   })
   return response.data.access_token
 }

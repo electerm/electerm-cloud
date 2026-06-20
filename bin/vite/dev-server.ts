@@ -1,13 +1,28 @@
 import logger from 'morgan'
 import { resolve } from 'path'
+import { readFileSync } from 'fs'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
+import stylus from 'stylus'
 import conf from './conf'
 import route from './route'
 
+// Import data for static pages
+import {
+  landingData,
+  privacyData,
+  agreementData,
+  headerLinks,
+  headerUrls,
+  footerSections,
+  siteMeta,
+  consentText
+} from '../../src/data'
+
 const env = process.env
 const cwd = process.cwd()
-const viewPath = resolve(cwd, 'src/server/views')
+const viewPath = resolve(cwd, 'src/views')
+const staticPath = resolve(cwd, 'src/static')
 const devPort: number = env.SERVER_DEV_PORT != null && Number(env.SERVER_DEV_PORT) !== 0 ? Number(env.SERVER_DEV_PORT) : 5678
 const host: string = env.SERVER_HOST ?? '127.0.0.1'
 const h: string = `http://${host}:${devPort}`
@@ -19,7 +34,102 @@ declare global {
   var viteInst: any
 }
 
-function handleIndex (req: express.Request, res: express.Response): void {
+interface I18nText {
+  en: string
+  cn: string
+  [key: string]: string
+}
+
+// Helper: get lang from query or default to 'en'
+function getLang (req: express.Request): string {
+  const q = req.query.lang
+  if (q === 'cn' || q === 'en') return q as string
+  return 'en'
+}
+
+// Helper: translate function for pug templates
+function t (lang: string) {
+  return function (obj: I18nText | undefined): string {
+    if (!obj) return ''
+    return obj[lang] ?? obj.en ?? ''
+  }
+}
+
+// Common template data
+function getCommonData (req: express.Request, cssUrl: string, canonicalPath: string) {
+  const lang = getLang(req)
+  return {
+    lang,
+    t: t(lang),
+    headerLinks,
+    headerUrls,
+    footerSections,
+    siteMeta,
+    consentText,
+    cssUrl,
+    canonicalPath,
+    canonicalUrl: siteMeta.baseUrl + canonicalPath,
+    currentPath: canonicalPath
+  }
+}
+
+// Compile Stylus to CSS
+function compileMainCss (): string {
+  const stylPath = resolve(cwd, 'src/styles/main.styl')
+  const stylContent = readFileSync(stylPath, 'utf8')
+  let css = ''
+  stylus(stylContent)
+    .set('filename', stylPath)
+    .set('paths', [resolve(cwd, 'src/styles/partials')])
+    .set('compress', true)
+    .render((err, result) => {
+      if (err) throw err
+      css = result
+    })
+  return css
+}
+
+// Landing page handler
+function handleLanding (req: express.Request, res: express.Response): void {
+  const lang = getLang(req)
+  const common = getCommonData(req, '/css/main.css', '/')
+  res.render('landing', {
+    ...common,
+    landingData,
+    title: (landingData.meta.title as I18nText)[lang] ?? landingData.meta.title.en,
+    description: (landingData.meta.description as I18nText)[lang] ?? landingData.meta.description.en,
+    keywords: (landingData.meta.keywords as I18nText)[lang] ?? landingData.meta.keywords.en
+  })
+}
+
+// Privacy page handler
+function handlePrivacy (req: express.Request, res: express.Response): void {
+  const lang = getLang(req)
+  const common = getCommonData(req, '/css/main.css', '/privacy')
+  res.render('privacy', {
+    ...common,
+    privacyData,
+    title: (privacyData.meta.title as I18nText)[lang] ?? privacyData.meta.title.en,
+    description: (privacyData.meta.description as I18nText)[lang] ?? privacyData.meta.description.en,
+    keywords: ''
+  })
+}
+
+// Agreement page handler (static)
+function handleAgreement (req: express.Request, res: express.Response): void {
+  const lang = getLang(req)
+  const common = getCommonData(req, '/css/main.css', '/agreement')
+  res.render('agreement', {
+    ...common,
+    agreementData,
+    title: (agreementData.meta.title as I18nText)[lang] ?? agreementData.meta.title.en,
+    description: (agreementData.meta.description as I18nText)[lang] ?? agreementData.meta.description.en,
+    keywords: ''
+  })
+}
+
+// App page handler (moved from /)
+function handleApp (req: express.Request, res: express.Response): void {
   res.render('index', {
     dev: true,
     cssUrl: '/app.bundle.css',
@@ -31,6 +141,7 @@ function handleIndex (req: express.Request, res: express.Response): void {
   })
 }
 
+// Admin page handler
 function handleAdmin (req: express.Request, res: express.Response): void {
   res.render('admin', {
     dev: true,
@@ -40,17 +151,6 @@ function handleAdmin (req: express.Request, res: express.Response): void {
     desc: 'electerm cloud: sync your electerm data to cloud',
     keywords: 'electerm, electerm-cloud',
     siteName: 'electerm cloud'
-  })
-}
-
-function handleAgreement (req: express.Request, res: express.Response): void {
-  res.render('agreement', {
-    dev: true,
-    cssUrl: '/agreement.bundle.css',
-    jsUrl: '/src/client/entry/agreement.tsx',
-    desc: 'electerm cloud agreement',
-    keywords: 'electerm, electerm-cloud',
-    siteName: 'electerm cloud agreement'
   })
 }
 
@@ -72,10 +172,45 @@ async function createServer (): Promise<void> {
   app.set('views', viewPath)
   app.set('view engine', 'pug')
 
-  app.get('/', handleIndex)
-  app.get('/admin', handleAdmin)
+  // Static files from src/static
+  app.use('/favicon.ico', express.static(resolve(staticPath, 'favicon.ico')))
+  app.use('/favicon-32x32.png', express.static(resolve(staticPath, 'favicon-32x32.png')))
+  app.use('/favicon-16x16.png', express.static(resolve(staticPath, 'favicon-16x16.png')))
+  app.use('/apple-touch-icon.png', express.static(resolve(staticPath, 'apple-touch-icon.png')))
+  app.get('/robots.txt', (_req, res) => {
+    res.type('text/plain')
+    res.sendFile(resolve(staticPath, 'robots.txt'))
+  })
+  app.get('/ai.txt', (_req, res) => {
+    res.type('text/plain')
+    res.sendFile(resolve(staticPath, 'ai.txt'))
+  })
+
+  // Compiled SCSS endpoint for static pages
+  app.get('/css/main.css', (_req, res) => {
+    try {
+      const css = compileMainCss()
+      res.type('text/css')
+      res.send(css)
+    } catch (err) {
+      console.error('SCSS compilation error:', err)
+      res.status(500).send('CSS compilation error')
+    }
+  })
+
+  // Static page routes
+  app.get('/', handleLanding)
+  app.get('/privacy', handlePrivacy)
   app.get('/agreement', handleAgreement)
+
+  // React app routes
+  app.get('/app', handleApp)
+  app.get('/admin', handleAdmin)
+
+  // API routes
   route(app)
+
+  // Vite middleware (HMR, source serving)
   app.use(vite.middlewares)
 
   app.listen(devPort, host, () => {

@@ -1,0 +1,18 @@
+// Footer partial
+//- Expected variables: footerSections, siteMeta, lang, t (translate function)
+footer.site-footer
+  .footer-inner
+    .footer-sections
+      each section in footerSections
+        .footer-section
+          h4.footer-section-title= t(section.title)
+          ul.footer-links
+            each link in section.links
+              li
+                a(href=link.url target='_blank' rel='noopener noreferrer')= t(link.title)
+    .footer-bottom
+      .footer-copy= siteMeta.copyright
+      .footer-legal
+        a(href='/privacy?lang=' + lang)= lang === 'cn' ? '隐私政策' : 'Privacy Policy'
+        span.footer-sep |
+        a(href='/agreement?lang=' + lang)= lang === 'cn' ? '用户协议' : 'User Agreement'

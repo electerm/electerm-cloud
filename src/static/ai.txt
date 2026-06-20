@@ -1,0 +1,16 @@
+# AI Usage Policy for Electerm Cloud
+
+## About
+Electerm Cloud (sync.electerm.org) is a free data sync service for electerm terminal users.
+
+## Allowed
+- Informational queries about the service
+- Help finding documentation or support resources
+
+## Disallowed
+- Automated account creation
+- Data scraping of user content
+- Automated API access without authorization
+
+## Contact
+For questions about AI usage, visit: https://github.com/electerm/electerm/discussions

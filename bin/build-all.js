@@ -5,10 +5,10 @@ const { cwd, env } = require('./common.js')
 const { mkdirSync } = require('fs')
 
 async function main () {
+  // Build /app page (React app, moved from /)
   const from = resolve(cwd, 'src/server/views/index.pug')
-  const to = resolve(cwd, 'public/index.html')
-  const cid = env.CLIENT_ID_PROD
-  console.log('cid, cid', cid)
+  const to = resolve(cwd, 'public/app/index.html')
+  mkdirSync(resolve(cwd, 'public/app'), { recursive: true })
 
   await buildPug(from, to, {
     dev: false,
@@ -19,7 +19,9 @@ async function main () {
     keywords: 'electerm, electerm-cloud',
     siteName: 'electerm cloud'
   })
+  console.log('  ✓ public/app/index.html')
 
+  // Build /admin page
   const from1 = resolve(cwd, 'src/server/views/admin.pug')
   const to1 = resolve(cwd, 'public/admin/index.html')
   mkdirSync(
@@ -36,22 +38,13 @@ async function main () {
     keywords: 'electerm, electerm-cloud',
     siteName: 'electerm cloud admin'
   })
+  console.log('  ✓ public/admin/index.html')
 
-  const from2 = resolve(cwd, 'src/server/views/agreement.pug')
-  const to2 = resolve(cwd, 'public/agreement/index.html')
-  mkdirSync(
-    resolve(cwd, 'public/agreement'),
-    { recursive: true }
-  )
-
-  await buildPug(from2, to2, {
-    dev: false,
-    cssUrl: '/css/style.css',
-    jsUrl: '/js/agreement.bundle.js',
-    desc: 'electerm cloud agreement: sync your electerm data to cloud',
-    keywords: 'electerm, electerm-cloud',
-    siteName: 'electerm cloud agreement'
-  })
+  // Also keep a redirect at old root for backwards compatibility
+  // This is handled by vercel.json rewrites instead
 }
 
-main()
+main().catch(err => {
+  console.error('Build failed:', err)
+  process.exit(1)
+})

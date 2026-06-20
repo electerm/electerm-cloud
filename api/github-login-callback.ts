@@ -34,7 +34,7 @@ export default async function githubLogin (req: VercelRequest, res: VercelRespon
   }
   const token = sign((user as User).id)
   const tokenName = isAdmin ? 'adminToken' : 'token'
-  const redirectUrl = isAdmin ? '/admin' : '/'
+  const redirectUrl = isAdmin ? '/admin' : '/app'
   const html = `
 <!DOCTYPE html>
 <html>

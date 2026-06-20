@@ -1,0 +1,18 @@
+// Header partial - navigation
+//- Expected variables: headerLinks, headerUrls, lang, t (translate function), currentPath
+header.site-header
+  .header-inner
+    a.header-logo(href='/' title='Electerm Cloud')
+      img.header-logo-img(src='https://electerm.org/electerm.png' alt='electerm' height='32')
+      span.header-logo-text
+        sup cloud
+    nav.header-nav
+      a.header-link(href=headerUrls.desktop target='_blank' rel='noopener noreferrer')= t(headerLinks.desktop)
+      a.header-link(href=headerUrls.online target='_blank' rel='noopener noreferrer')= t(headerLinks.online)
+      a.header-link(href=headerUrls.github target='_blank' rel='noopener noreferrer')= t(headerLinks.github)
+    .header-lang
+      - var path = currentPath || '/'
+      if lang === 'en'
+        a.lang-link(href=path + '?lang=cn') 中文
+      else
+        a.lang-link(href=path + '?lang=en') English

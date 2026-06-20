@@ -1,0 +1,21 @@
+// Agreement page template
+//- Expected variables: agreementData, headerLinks, headerUrls, footerSections, siteMeta, consentText, lang, t, cssUrl, canonicalPath
+doctype html
+html(lang=lang === 'cn' ? 'zh-CN' : 'en')
+  head
+    include partials/head
+  body
+    include partials/header
+
+    main.static-main
+      .static-inner
+        h1.static-title= t(agreementData.content.title)
+        p.static-updated= t(agreementData.content.lastUpdated)
+        each section in agreementData.content.sections
+          article.static-section
+            h2.static-section-title= t(section.title)
+            .static-section-body
+              p= t(section.body)
+
+    include partials/footer
+    include partials/consent
