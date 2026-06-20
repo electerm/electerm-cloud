@@ -33,7 +33,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          
+
+      - run: npm config set legacy-peer-deps true
       - name: Install dependencies
         run: npm i
 
