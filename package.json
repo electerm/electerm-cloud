@@ -15,7 +15,7 @@
     "pub": "npm run b && vercel --prod",
     "rm": "rm -rf public/ && mkdir public",
     "c": "tsx -r dotenv/config bin/vite/dev-server.ts",
-    "s": "node bin/test-server.js",
+    "s": "tsx -r dotenv/config bin/test-server.ts",
     "bb": "NODE_ENV=production vite build --config bin/vite/conf.ts",
     "lint": "./node_modules/.bin/ts-standard",
     "fix": "./node_modules/.bin/ts-standard --fix",

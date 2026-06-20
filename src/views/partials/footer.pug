@@ -13,6 +13,8 @@ footer.site-footer
     .footer-bottom
       .footer-copy= siteMeta.copyright
       .footer-legal
-        a(href='/privacy?lang=' + lang)= lang === 'cn' ? '隐私政策' : 'Privacy Policy'
+        - var privacyPath = lang === 'cn' ? '/zh-cn/privacy' : '/privacy'
+        a(href=privacyPath)= lang === 'cn' ? '隐私政策' : 'Privacy Policy'
         span.footer-sep |
-        a(href='/agreement?lang=' + lang)= lang === 'cn' ? '用户协议' : 'User Agreement'
+        - var agreementPath = lang === 'cn' ? '/zh-cn/agreement' : '/agreement'
+        a(href=agreementPath)= lang === 'cn' ? '用户协议' : 'User Agreement'

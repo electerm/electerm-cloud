@@ -2,7 +2,7 @@
 //- Expected variables: headerLinks, headerUrls, lang, t (translate function), currentPath
 header.site-header
   .header-inner
-    a.header-logo(href='/' title='Electerm Cloud')
+    a.header-logo(href=lang === 'cn' ? '/zh-cn' : '/' title='Electerm Cloud')
       img.header-logo-img(src='https://electerm.org/electerm.png' alt='electerm' height='32')
       span.header-logo-text
         sup cloud
@@ -11,8 +11,9 @@ header.site-header
       a.header-link(href=headerUrls.online target='_blank' rel='noopener noreferrer')= t(headerLinks.online)
       a.header-link(href=headerUrls.github target='_blank' rel='noopener noreferrer')= t(headerLinks.github)
     .header-lang
-      - var path = currentPath || '/'
       if lang === 'en'
-        a.lang-link(href=path + '?lang=cn') 中文
+        - var cnPath = currentPath === '/' ? '/zh-cn' : '/zh-cn' + currentPath
+        a.lang-link(href=cnPath) 中文
       else
-        a.lang-link(href=path + '?lang=en') English
+        - var enPath = currentPath.replace('/zh-cn', '') || '/'
+        a.lang-link(href=enPath) English

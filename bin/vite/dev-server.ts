@@ -40,8 +40,9 @@ interface I18nText {
   [key: string]: string
 }
 
-// Helper: get lang from query or default to 'en'
+// Helper: get lang from URL path (/zh-cn prefix) or query string
 function getLang (req: express.Request): string {
+  if (req.path.startsWith('/zh-cn')) return 'cn'
   const q = req.query.lang
   if (q === 'cn' || q === 'en') return q as string
   return 'en'
@@ -92,7 +93,8 @@ function compileMainCss (): string {
 // Landing page handler
 function handleLanding (req: express.Request, res: express.Response): void {
   const lang = getLang(req)
-  const common = getCommonData(req, '/css/main.css', '/')
+  const path = req.path
+  const common = getCommonData(req, '/css/main.css', path)
   res.render('landing', {
     ...common,
     landingData,
@@ -105,7 +107,7 @@ function handleLanding (req: express.Request, res: express.Response): void {
 // Privacy page handler
 function handlePrivacy (req: express.Request, res: express.Response): void {
   const lang = getLang(req)
-  const common = getCommonData(req, '/css/main.css', '/privacy')
+  const common = getCommonData(req, '/css/main.css', req.path)
   res.render('privacy', {
     ...common,
     privacyData,
@@ -115,10 +117,10 @@ function handlePrivacy (req: express.Request, res: express.Response): void {
   })
 }
 
-// Agreement page handler (static)
+// Agreement page handler
 function handleAgreement (req: express.Request, res: express.Response): void {
   const lang = getLang(req)
-  const common = getCommonData(req, '/css/main.css', '/agreement')
+  const common = getCommonData(req, '/css/main.css', req.path)
   res.render('agreement', {
     ...common,
     agreementData,
@@ -198,10 +200,15 @@ async function createServer (): Promise<void> {
     }
   })
 
-  // Static page routes
+  // Static page routes (English)
   app.get('/', handleLanding)
   app.get('/privacy', handlePrivacy)
   app.get('/agreement', handleAgreement)
+
+  // Static page routes (Chinese - /zh-cn prefix)
+  app.get('/zh-cn', handleLanding)
+  app.get('/zh-cn/privacy', handlePrivacy)
+  app.get('/zh-cn/agreement', handleAgreement)
 
   // React app routes
   app.get('/app', handleApp)

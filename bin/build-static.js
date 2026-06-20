@@ -73,14 +73,17 @@ function buildCss () {
 // Build a static page for both en and cn
 // dataKey is the variable name used in pug (e.g., 'landingData')
 // pageData is the actual data object (e.g., landingData)
-async function buildStaticPage (templateName, dataKey, pageData, outDir, canonicalPath) {
+// enOutDir: output dir for English version (e.g., '' for root, 'privacy')
+// cnCanonicalPath: canonical path for Chinese version (e.g., '/zh-cn', '/zh-cn/privacy')
+async function buildStaticPage (templateName, dataKey, pageData, enOutDir, enCanonicalPath, cnCanonicalPath) {
   const from = resolve(cwd, `src/views/${templateName}.pug`)
   const pageMeta = pageData.meta
 
-  // English version (root)
-  const toEn = resolve(cwd, `public/${outDir}/index.html`)
-  mkdirSync(resolve(cwd, `public/${outDir}`), { recursive: true })
-  const commonEn = getCommonData('/css/main.css', canonicalPath)
+  // English version
+  const enDir = enOutDir ? `public/${enOutDir}` : 'public'
+  const toEn = resolve(cwd, `${enDir}/index.html`)
+  mkdirSync(resolve(cwd, enDir), { recursive: true })
+  const commonEn = getCommonData('/css/main.css', enCanonicalPath)
   await buildPug(from, toEn, {
     ...commonEn,
     [dataKey]: pageData,
@@ -88,12 +91,13 @@ async function buildStaticPage (templateName, dataKey, pageData, outDir, canonic
     description: pageMeta.description.en,
     keywords: pageMeta.keywords ? pageMeta.keywords.en : ''
   })
-  console.log(`  ✓ public/${outDir}/index.html (en)`)
+  console.log(`  ✓ ${enDir}/index.html (en)`)
 
-  // Chinese version
-  const toCn = resolve(cwd, `public/${outDir}/cn/index.html`)
-  mkdirSync(resolve(cwd, `public/${outDir}/cn`), { recursive: true })
-  const commonCn = { ...getCommonData('/css/main.css', canonicalPath), lang: 'cn', t: t('cn') }
+  // Chinese version (under /zh-cn/)
+  const cnOutDir = cnCanonicalPath.replace(/^\//, '') // e.g., 'zh-cn', 'zh-cn/privacy'
+  const toCn = resolve(cwd, `public/${cnOutDir}/index.html`)
+  mkdirSync(resolve(cwd, `public/${cnOutDir}`), { recursive: true })
+  const commonCn = { ...getCommonData('/css/main.css', cnCanonicalPath), lang: 'cn', t: t('cn') }
   await buildPug(from, toCn, {
     ...commonCn,
     [dataKey]: pageData,
@@ -101,7 +105,7 @@ async function buildStaticPage (templateName, dataKey, pageData, outDir, canonic
     description: pageMeta.description.cn ?? pageMeta.description.en,
     keywords: pageMeta.keywords ? (pageMeta.keywords.cn ?? pageMeta.keywords.en) : ''
   })
-  console.log(`  ✓ public/${outDir}/cn/index.html (cn)`)
+  console.log(`  ✓ public/${cnOutDir}/index.html (cn)`)
 }
 
 // Generate sitemap.xml
@@ -110,9 +114,9 @@ function buildSitemap () {
     { path: '/', changefreq: 'weekly', priority: '1.0' },
     { path: '/privacy', changefreq: 'monthly', priority: '0.5' },
     { path: '/agreement', changefreq: 'monthly', priority: '0.5' },
-    { path: '/cn/', changefreq: 'weekly', priority: '0.8' },
-    { path: '/privacy/cn/', changefreq: 'monthly', priority: '0.4' },
-    { path: '/agreement/cn/', changefreq: 'monthly', priority: '0.4' }
+    { path: '/zh-cn', changefreq: 'weekly', priority: '0.8' },
+    { path: '/zh-cn/privacy', changefreq: 'monthly', priority: '0.4' },
+    { path: '/zh-cn/agreement', changefreq: 'monthly', priority: '0.4' }
   ]
 
   const urls = pages.map(p => `  <url>
@@ -165,9 +169,9 @@ async function main () {
   buildCss()
 
   // Build static pages
-  await buildStaticPage('landing', 'landingData', landingData, '', '/')
-  await buildStaticPage('privacy', 'privacyData', privacyData, 'privacy', '/privacy')
-  await buildStaticPage('agreement', 'agreementData', agreementData, 'agreement', '/agreement')
+  await buildStaticPage('landing', 'landingData', landingData, '', '/', '/zh-cn')
+  await buildStaticPage('privacy', 'privacyData', privacyData, 'privacy', '/privacy', '/zh-cn/privacy')
+  await buildStaticPage('agreement', 'agreementData', agreementData, 'agreement', '/agreement', '/zh-cn/agreement')
 
   // Generate sitemap
   buildSitemap()
