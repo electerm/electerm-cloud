@@ -21,8 +21,7 @@ const {
   headerLinks,
   headerUrls,
   footerSections,
-  siteMeta,
-  consentText
+  siteMeta
 } = require(dataPath)
 
 // Helper: translate function factory
@@ -43,7 +42,6 @@ function getCommonData (cssUrl, canonicalPath) {
     headerUrls,
     footerSections,
     siteMeta,
-    consentText,
     cssUrl,
     canonicalPath,
     canonicalUrl: siteMeta.baseUrl + canonicalPath,

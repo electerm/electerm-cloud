@@ -1,5 +1,5 @@
 // Landing page template
-//- Expected variables: landingData, headerLinks, headerUrls, footerSections, siteMeta, consentText, lang, t, cssUrl, canonicalPath
+//- Expected variables: landingData, headerLinks, headerUrls, footerSections, siteMeta, lang, t, cssUrl, canonicalPath
 doctype html
 html(lang=lang === 'cn' ? 'zh-CN' : 'en')
   head
@@ -31,4 +31,5 @@ html(lang=lang === 'cn' ? 'zh-CN' : 'en')
                 p.feature-desc= t(item.desc)
 
     include partials/footer
-    include partials/consent
+    include partials/analytics
+    include partials/ethical-ads

@@ -68,36 +68,5 @@ export const siteMeta = {
   domain: 'sync.electerm.org',
   baseUrl: 'https://sync.electerm.org',
   author: 'ZHAO Xudong',
-  copyright: '© 2024 ZHAO Xudong. MIT License.',
-  gaId: 'G-NT5W8GL31W',
-  adsenseId: 'ca-pub-3871790631789822'
+  copyright: '© 2024 ZHAO Xudong. MIT License.'
 }
-
-export const consentText = {
-  message: {
-    en: 'We use cookies and similar technologies for analytics and advertising. By continuing to use this site, you consent to our use of cookies.',
-    cn: '我们使用 Cookie 和类似技术进行分析和广告投放。继续使用本网站即表示您同意我们使用 Cookie。'
-  },
-  accept: {
-    en: 'Accept',
-    cn: '接受'
-  },
-  decline: {
-    en: 'Decline',
-    cn: '拒绝'
-  },
-  learnMore: {
-    en: 'Learn more',
-    cn: '了解更多'
-  }
-}
-
-// EU/EEA + Switzerland + UK country codes that require consent
-export const consentRequiredCountries = new Set([
-  'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
-  'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
-  'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', // EU
-  'IS', 'LI', 'NO', // EEA
-  'CH', // Switzerland
-  'GB' // United Kingdom
-])

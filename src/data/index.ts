@@ -6,6 +6,5 @@ export {
   headerLinks,
   headerUrls,
   footerSections,
-  siteMeta,
-  consentText
+  siteMeta
 } from './common'

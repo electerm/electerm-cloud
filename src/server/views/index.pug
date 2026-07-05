@@ -30,6 +30,63 @@ html
         height: 400px;
         z-index: -1;
       }
+      /* EthicalAds */
+      .ethical-ad-wrapper {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 998;
+        min-height: 56px;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 20px;
+        background: #f5f7fa;
+        border-top: 1px solid #e4e4e4;
+      }
+      .ethical-ad-wrapper.ethical-ad-active {
+        display: flex;
+      }
+      @media (min-width: 1420px) {
+        .ethical-ad-wrapper {
+          min-height: auto;
+          bottom: 24px;
+          left: auto;
+          right: 24px;
+          z-index: 999;
+          padding: 0;
+          border: none;
+          max-width: 300px;
+          background: #fff;
+          border-radius: 10px;
+          box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+        }
+        .ethical-ad-wrapper.ethical-ad-active {
+          display: block;
+        }
+      }
+      @media (max-width: 1419px) {
+        body {
+          padding-bottom: 56px;
+        }
+      }
+      .ethical-ad-desktop {
+        display: none;
+      }
+      @media (min-width: 1420px) {
+        .ethical-ad-desktop {
+          display: block;
+        }
+      }
+      .ethical-ad-mobile {
+        display: block;
+      }
+      @media (min-width: 1420px) {
+        .ethical-ad-mobile {
+          display: none;
+        }
+      }
     - if (!dev)
       link(rel='stylesheet', href=cssUrl)
 
@@ -101,13 +158,88 @@ html
       script(src=jsUrl, type='module')
     - else
       script(src=jsUrl, type='module')
-    script(async=true, src='https://www.googletagmanager.com/gtag/js?id=G-NT5W8GL31W')
+
+    // Google Analytics — loaded directly without consent
+    script.
+      (function(){
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-LCY5SM7M8J';
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-LCY5SM7M8J');
+      })();
+
+    // EthicalAds — fixed corner on desktop, in-footer on mobile
+    #ethical-ad.ethical-ad-wrapper
+      .ethical-ad-desktop(data-ea-publisher="electermorg", data-ea-type="image")
+      .ethical-ad-mobile(data-ea-publisher="electermorg", data-ea-type="text")
 
     script.
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      (function(){
+        // === EthicalAds — load for non-CN visitors ===
+        fetch('/api/country')
+          .then(function(r){ return r.json(); })
+          .then(function(d){ return (d.country || '').toUpperCase(); })
+          .catch(function(){ return null; })
+          .then(function(cc){
+            if (cc === 'CN') return;
+            var adWrapper = document.querySelector('.ethical-ad-wrapper');
+            if (adWrapper) adWrapper.classList.add('ethical-ad-active');
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://media.ethicalads.io/media/client/ethicalads.min.js';
+            document.body.appendChild(s);
+          });
 
-      gtag('config', 'G-NT5W8GL31W');
-
-    script(async=true, src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3871790631789822' crossorigin='anonymous')
+        // === EthicalAds spacing ===
+        var wrapper = document.querySelector('.ethical-ad-wrapper');
+        var footer = document.querySelector('footer.site-footer');
+        if (!wrapper) return;
+        var BP = 1420;
+        function apply() {
+          var h = wrapper.offsetHeight || 0;
+          var vw = window.innerWidth || document.documentElement.clientWidth;
+          if (vw < BP) {
+            document.body.style.paddingBottom = h + 'px';
+            if (footer) {
+              footer.style.paddingBottom = '';
+              footer.style.setProperty('--watermark-height', '0px');
+              footer.style.setProperty('--watermark-bottom', '0px');
+              footer.style.setProperty('--watermark-bg-size', '0px');
+            }
+          } else {
+            document.body.style.paddingBottom = '';
+            if (footer) {
+              if (h > 0) {
+                var ph = (h + 32);
+                var wh = Math.round(ph * 0.6);
+                var wb = Math.round((ph - wh) / 2);
+                var bg = Math.round(ph * 1.2);
+                footer.style.paddingBottom = ph + 'px';
+                footer.style.setProperty('--watermark-height', wh + 'px');
+                footer.style.setProperty('--watermark-bottom', wb + 'px');
+                footer.style.setProperty('--watermark-bg-size', bg + 'px');
+              } else {
+                footer.style.paddingBottom = '';
+                footer.style.setProperty('--watermark-height', '0px');
+                footer.style.setProperty('--watermark-bottom', '0px');
+                footer.style.setProperty('--watermark-bg-size', '0px');
+              }
+            }
+          }
+        }
+        if (window.ResizeObserver) {
+          new ResizeObserver(function(){ apply(); }).observe(wrapper);
+        }
+        var rt = null;
+        window.addEventListener('resize', function(){
+          if (rt) clearTimeout(rt);
+          rt = setTimeout(apply, 100);
+        });
+        apply();
+        setTimeout(apply, 1500);
+        setTimeout(apply, 3000);
+      })();

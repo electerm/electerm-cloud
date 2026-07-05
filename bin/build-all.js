@@ -1,12 +1,12 @@
 require('dotenv').config()
 const { buildPug } = require('./build-bug.js')
 const { resolve } = require('path')
-const { cwd, env } = require('./common.js')
+const { cwd } = require('./common.js')
 const { mkdirSync } = require('fs')
 
 async function main () {
   // Build /app page (React app, moved from /)
-  const from = resolve(cwd, 'src/server/views/index.pug')
+  const from = resolve(cwd, 'src/views/index.pug')
   const to = resolve(cwd, 'public/app/index.html')
   mkdirSync(resolve(cwd, 'public/app'), { recursive: true })
 
@@ -22,7 +22,7 @@ async function main () {
   console.log('  ✓ public/app/index.html')
 
   // Build /admin page
-  const from1 = resolve(cwd, 'src/server/views/admin.pug')
+  const from1 = resolve(cwd, 'src/views/admin.pug')
   const to1 = resolve(cwd, 'public/admin/index.html')
   mkdirSync(
     resolve(cwd, 'public/admin'),

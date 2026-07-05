@@ -1,0 +1,72 @@
+// EthicalAds — fixed corner on desktop, in-footer on mobile
+//- Shown on all pages except /admin
+#ethical-ad.ethical-ad-wrapper
+  .ethical-ad-desktop(data-ea-publisher="electermorg", data-ea-type="image")
+  .ethical-ad-mobile(data-ea-publisher="electermorg", data-ea-type="text")
+
+script.
+  (function(){
+    // === EthicalAds — load for non-CN visitors ===
+    fetch('/api/country')
+      .then(function(r){ return r.json(); })
+      .then(function(d){ return (d.country || '').toUpperCase(); })
+      .catch(function(){ return null; })
+      .then(function(cc){
+        if (cc === 'CN') return;
+        var adWrapper = document.querySelector('.ethical-ad-wrapper');
+        if (adWrapper) adWrapper.classList.add('ethical-ad-active');
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://media.ethicalads.io/media/client/ethicalads.min.js';
+        document.body.appendChild(s);
+      });
+
+    // === EthicalAds spacing: keep the fixed ad bar/card from covering footer content ===
+    var wrapper = document.querySelector('.ethical-ad-wrapper');
+    var footer = document.querySelector('footer.site-footer');
+    if (!wrapper) return;
+    var BP = 1420;
+    function apply() {
+      var h = wrapper.offsetHeight || 0;
+      var vw = window.innerWidth || document.documentElement.clientWidth;
+      if (vw < BP) {
+        document.body.style.paddingBottom = h + 'px';
+        if (footer) {
+          footer.style.paddingBottom = '';
+          footer.style.setProperty('--watermark-height', '0px');
+          footer.style.setProperty('--watermark-bottom', '0px');
+          footer.style.setProperty('--watermark-bg-size', '0px');
+        }
+      } else {
+        document.body.style.paddingBottom = '';
+        if (footer) {
+          if (h > 0) {
+            var ph = (h + 32);
+            var wh = Math.round(ph * 0.6);
+            var wb = Math.round((ph - wh) / 2);
+            var bg = Math.round(ph * 1.2);
+            footer.style.paddingBottom = ph + 'px';
+            footer.style.setProperty('--watermark-height', wh + 'px');
+            footer.style.setProperty('--watermark-bottom', wb + 'px');
+            footer.style.setProperty('--watermark-bg-size', bg + 'px');
+          } else {
+            footer.style.paddingBottom = '';
+            footer.style.setProperty('--watermark-height', '0px');
+            footer.style.setProperty('--watermark-bottom', '0px');
+            footer.style.setProperty('--watermark-bg-size', '0px');
+          }
+        }
+      }
+    }
+    if (window.ResizeObserver) {
+      new ResizeObserver(function(){ apply(); }).observe(wrapper);
+    }
+    var rt = null;
+    window.addEventListener('resize', function(){
+      if (rt) clearTimeout(rt);
+      rt = setTimeout(apply, 100);
+    });
+    apply();
+    setTimeout(apply, 1500);
+    setTimeout(apply, 3000);
+  })();

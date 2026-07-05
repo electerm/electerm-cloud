@@ -15,8 +15,7 @@ import {
   headerLinks,
   headerUrls,
   footerSections,
-  siteMeta,
-  consentText
+  siteMeta
 } from '../../src/data'
 
 const env = process.env
@@ -66,7 +65,6 @@ function getCommonData (req: express.Request, cssUrl: string, canonicalPath: str
     headerUrls,
     footerSections,
     siteMeta,
-    consentText,
     cssUrl,
     canonicalPath,
     canonicalUrl: siteMeta.baseUrl + canonicalPath,

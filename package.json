@@ -12,6 +12,8 @@
     "b2": "npm run bb",
     "bs": "node bin/build-static.js",
     "build": "echo \"ok\"",
+    "db": "./bin/init-local-dynamodb.sh",
+    "db-stop": "./bin/stop-local-dynamodb.sh",
     "pub": "npm run b && vercel --prod",
     "rm": "rm -rf public/ && mkdir public",
     "c": "tsx -r dotenv/config bin/vite/dev-server.ts",

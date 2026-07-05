@@ -43,8 +43,8 @@ export const privacyData = {
       {
         title: { en: 'Third-Party Services', cn: '第三方服务' },
         body: {
-          en: 'We use the following third-party services: GitHub OAuth for authentication; Google Analytics (G-NT5W8GL31W) for anonymous usage analytics; Google AdSense (ca-pub-3871790631789822) for advertising. These services may collect information as described in their respective privacy policies.',
-          cn: '我们使用以下第三方服务：GitHub OAuth 用于身份验证；Google Analytics（G-NT5W8GL31W）用于匿名使用分析；Google AdSense（ca-pub-3871790631789822）用于广告投放。这些服务可能会按照其各自的隐私政策收集信息。'
+          en: 'We use the following third-party services: GitHub OAuth for authentication; Google Analytics (G-LCY5SM7M8J) for anonymous usage analytics; EthicalAds for advertising. These services may collect information as described in their respective privacy policies.',
+          cn: '我们使用以下第三方服务：GitHub OAuth 用于身份验证；Google Analytics（G-LCY5SM7M8J）用于匿名使用分析；EthicalAds 用于广告投放。这些服务可能会按照其各自的隐私政策收集信息。'
         }
       },
       {

@@ -1,0 +1,13 @@
+// Google Analytics — loaded directly without consent banner
+//- GA ID hardcoded as G-LCY5SM7M8J, no data variable needed
+script.
+  (function(){
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-LCY5SM7M8J';
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LCY5SM7M8J');
+  })();
