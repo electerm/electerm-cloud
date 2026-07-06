@@ -35,3 +35,49 @@
     color $color-text-light
     line-height 1.8
     margin-bottom $spacing-unit * 1.5
+
+// 404 page styles
+
+.not-found-main
+  flex 1
+  display flex
+  align-items center
+  justify-content center
+  padding $spacing-unit * 6 0
+
+.not-found-inner
+  text-align center
+  max-width $max-width-narrow
+  margin 0 auto
+  padding 0 $spacing-unit * 3
+
+.not-found-code
+  font-size 6rem
+  font-weight 700
+  color $color-primary
+  line-height 1
+  margin-bottom $spacing-unit * 3
+
+.not-found-title
+  font-size 1.75rem
+  color $color-text
+  margin-bottom $spacing-unit * 2
+
+.not-found-desc
+  font-size 1rem
+  color $color-text-light
+  margin-bottom $spacing-unit * 4
+
+.not-found-link
+  display inline-block
+  padding $spacing-unit * 1.5 $spacing-unit * 4
+  background $color-primary
+  color #fff
+  border-radius 4px
+  font-size 1rem
+  transition background 0.2s
+
+  &:hover
+    background $color-primary-dark
+    color #fff
+    text-decoration none

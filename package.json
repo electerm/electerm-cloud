@@ -41,6 +41,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/node": "^20.19.43",
+    "@types/pug": "^2.0.10",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vercel/node": "^2.15.10",

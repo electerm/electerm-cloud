@@ -1,5 +1,13 @@
 {
   "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/404" }
+  ],
+  "functions": {
+    "api/404.ts": {
+      "includeFiles": "src/views/**"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",

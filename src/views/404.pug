@@ -1,0 +1,19 @@
+// 404 page template
+//- Expected variables: notFoundData, headerLinks, headerUrls, footerSections, siteMeta, lang, t, cssUrl, canonicalPath
+doctype html
+html(lang=lang === 'cn' ? 'zh-CN' : 'en')
+  head
+    include partials/head
+  body
+    include partials/header
+
+    main.not-found-main
+      .not-found-inner
+        .not-found-code 404
+        h1.not-found-title= t(notFoundData.title)
+        p.not-found-desc= t(notFoundData.description)
+        a.not-found-link(href=lang === 'cn' ? '/zh-cn' : '/')= t(notFoundData.backHome)
+
+    include partials/footer
+    include partials/analytics
+    include partials/ethical-ads
