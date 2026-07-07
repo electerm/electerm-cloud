@@ -71,21 +71,9 @@ html
           padding-bottom: 56px;
         }
       }
-      .ethical-ad-desktop {
-        display: none;
-      }
-      @media (min-width: 1420px) {
-        .ethical-ad-desktop {
-          display: block;
-        }
-      }
-      .ethical-ad-mobile {
+      /* Ad unit visibility — always visible; JS controls type/layout */
+      .ethical-ad-unit {
         display: block;
-      }
-      @media (min-width: 1420px) {
-        .ethical-ad-mobile {
-          display: none;
-        }
       }
     - if (!dev)
       link(rel='stylesheet', href=cssUrl)
