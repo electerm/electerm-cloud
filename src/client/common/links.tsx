@@ -23,6 +23,10 @@ export default function Links (): JSX.Element {
       title: 'electerm-web-docker'
     },
     {
+      url: 'https://theme.electerm.org',
+      title: 'electerm theme'
+    },
+    {
       url: 'https://github.com/electerm/electerm-locales',
       title: 'electerm-locales'
     },
