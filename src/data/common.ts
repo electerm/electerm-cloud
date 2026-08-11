@@ -69,5 +69,8 @@ export const siteMeta = {
   domain: 'sync.electerm.org',
   baseUrl: 'https://sync.electerm.org',
   author: 'ZHAO Xudong',
-  copyright: '© 2024 ZHAO Xudong. MIT License.'
+  copyright: '© 2024 ZHAO Xudong. MIT License.',
+  // Ads Network switch. 'ethical' (EthicalAds) is the default network;
+  // set to 'carbon' to serve Carbon Ads site-wide.
+  adProvider: 'carbon'
 }

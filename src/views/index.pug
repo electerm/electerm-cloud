@@ -75,6 +75,42 @@ html
       .ethical-ad-unit {
         display: block;
       }
+      /* Carbon Ads */
+      .carbon-ad-wrapper {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 998;
+        min-height: 56px;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 20px;
+        background: #f5f7fa;
+        border-top: 1px solid #e4e4e4;
+      }
+      .carbon-ad-wrapper.carbon-ad-active {
+        display: flex;
+      }
+      @media (min-width: 1420px) {
+        .carbon-ad-wrapper {
+          min-height: auto;
+          bottom: 24px;
+          left: auto;
+          right: 24px;
+          z-index: 999;
+          padding: 0;
+          border: none;
+          max-width: 300px;
+          background: #fff;
+          border-radius: 10px;
+          box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+        }
+        .carbon-ad-wrapper.carbon-ad-active {
+          display: block;
+        }
+      }
     - if (!dev)
       link(rel='stylesheet', href=cssUrl)
 
@@ -147,4 +183,4 @@ html
     - else
       script(src=jsUrl, type='module')
     include partials/analytics
-    include partials/ethical-ads
+    include partials/ads
