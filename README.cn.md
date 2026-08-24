@@ -93,10 +93,6 @@ electerm-cloud 运行于 [Vercel](https://vercel.com)。`api/` 目录部署为�
 npm run pub        # 等价于：npm run b && vercel --prod
 ```
 
-## 许可证
-
-[MIT](LICENSE)
-
 ## 关于 electerm
 
 开源终端/ssh/telnet/serialport/RDP/VNC/Spice/sftp/ftp客户端(Linux, Mac, Windows, Android, HarmonyOS)。
@@ -120,3 +116,7 @@ npm run pub        # 等价于：npm run b && vercel --prod
 <div>🌐 <strong><a href="https://cloud.electerm.org">electerm 在线版</a></strong> — 公共免费在线 electerm 应用</div>
 <div>🤖 <strong><a href="https://ai.electerm.org">electerm AI</a></strong> — 免费为 electerm 用户提供 AI</div>
 <div>💻 <strong><a href="https://github.com/electerm/electerm-web">electerm-web</a></strong> — 运行于浏览器(支持移动设备)的 web app 版本</div>
+
+## 许可证
+
+[MIT](LICENSE)
