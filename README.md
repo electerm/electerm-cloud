@@ -93,10 +93,6 @@ electerm-cloud runs on [Vercel](https://vercel.com). The `api/` directory is dep
 npm run pub        # equivalent to: npm run b && vercel --prod
 ```
 
-## License
-
-[MIT](LICENSE)
-
 ## About electerm
 
 Open-sourced terminal/ssh/sftp/telnet/serialport/RDP/VNC/Spice/ftp client(Linux, Mac, Windows, Android, HarmonyOS).
@@ -120,3 +116,7 @@ Besides mainstream Windows/macOS/Linux/Android, electerm also supports HarmonyOS
 <div>🌐 <strong><a href="https://cloud.electerm.org">electerm online</a></strong> — Public free online electerm app</div>
 <div>🤖 <strong><a href="https://ai.electerm.org">electerm AI</a></strong> — Free AI for electerm users</div>
 <div>💻 <strong><a href="https://github.com/electerm/electerm-web">electerm-web</a></strong> — Web app version running in browser (including mobile device)</div>
+
+## License
+
+[MIT](LICENSE)
