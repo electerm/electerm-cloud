@@ -8,90 +8,14 @@
 
 # electerm-cloud
 
-[electerm](https://github.com/electerm/electerm) 用户的数据云服务 —— 支撑 [cloud.electerm.org](https://cloud.electerm.org) 的后端与 Web 应用。
+[electerm](https://github.com/electerm/electerm) 用户的数据同步站点。
 
-electerm-cloud 为 electerm 用户提供账号管理、数据同步与 AI 能力，让你的设置、书签与连接历史等数据安全地存储在云端，并可在所有设备间同步访问。
+将你的 electerm 数据（设置、书签、连接历史等）安全地存储在云端并同步，可在所有设备间访问。
 
 ## 功能特性
 
-- **账号与 GitHub 登录** —— 使用 GitHub 账号登录并管理你的云端资料
-- **数据同步** —— 将你的 electerm 同步数据（设置、书签、连接历史等）安全地存储与读取
-- **管理后台** —— 内置管理界面，用于管理用户与站点静态数据
-- **AI 能力** —— 为 electerm 用户提供的 AI 功能（见 `src/static/ai.txt`）
-- **多语言界面** —— 国际化的用户界面
-- **Web 页面** —— 使用 Pug 渲染的首页、协议页与隐私页
-
-## 技术栈
-
-- **TypeScript** —— 主要开发语言
-- **React + Ant Design** —— 前端 UI
-- **Vite** —— 构建工具与开发服务器
-- **Express** —— 本地开发服务器
-- **Vercel Serverless Functions**（`api/`）—— 生产环境后端，部署于 Vercel
-- **DynamoDB**（`dynamoose`）与 **MongoDB**（`mongoose`）—— 数据存储
-- **JSON Web Tokens** —— 身份认证
-- **Pug** —— 服务端页面模板
-- **Stylus** —— CSS 预处理
-
-## 项目结构
-
-```
-api/            Vercel 无服务器函数（sync、user、admin、auth 等）
-src/
-  client/       React 前端（admin、login、me 等）
-  data/         数据处理（agreement、landing、privacy 等）
-  server/       服务端逻辑（control、models、views）
-  static/       静态资源（图标、ai.txt、robots.txt 等）
-  styles/       Stylus 样式
-  views/        Pug 模板（index、landing、agreement、privacy、404）
-bin/            构建与管理脚本、本地 DynamoDB 辅助脚本
-```
-
-## 本地开发
-
-```bash
-# 安装依赖
-npm install
-
-# （可选）启动本地 DynamoDB 用于开发
-npm run db
-
-# 复制示例环境变量文件并填写所需配置
-cp sample.env .env
-
-# 启动 Vercel 开发服务器（无服务器函数）
-npm run d
-
-# 或启动 Vite 开发服务器（前端）
-npm run c
-```
-
-## 环境变量
-
-将 `sample.env` 复制为 `.env` 并填写所需配置：
-
-| 变量 | 说明 |
-|---|---|
-| `CLIENT_ID` / `CLIENT_SECRET` | GitHub OAuth 应用凭据（开发环境） |
-| `CLIENT_ID_PROD` / `CLIENT_SECRET_PROD` | GitHub OAuth 应用凭据（生产环境） |
-| `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_REGION` | DynamoDB 所需的 AWS 凭据与区域 |
-| `DYNAMODB_ENDPOINT_URL` | DynamoDB 端点（本地 DynamoDB 设为 `http://localhost:8000`） |
-| `DYNAMO_TABLE_PREFIX` | DynamoDB 表名前缀 |
-| `JWT_SECRET` | 用于签发认证 JWT 的密钥 |
-| `ADMIN_USER` / `ADMIN_PASS` | 本地管理员凭据 |
-| `ADMIN_USER_PROD` / `ADMIN_PASS_PROD` | 生产环境管理员凭据 |
-| `ADMIN_GITHUB_LOGIN` | 被授予管理员权限的 GitHub 账号 |
-| `ADMIN_INIT_DOMAIN` / `ADMIN_INIT_DOMAIN_PROD` | 管理初始化域名（本地 / 生产） |
-| `TEST_TOKEN` | 自动化测试使用的令牌 |
-
-## 部署
-
-electerm-cloud 运行于 [Vercel](https://vercel.com)。`api/` 目录部署为无服务器函数，前端使用 Vite 构建。
-
-```bash
-# 构建并部署到生产环境
-npm run pub        # 等价于：npm run b && vercel --prod
-```
+- **数据同步** —— 将你的 electerm 同步数据安全存储在云端并读取
+- **账号** —— 登录以管理你的同步数据
 
 ## 关于 electerm
 
