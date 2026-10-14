@@ -11,7 +11,9 @@ export default async function getDataRoute (req: VercelRequest, res: VercelRespo
   const {
     id
   } = req.body
-  if (!user.dataIds.includes(id)) {
+  // exact membership check: dataIds is a comma-joined list, and a substring
+  // matches like "abc" against "xabc,y" would pass an includes() test
+  if (typeof id !== 'string' || !user.dataIds.split(',').includes(id)) {
     res.status(403).send('data id not match')
     return
   }

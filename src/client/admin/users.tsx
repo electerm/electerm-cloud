@@ -29,7 +29,13 @@ export default function Users (props: any): JSX.Element {
         user,
         delUser: props.delUser,
         loading: props.loading,
-        onSelectEdit: props.onSelectEdit
+        onSelectEdit: props.onSelectEdit,
+        tokensUserId: props.tokensUserId,
+        tokens: props.tokens,
+        tokensLoading: props.tokensLoading,
+        getTokens: props.getTokens,
+        delToken: props.delToken,
+        reToken: props.reToken
       }
       return (
         <User

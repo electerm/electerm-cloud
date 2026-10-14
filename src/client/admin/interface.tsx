@@ -9,3 +9,11 @@ export interface UserDef {
   avatarUrl: string
   status: 'active' | 'disabled'
 }
+
+export interface TokenDef {
+  id: string
+  name: string
+  useCount: number
+  lastUseTime: string
+  dataId: string
+}

@@ -34,5 +34,12 @@ If you do not agree with these terms, please do not use this application. By cli
   email: 'Email',
   name: 'Name',
   backToHome: 'Back to Home',
-  download: 'Download'
+  download: 'Download',
+  dangerZone: 'Danger Zone',
+  dangerZoneDesc: 'The following actions are irreversible. Please proceed with caution.',
+  deleteAccount: 'Delete Account',
+  deleteAccountWarn: 'Deleting your account will permanently remove all your data (including access tokens and synced data). This action cannot be undone!',
+  typeToConfirm: 'Type your GitHub username to confirm',
+  confirmInputMismatch: 'GitHub username does not match. Deletion aborted.',
+  accountDeleted: 'Account deleted'
 }

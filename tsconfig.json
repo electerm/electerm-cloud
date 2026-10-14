@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./api/*.ts", "src/client/common/fetch.jsx"],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./api/*.ts", "./tests/**/*.ts", "src/client/common/fetch.jsx"],
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended",
   "extends": "@tsconfig/recommended/tsconfig.json"

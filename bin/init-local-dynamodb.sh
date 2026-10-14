@@ -12,6 +12,22 @@ DYNAMODB_LIB="$DYNAMODB_DIR/DynamoDBLocal_lib"
 
 # Check for Java
 if ! java -version >/dev/null 2>&1; then
+    # Fall back to common Homebrew OpenJDK locations (macOS) when java is not on PATH
+    for CANDIDATE in \
+        /opt/homebrew/opt/openjdk@21/bin \
+        /opt/homebrew/opt/openjdk/bin \
+        /usr/local/opt/openjdk@21/bin \
+        /usr/local/opt/openjdk/bin; do
+        if [ -x "$CANDIDATE/java" ]; then
+            export PATH="$CANDIDATE:$PATH"
+            echo "Using Java at $CANDIDATE/java"
+            break
+        fi
+    done
+fi
+
+# Check for Java
+if ! java -version >/dev/null 2>&1; then
     echo "Error: Java is not properly installed or not in PATH."
     echo "Please install Java 8 or later from https://adoptium.net/ or using Homebrew: 'brew install openjdk'"
     exit 1

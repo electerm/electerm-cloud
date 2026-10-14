@@ -7,7 +7,7 @@ import fetch from '../common/fetch'
 import Links from '../common/links'
 import Footer from '../common/footer'
 import Users from './users'
-import { UserDef } from './interface'
+import { UserDef, TokenDef } from './interface'
 import Logout from '../common/logout'
 import UserInfo from '../common/user-info'
 import Logo from '../common/logo'
@@ -24,6 +24,9 @@ export default function Admin (props: any): JSX.Element {
   const [editingUserId, setEditingUserId] = useState('')
   const [users, setUsers] = useState<UserDef[]>([])
   const [txt, setTxt] = useState('')
+  const [tokensUserId, setTokensUserId] = useState('')
+  const [tokens, setTokens] = useState<TokenDef[]>([])
+  const [tokensLoading, setTokensLoading] = useState(false)
   const {
     user,
     handleLogout
@@ -94,6 +97,54 @@ export default function Admin (props: any): JSX.Element {
       })
   }
 
+  function getTokens (id: string): void {
+    if (tokensUserId === id) {
+      setTokensUserId('')
+      return
+    }
+    setTokensUserId(id)
+    setTokensLoading(true)
+    setTokens([])
+    fetch(`/api/admin-tokens?userId=${id}`, undefined, 'GET')
+      .then((res) => {
+        setTokensLoading(false)
+        setTokens(res.tokens)
+      })
+      .catch(e => {
+        setTokensLoading(false)
+        console.log(e)
+        void message.error('get tokens failed')
+      })
+  }
+
+  function delToken (userId: string, id: string): void {
+    setTokensLoading(true)
+    fetch('/api/admin-tokens', { userId, id }, 'DELETE')
+      .then(() => {
+        setTokensLoading(false)
+        setTokens(tokens.filter(d => d.id !== id))
+      })
+      .catch(e => {
+        setTokensLoading(false)
+        console.log(e)
+        void message.error('del token failed')
+      })
+  }
+
+  function reToken (userId: string, id: string): void {
+    setTokensLoading(true)
+    fetch('/api/admin-tokens', { userId, id }, 'PATCH')
+      .then((res) => {
+        setTokensLoading(false)
+        setTokens(tokens.map(d => d.id === id ? res.token : d))
+      })
+      .catch(e => {
+        setTokensLoading(false)
+        console.log(e)
+        void message.error('regenerate token failed')
+      })
+  }
+
   function onSave (id: string, update: Object): void {
     setEditing(id)
     fetch('/api/user', { id, update }, 'PATCH')
@@ -145,7 +196,13 @@ export default function Admin (props: any): JSX.Element {
     handleSearchUser: searchUser,
     handleGetUsers: getUsers,
     txt,
-    onChangeSearch
+    onChangeSearch,
+    tokensUserId,
+    tokens,
+    tokensLoading,
+    getTokens,
+    delToken,
+    reToken
   }
 
   useEffect(() => {

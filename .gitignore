@@ -134,6 +134,11 @@ dist
 /public
 .DS_Store
 bin/DynamoDBLocal_lib
+bin/LICENSE.txt
+bin/README.txt
+bin/THIRD-PARTY-LICENSES.txt
 dynamodb-local-metadata.json
 shared-local-instance.db
 bin/DynamoDBLocal.jar
+.workbuddy-ai
+.DS_Store

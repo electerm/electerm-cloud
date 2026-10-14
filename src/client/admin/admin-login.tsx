@@ -50,8 +50,14 @@ export default function AdminLogin (): JSX.Element {
   }
 
   function handleLogout (): void {
-    localStorage.removeItem('adminToken')
-    setUser(null)
+    fetch('/api/logout')
+      .catch(e => {
+        console.log(e)
+      })
+      .finally(() => {
+        localStorage.removeItem('adminToken')
+        setUser(null)
+      })
   }
 
   useEffect(() => {

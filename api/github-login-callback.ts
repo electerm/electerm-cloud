@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import jwt from 'jsonwebtoken'
 import { sign } from '../src/server/control/jwt'
+import { generateCsrfToken, setCsrfCookie, setSessionCookie } from '../src/server/control/session'
 import { handleGitHubLogin } from '../src/server/control/github-login'
 import { User } from '../src/server/models/user-model'
 
@@ -32,26 +33,15 @@ export default async function githubLogin (req: VercelRequest, res: VercelRespon
   if (user === false) {
     return
   }
+  // Browser channel: session JWT in an httpOnly cookie (never touches JS),
+  // plus a readable csrf cookie for double-submit on writes. No more inline
+  // script writing the token into localStorage.
   const token = sign((user as User).id)
-  const tokenName = isAdmin ? 'adminToken' : 'token'
+  setSessionCookie(req, res, token)
+  setCsrfCookie(req, res, generateCsrfToken())
   const redirectUrl = isAdmin ? '/admin' : '/app'
-  const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Redirect</title>
-</head>
-<body>
-<div style="text-align: center; padding: 30px 10px;">Loading...</div>
-<script>
-  localStorage.setItem(${JSON.stringify(tokenName)}, ${JSON.stringify(token)});
-  setTimeout(() => {
-    window.location.href = ${JSON.stringify(redirectUrl)}
-  }, 1000)
-</script>
-
-</body>
-</html>
-`
-  res.send(html)
+  res.setHeader('Cache-Control', 'private, no-store')
+  res.status(302)
+  res.setHeader('Location', redirectUrl)
+  res.end()
 }

@@ -38,5 +38,12 @@ export const cn: Lang = {
   email: '电子邮件',
   name: '姓名',
   backToHome: '返回首页',
-  download: '下载'
+  download: '下载',
+  dangerZone: '危险操作区',
+  dangerZoneDesc: '以下操作不可恢复，请谨慎操作。',
+  deleteAccount: '删除账户',
+  deleteAccountWarn: '删除账户将永久删除您的所有数据（包括访问令牌和同步数据），此操作不可恢复！',
+  typeToConfirm: '请输入您的 GitHub 用户名以确认',
+  confirmInputMismatch: 'GitHub 用户名不匹配，无法删除',
+  accountDeleted: '账户已删除'
 }

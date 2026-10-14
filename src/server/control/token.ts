@@ -64,8 +64,15 @@ export async function listTokens (ids: string[]): Promise<Object[]> {
   })
 }
 
+function assertTokenOwner (token: Token | undefined | null, user: User): void {
+  if (token === undefined || token === null || token.userId !== user.id) {
+    throw new Error('Token not found or access denied')
+  }
+}
+
 export async function delToken (id: string, user: User): Promise<void> {
   const token = await TokenModel.get(id)
+  assertTokenOwner(token, user)
   await DataModel.delete(token.dataId)
   const newTokenIds = user.tokenIds.split(',').filter(d => d !== id).join(',')
   const newDataIds = user.dataIds.split(',').filter(d => d !== token.dataId).join(',')
@@ -79,6 +86,7 @@ export async function delToken (id: string, user: User): Promise<void> {
 
 export async function reToken (id: string, user: User): Promise<Object> {
   const token = await TokenModel.get(id)
+  assertTokenOwner(token, user)
   await TokenModel.delete(id)
   const obj = await TokenModel.create({
     id: nanoid(),
@@ -102,7 +110,7 @@ export async function reToken (id: string, user: User): Promise<Object> {
 }
 
 export async function editTokenName (id: string, name: string, user: User): Promise<Object> {
-  if (!user.tokenIds.includes(id)) {
+  if (!user.tokenIds.split(',').includes(id)) {
     throw new Error('Token not found or access denied')
   }
   await TokenModel.update({ id }, {

@@ -42,6 +42,24 @@
 <div>🤖 <strong><a href="https://ai.electerm.org">electerm AI</a></strong> — 免费为 electerm 用户提供 AI</div>
 <div>💻 <strong><a href="https://github.com/electerm/electerm-web">electerm-web</a></strong> — 运行于浏览器(支持移动设备)的 web app 版本</div>
 
+## 本地开发与测试
+
+需要 Node.js 和 Java（DynamoDB Local 依赖 Java）。
+
+```bash
+cp sample.env .env        # 填写 JWT_SECRET、ADMIN_GITHUB_LOGIN、TEST_TOKEN
+npm i
+
+npm run db                # 下载 DynamoDB Local 到 bin/ 并启动（端口 8000）
+npm run ct                # 创建 5 张表（User/AdminUser/Token/Data/Statics）
+npm run seed              # 创建管理员用户、统计计数，以及与 TEST_TOKEN 匹配的测试用户与 token
+
+npm run c                 # 开发服务器 http://127.0.0.1:5678
+npm test                  # jest：单元测试 + 基于本地环境的 e2e 同步测试
+```
+
+常用脚本：`npm run init`（创建管理员用户）、`npm run st`（初始化统计）、`npm run adu`（添加测试用户）、`npm run cl`（清理孤立数据，需 `ALLOW_DESTRUCTIVE=true`）、`npm run cdb`（清空所有表，需 `ALLOW_DESTRUCTIVE=true`）、`npm run db-stop`（停止 DynamoDB Local）。
+
 ## 许可证
 
 [MIT](LICENSE)

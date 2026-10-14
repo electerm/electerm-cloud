@@ -3,10 +3,11 @@ import sync from '../../api/sync'
 import githubLogin from '../../api/github-login-callback'
 import getLoginUrl from '../../api/get-login-url'
 import token from '../../api/token'
-import admin from '../../api/admin'
+import adminTokens from '../../api/admin-tokens'
 import getAdminUser from '../../api/get-admin-user'
 import getUser from '../../api/get-user'
 import user from '../../api/user'
+import logout from '../../api/logout'
 import statics from '../../api/statics'
 import country from '../../api/country'
 import { Request, Response, Application, RequestHandler } from 'express'
@@ -31,9 +32,10 @@ export default function (app: Application): void {
   app.get('/api/get-login-url', convertToExpressHandler(getLoginUrl))
   app.all('/api/user', convertToExpressHandler(user))
   app.all('/api/token', convertToExpressHandler(token))
+  app.all('/api/admin-tokens', convertToExpressHandler(adminTokens))
   app.post('/api/get-user', convertToExpressHandler(getUser))
+  app.post('/api/logout', convertToExpressHandler(logout))
   app.post('/api/token', convertToExpressHandler(token))
-  app.post('/api/admin', convertToExpressHandler(admin))
   app.post('/api/get-admin-user', convertToExpressHandler(getAdminUser))
   app.get('/api/statics', convertToExpressHandler(statics))
   app.get('/api/country', convertToExpressHandler(country))

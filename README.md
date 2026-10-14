@@ -42,6 +42,24 @@ Besides mainstream Windows/macOS/Linux/Android, electerm also supports HarmonyOS
 <div>🤖 <strong><a href="https://ai.electerm.org">electerm AI</a></strong> — Free AI for electerm users</div>
 <div>💻 <strong><a href="https://github.com/electerm/electerm-web">electerm-web</a></strong> — Web app version running in browser (including mobile device)</div>
 
+## Local development & testing
+
+Requires Node.js and Java (for DynamoDB Local).
+
+```bash
+cp sample.env .env        # fill in JWT_SECRET, ADMIN_GITHUB_LOGIN, TEST_TOKEN
+npm i
+
+npm run db                # downloads DynamoDB Local into bin/ and starts it on port 8000
+npm run ct                # creates the 5 tables (User/AdminUser/Token/Data/Statics)
+npm run seed              # creates admin user + statics + a test user/token matching TEST_TOKEN
+
+npm run c                 # dev server on http://127.0.0.1:5678
+npm test                  # jest: unit tests + e2e sync test against the local stack
+```
+
+Useful scripts: `npm run init` (create admin user), `npm run st` (init statics), `npm run adu` (add test users), `npm run cl` (clean orphaned records, needs `ALLOW_DESTRUCTIVE=true`), `npm run cdb` (wipe all tables, needs `ALLOW_DESTRUCTIVE=true`), `npm run db-stop` (stop DynamoDB Local).
+
 ## License
 
 [MIT](LICENSE)

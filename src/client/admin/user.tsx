@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   Avatar,
+  Button,
   Popconfirm,
   List,
   Spin
@@ -11,6 +12,7 @@ import {
 } from '@ant-design/icons'
 
 import { UserDef } from './interface'
+import UserTokens from './user-tokens'
 
 const { Item } = List
 const { Meta } = Item
@@ -40,6 +42,7 @@ export default function Users (props: any): JSX.Element {
   // }
   const githubUrl = `https://github.com/${githubLogin}`
   const loading = props.loading === id
+  const showTokens = props.tokensUserId === id
   const metaProps = {
     avatar: (
       <Avatar src={avatarUrl} />
@@ -59,6 +62,13 @@ export default function Users (props: any): JSX.Element {
           className='mg1l pointer'
           onClick={() => props.onSelectEdit(user)}
         />
+        <Button
+          size='small'
+          className='mg1l'
+          onClick={() => props.getTokens(id)}
+        >
+          Tokens {showTokens ? '▲' : '▼'}
+        </Button>
       </div>
     ),
     description: (
@@ -79,6 +89,16 @@ export default function Users (props: any): JSX.Element {
         <Meta
           {...metaProps}
         />
+        {
+          showTokens && (
+            <UserTokens
+              tokens={props.tokens}
+              loading={props.tokensLoading}
+              delToken={(tokenId: string) => props.delToken(id, tokenId)}
+              reToken={(tokenId: string) => props.reToken(id, tokenId)}
+            />
+          )
+        }
       </Item>
     </Spin>
   )

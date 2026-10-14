@@ -27,7 +27,15 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
     })
     return
   }
-  const tokenId = id !== undefined ? decode(id) : ''
+  let tokenId = ''
+  if (id !== undefined) {
+    try {
+      tokenId = decode(id as string)
+    } catch {
+      res.status(400).send('Invalid token id')
+      return
+    }
+  }
   function handleError (err: Error): void {
     console.log(err)
     res.status(500).send(err.message)
@@ -37,29 +45,35 @@ export default async function token (req: VercelRequest, res: VercelResponse): P
     return
   }
   if (method === 'DELETE') {
-    await delToken(tokenId, user).catch(handleError)
-    res.send({
-      ok: true
-    })
+    await delToken(tokenId, user)
+      .then(() => {
+        res.send({ ok: true })
+      })
+      .catch(handleError)
   } else if (method === 'PATCH') {
     if (name !== undefined) {
-      const r = await editTokenName(tokenId, name, user).catch(handleError)
-      res.send(r)
+      await editTokenName(tokenId, name as string, user)
+        .then(r => {
+          res.send(r)
+        })
+        .catch(handleError)
       return
     }
-    const token = await reToken(tokenId, user).catch(handleError)
-    res.send({
-      token
-    })
+    await reToken(tokenId, user)
+      .then(token => {
+        res.send({ token })
+      })
+      .catch(handleError)
   } else if (method === 'POST') {
     if (tokenLimitExceeded(user)) {
       res.status(403).send('token limit exceeded')
       return
     }
-    const token = await newToken(user, user.id, name).catch(handleError)
-    res.send({
-      token
-    })
+    await newToken(user, user.id, name)
+      .then(token => {
+        res.send({ token })
+      })
+      .catch(handleError)
   } else {
     res.status(404).send('404 not found')
   }

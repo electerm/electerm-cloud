@@ -17,7 +17,9 @@ import { t } from '../locales/lang'
 import './token.styl'
 import {
   CopyOutlined,
+  DeleteOutlined,
   DownloadOutlined,
+  ExclamationCircleOutlined,
   JavaScriptOutlined
 } from '@ant-design/icons'
 import AutoFocusInput from '../common/auto-focus-input'
@@ -54,6 +56,7 @@ function parseNestedJSON (obj: Object | string | null): Object | string | null {
 export default function Me (props: any): JSX.Element {
   const [txt, setTxt] = useState('')
   const tokenNameRef = useRef('')
+  const deleteConfirmRef = useRef('')
   const [loading, setLoading] = useState('')
   const [tokens, setTokens] = useState<TokenDef1[]>([])
   const {
@@ -277,6 +280,59 @@ export default function Me (props: any): JSX.Element {
     void message.success('Data Copied')
   }
 
+  function onChangeDeleteConfirm (e: any): void {
+    deleteConfirmRef.current = e.target.value
+  }
+
+  async function deleteAccount (): Promise<void> {
+    setLoading('delete')
+    try {
+      await fetch('/api/delete-user', undefined, 'DELETE')
+      setLoading('')
+      void message.success(t('accountDeleted'))
+      handleLogout()
+    } catch (e) {
+      setLoading('')
+      console.log(e)
+      void message.error((e as Error).message)
+      throw e
+    }
+  }
+
+  function renderDeleteConfirm (): JSX.Element {
+    return (
+      <div>
+        <p className='color-red'>{t('deleteAccountWarn')}</p>
+        <p>
+          {t('typeToConfirm')}: <b>{user.githubLogin}</b>
+        </p>
+        <AutoFocusInput
+          onChange={onChangeDeleteConfirm}
+          placeholder={user.githubLogin}
+        />
+      </div>
+    )
+  }
+
+  function handleDeleteAccount (): void {
+    deleteConfirmRef.current = ''
+    Modal.confirm({
+      title: t('deleteAccount'),
+      icon: <ExclamationCircleOutlined className='color-red' />,
+      content: renderDeleteConfirm(),
+      okText: t('delete'),
+      okButtonProps: { danger: true },
+      cancelText: t('cancel'),
+      onOk: async () => {
+        if (deleteConfirmRef.current !== user.githubLogin) {
+          void message.error(t('confirmInputMismatch'))
+          throw new Error('mismatch')
+        }
+        return await deleteAccount()
+      }
+    })
+  }
+
   function onEdit (id: string, name: string): void {
     Modal.confirm({
       title: 'Edit token',
@@ -309,6 +365,18 @@ export default function Me (props: any): JSX.Element {
       <UserInfo user={user} />
       <div className='pd2y'>
         <Tokens {...tokensProps} />
+      </div>
+      <div className='danger-zone pd2y'>
+        <h2 className='danger-zone-title'>{t('dangerZone')}</h2>
+        <p className='color-grey'>{t('dangerZoneDesc')}</p>
+        <Button
+          danger
+          icon={<DeleteOutlined />}
+          loading={loading === 'delete'}
+          onClick={handleDeleteAccount}
+        >
+          {t('deleteAccount')}
+        </Button>
       </div>
       <Logo />
       <Links />

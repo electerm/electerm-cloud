@@ -28,15 +28,17 @@ export default async function userHandler (req: VercelRequest, res: VercelRespon
     return
   }
   if (method === 'DELETE') {
-    await delUser(id).catch(handleError)
-    res.send({
-      ok: true
-    })
+    await delUser(id)
+      .then(() => {
+        res.send({ ok: true })
+      })
+      .catch(handleError)
   } else if (method === 'PATCH') {
-    const token = await updateUser(id, update).catch(handleError)
-    res.send({
-      token
-    })
+    await updateUser(id, update)
+      .then(token => {
+        res.send({ token })
+      })
+      .catch(handleError)
   } else {
     res.status(404).send('404 not found')
   }

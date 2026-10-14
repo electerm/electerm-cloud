@@ -52,8 +52,14 @@ export default function Login (): JSX.Element {
   }
 
   function handleLogout (): void {
-    localStorage.removeItem('token')
-    setUser(null)
+    fetch('/api/logout')
+      .catch(e => {
+        console.log(e)
+      })
+      .finally(() => {
+        localStorage.removeItem('token')
+        setUser(null)
+      })
   }
 
   useEffect(() => {
