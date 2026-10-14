@@ -25,7 +25,7 @@ export default function AdminLogin (): JSX.Element {
 
   async function getUser (): Promise<void> {
     setLoading(true)
-    await fetch('/api/get-admin-user')
+    await fetch('/api/admin')
       .then(res => {
         setUser(res.user)
         console.log(res)
@@ -38,7 +38,7 @@ export default function AdminLogin (): JSX.Element {
 
   function handleLogin (): void {
     setLoading(true)
-    window.fetch('/api/get-login-url?isAdmin=true')
+    window.fetch('/api/auth?fn=login-url&isAdmin=true')
       .then(async res => await res.json())
       .then(data => {
         window.location.href = data.loginUrl
@@ -50,7 +50,7 @@ export default function AdminLogin (): JSX.Element {
   }
 
   function handleLogout (): void {
-    fetch('/api/logout')
+    fetch('/api/auth?fn=logout')
       .catch(e => {
         console.log(e)
       })

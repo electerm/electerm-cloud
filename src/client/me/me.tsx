@@ -287,7 +287,7 @@ export default function Me (props: any): JSX.Element {
   async function deleteAccount (): Promise<void> {
     setLoading('delete')
     try {
-      await fetch('/api/delete-user', undefined, 'DELETE')
+      await fetch('/api/me', undefined, 'DELETE')
       setLoading('')
       void message.success(t('accountDeleted'))
       handleLogout()

@@ -1,14 +1,11 @@
 import getData from '../../api/get-data'
 import sync from '../../api/sync'
 import githubLogin from '../../api/github-login-callback'
-import getLoginUrl from '../../api/get-login-url'
 import token from '../../api/token'
-import adminTokens from '../../api/admin-tokens'
-import getAdminUser from '../../api/get-admin-user'
-import getUser from '../../api/get-user'
-import user from '../../api/user'
-import logout from '../../api/logout'
-import statics from '../../api/statics'
+import me from '../../api/me'
+import admin from '../../api/admin'
+import auth from '../../api/auth'
+import getUser from '../../api/user'
 import country from '../../api/country'
 import { Request, Response, Application, RequestHandler } from 'express'
 import { VercelRequest, VercelResponse } from '@vercel/node'
@@ -29,14 +26,10 @@ export default function (app: Application): void {
   app.post('/api/get-data', convertToExpressHandler(getData))
   app.all('/api/sync', convertToExpressHandler(sync))
   app.get('/api/github-login-callback', convertToExpressHandler(githubLogin))
-  app.get('/api/get-login-url', convertToExpressHandler(getLoginUrl))
-  app.all('/api/user', convertToExpressHandler(user))
+  app.all('/api/user', convertToExpressHandler(getUser))
   app.all('/api/token', convertToExpressHandler(token))
-  app.all('/api/admin-tokens', convertToExpressHandler(adminTokens))
-  app.post('/api/get-user', convertToExpressHandler(getUser))
-  app.post('/api/logout', convertToExpressHandler(logout))
-  app.post('/api/token', convertToExpressHandler(token))
-  app.post('/api/get-admin-user', convertToExpressHandler(getAdminUser))
-  app.get('/api/statics', convertToExpressHandler(statics))
+  app.all('/api/me', convertToExpressHandler(me))
+  app.all('/api/admin', convertToExpressHandler(admin))
+  app.all('/api/auth', convertToExpressHandler(auth))
   app.get('/api/country', convertToExpressHandler(country))
 }

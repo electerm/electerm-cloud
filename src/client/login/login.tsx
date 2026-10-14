@@ -28,7 +28,7 @@ export default function Login (): JSX.Element {
 
   async function getUser (): Promise<void> {
     setLoading(true)
-    await fetch('/api/get-user')
+    await fetch('/api/me', undefined, 'GET')
       .then(res => {
         setUser(res.user)
       })
@@ -40,7 +40,7 @@ export default function Login (): JSX.Element {
 
   function handleLogin (): void {
     setLoading(true)
-    window.fetch('/api/get-login-url')
+    window.fetch('/api/auth?fn=login-url')
       .then(async res => await res.json())
       .then(data => {
         window.location.href = data.loginUrl
@@ -52,7 +52,7 @@ export default function Login (): JSX.Element {
   }
 
   function handleLogout (): void {
-    fetch('/api/logout')
+    fetch('/api/auth?fn=logout')
       .catch(e => {
         console.log(e)
       })

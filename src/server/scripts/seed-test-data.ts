@@ -2,7 +2,7 @@
 // Everything is idempotent - safe to re-run.
 //
 // Creates:
-//   - AdminUser  github-<ADMIN_GITHUB_LOGIN>     (for /api/get-admin-user, /api/admin-tokens)
+//   - AdminUser  github-<ADMIN_GITHUB_LOGIN>     (for /api/admin)
 //   - Statics    userCount / tokenCount / tokenUseCount
 //   - User + Data + Token, where the Token id is decoded from the TEST_TOKEN
 //     JWT in .env (so tests/e2e/sync.spec.js can authenticate with it)

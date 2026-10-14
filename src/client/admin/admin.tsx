@@ -53,7 +53,7 @@ export default function Admin (props: any): JSX.Element {
   }
 
   function getStatics (): void {
-    fetch('/api/statics', undefined, 'GET')
+    fetch('/api/admin?fn=statics', undefined, 'GET')
       .then((res) => {
         setStatics(res)
       })
@@ -105,7 +105,7 @@ export default function Admin (props: any): JSX.Element {
     setTokensUserId(id)
     setTokensLoading(true)
     setTokens([])
-    fetch(`/api/admin-tokens?userId=${id}`, undefined, 'GET')
+    fetch(`/api/admin?fn=tokens&userId=${id}`, undefined, 'GET')
       .then((res) => {
         setTokensLoading(false)
         setTokens(res.tokens)
@@ -119,7 +119,7 @@ export default function Admin (props: any): JSX.Element {
 
   function delToken (userId: string, id: string): void {
     setTokensLoading(true)
-    fetch('/api/admin-tokens', { userId, id }, 'DELETE')
+    fetch('/api/admin?fn=tokens', { userId, id }, 'DELETE')
       .then(() => {
         setTokensLoading(false)
         setTokens(tokens.filter(d => d.id !== id))
@@ -133,7 +133,7 @@ export default function Admin (props: any): JSX.Element {
 
   function reToken (userId: string, id: string): void {
     setTokensLoading(true)
-    fetch('/api/admin-tokens', { userId, id }, 'PATCH')
+    fetch('/api/admin?fn=tokens', { userId, id }, 'PATCH')
       .then((res) => {
         setTokensLoading(false)
         setTokens(tokens.map(d => d.id === id ? res.token : d))
