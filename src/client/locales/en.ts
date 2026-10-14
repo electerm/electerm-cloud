@@ -23,6 +23,8 @@ If you do not agree with these terms, please do not use this application. By cli
   delete: 'Delete',
   previewData: 'Preview Data',
   downloadData: 'Download Data',
+  dataEncrypted: 'Part of the data is encrypted',
+  dataEncryptedDesc: 'These files were encrypted in the electerm client (AES-256-GCM) and can only be decrypted there with your sync password: ',
   lastUseTime: 'Last Use Time',
   useCount: 'Use Count',
   accessToken: 'Access Token',

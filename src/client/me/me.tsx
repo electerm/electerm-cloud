@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import {
   Button,
   Modal,
-  message
+  message,
+  Alert
 } from 'antd'
 import fetch from '../common/fetch'
 import downLoadJson from '../common/download'
@@ -26,6 +27,48 @@ import AutoFocusInput from '../common/auto-focus-input'
 
 interface JsonType {
   [key: string]: any
+}
+
+// Marker of the client-side cipher format, see electerm src/app/lib/enc.js:
+// 'gcm:<iv_hex>:<salt_hex>:<authtag_hex>:<ciphertext_hex>'. Sync data carrying
+// this prefix was encrypted in the electerm client before upload and cannot
+// be read here — by design, the server never sees the sync password.
+const GCM_PREFIX = 'gcm:'
+// A full ciphertext is a wall of hex; show a head + length so the user can
+// see the data IS encrypted without rendering hundreds of KB of hex.
+const CIPHER_PREVIEW_LEN = 80
+
+function isEncryptedContent (content: unknown): content is string {
+  return typeof content === 'string' && content.startsWith(GCM_PREFIX)
+}
+
+/**
+ * Turn the stored sync payload into something previewable:
+ * - tolerates non-JSON input (shows it raw instead of throwing)
+ * - collects the file names that hold client-side ciphertext
+ * - shortens long ciphertext values to a head + length marker
+ */
+function buildPreview (text: string): { pretty: string, encryptedFiles: string[] } {
+  let obj: unknown
+  try {
+    obj = JSON.parse(text)
+  } catch (e) {
+    return { pretty: text, encryptedFiles: [] }
+  }
+  const encryptedFiles: string[] = []
+  const files = (obj as JsonType | null | undefined)?.files
+  if (files !== undefined && files !== null && typeof files === 'object' && !Array.isArray(files)) {
+    for (const [name, file] of Object.entries(files as JsonType)) {
+      const content = (file as JsonType | undefined)?.content
+      if (isEncryptedContent(content)) {
+        encryptedFiles.push(name)
+        if (content.length > CIPHER_PREVIEW_LEN) {
+          ;(file as JsonType).content = `${content.slice(0, CIPHER_PREVIEW_LEN)}… (${content.length} chars)`
+        }
+      }
+    }
+  }
+  return { pretty: JSON.stringify(parseNestedJSON(obj as Object), null, 2), encryptedFiles }
 }
 
 function parseNestedJSON (obj: Object | string | null): Object | string | null {
@@ -70,15 +113,29 @@ export default function Me (props: any): JSX.Element {
 
   function onPreview (text: string): void {
     setTxt(text)
-    const prettyStr = JSON.stringify(parseNestedJSON(JSON.parse(text)), null, 2)
+    const { pretty, encryptedFiles } = buildPreview(text)
     Modal.info({
       title: t('previewData'),
       icon: <JavaScriptOutlined />,
       content: (
         <div>
+          {encryptedFiles.length > 0 && (
+            <Alert
+              type='info'
+              showIcon
+              className='mg1b'
+              message={t('dataEncrypted')}
+              description={
+                <span>
+                  {t('dataEncryptedDesc')}
+                  <b>{encryptedFiles.join(', ')}</b>
+                </span>
+              }
+            />
+          )}
           <div className='wordbreak pd1 data-preview-wrap'>
             <pre>
-              {prettyStr}
+              {pretty}
             </pre>
           </div>
           <p>

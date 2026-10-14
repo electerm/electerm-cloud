@@ -23,6 +23,8 @@ export const cn: Lang = {
   delete: '删除',
   previewData: '预览数据',
   downloadData: '下载数据',
+  dataEncrypted: '部分数据已加密',
+  dataEncryptedDesc: '以下文件已在 electerm 客户端加密（AES-256-GCM），只能在客户端使用同步密码解密：',
   lastUseTime: '最后使用时间',
   useCount: '使用次数',
   userForm: '用户表单',

@@ -4,6 +4,13 @@ import { verifyJwt } from '../src/server/control/jwt'
 import { getToken } from '../src/server/control/token'
 import { UserModel } from '../src/server/models/db'
 
+// DynamoDB caps a stored item at 400KB. The electerm client encrypts
+// bookmarks/profiles with aes-256-gcm before upload, which roughly doubles
+// the payload (hex encoding + iv/salt/tag framing), so data that used to fit
+// can now exceed the limit and fail with an opaque 500. Reject early with a
+// clear message instead.
+const MAX_SYNC_PAYLOAD = 350 * 1024
+
 export default async function syncHandler (req: VercelRequest, res: VercelResponse): Promise<void> {
   const {
     method = ''
@@ -33,7 +40,12 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
     return
   }
   if (method === 'PUT') {
-    const data = await updateData(dataId, JSON.stringify(req.body))
+    const payload = JSON.stringify(req.body)
+    if (Buffer.byteLength(payload, 'utf8') > MAX_SYNC_PAYLOAD) {
+      res.status(413).send(`sync data too large, max ${MAX_SYNC_PAYLOAD / 1024}KB`)
+      return
+    }
+    const data = await updateData(dataId, payload)
     res.send(data)
   } else {
     const data = await getData(dataId)

@@ -15,6 +15,7 @@ Store and sync your electerm data (settings, bookmarks, connection history, etc.
 ## Features
 
 - **Data sync** — securely store and retrieve your electerm sync data in the cloud
+- **End-to-end encryption** — optionally set a sync password in electerm; bookmarks and profiles are encrypted with AES-256-GCM in the client before upload, so the server only ever stores ciphertext
 - **Account** — sign in to manage your synced data
 
 ## About electerm
