@@ -4,12 +4,22 @@ import { verifyJwt } from '../src/server/control/jwt'
 import { getToken } from '../src/server/control/token'
 import { UserModel } from '../src/server/models/db'
 
-// DynamoDB caps a stored item at 400KB. The electerm client encrypts
-// bookmarks/profiles with aes-256-gcm before upload, which roughly doubles
-// the payload (hex encoding + iv/salt/tag framing), so data that used to fit
-// can now exceed the limit and fail with an opaque 500. Reject early with a
-// clear message instead.
-const MAX_SYNC_PAYLOAD = 350 * 1024
+// DynamoDB caps a stored item at 400KB. Two layers inflate the payload:
+// the electerm client encrypts bookmarks/profiles with aes-256-gcm before
+// upload (hex framing, ~2x), and the server re-encrypts at rest (base64,
+// ~1.37x). Payloads that used to fit can exceed the limit and fail with an
+// opaque 500, so reject early with a clear message instead. 280KB leaves
+// ~27KB headroom under the 400KB item cap after server-side encoding.
+const MAX_SYNC_PAYLOAD = 280 * 1024
+
+// DynamoDB rejects oversized items with a ValidationException whose message
+// mentions the item size; surface it as a 413 instead of letting it bubble up
+// as a platform 500. Matched on message text only — the error class differs
+// between the raw SDK and dynamoose's wrappers.
+function isItemTooLarge (e: any): boolean {
+  const msg = String(e?.message ?? '')
+  return /item size|maximum allowable|too large/i.test(msg)
+}
 
 export default async function syncHandler (req: VercelRequest, res: VercelResponse): Promise<void> {
   const {
@@ -45,8 +55,16 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
       res.status(413).send(`sync data too large, max ${MAX_SYNC_PAYLOAD / 1024}KB`)
       return
     }
-    const data = await updateData(dataId, payload)
-    res.send(data)
+    try {
+      const data = await updateData(dataId, payload)
+      res.send(data)
+    } catch (e) {
+      if (isItemTooLarge(e)) {
+        res.status(413).send(`sync data too large, max ${MAX_SYNC_PAYLOAD / 1024}KB`)
+        return
+      }
+      throw e
+    }
   } else {
     const data = await getData(dataId)
     res.send(data.data)

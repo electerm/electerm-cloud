@@ -121,7 +121,7 @@ describe('api/sync PUT', () => {
 
   it('accepts a payload just under the limit', async () => {
     mockUpdate.mockResolvedValue('ok')
-    const near = 'x'.repeat(300 * 1024)
+    const near = 'x'.repeat(270 * 1024)
     const res = mockRes()
     await sync(mockReq({
       method: 'PUT',
@@ -129,6 +129,52 @@ describe('api/sync PUT', () => {
     }) as any, res)
     expect(res.statusCode).toBe(0)
     expect(mockUpdate).toHaveBeenCalled()
+  })
+
+  it('accepts the payload that used to fail with an opaque 500', async () => {
+    // production report: client-side gcm password turned bookmarks.json into
+    // ~206KB of hex; with hex server-side encoding the stored item hit ~412KB
+    // and DynamoDB rejected it as a plain 500. Must go through now.
+    mockUpdate.mockResolvedValue('ok')
+    const content = 'gcm:' + 'a1b2c3d4'.repeat(25500)
+    const res = mockRes()
+    await sync(mockReq({
+      method: 'PUT',
+      body: {
+        description: 'sync electerm data',
+        files: {
+          'bookmarks.json': { content },
+          'profiles.json': { content: 'gcm:' + 'e5f6a7b8'.repeat(100) }
+        }
+      }
+    }) as any, res)
+    expect(res.statusCode).toBe(0)
+    expect(res.body).toBe('ok')
+    expect(mockUpdate).toHaveBeenCalled()
+  })
+
+  it('413 instead of 500 when DynamoDB rejects the item as too large', async () => {
+    // real DynamoDB wording, verified against DynamoDB Local
+    const tooLarge: any = new Error('Item size to update has exceeded the maximum allowed size')
+    tooLarge.name = 'ValidationException'
+    mockUpdate.mockRejectedValue(tooLarge)
+    const res = mockRes()
+    await sync(mockReq({
+      method: 'PUT',
+      body: { files: { 'bookmarks.json': { content: 'x' } } }
+    }) as any, res)
+    expect(res.statusCode).toBe(413)
+    expect(res.body).toContain('too large')
+  })
+
+  it('other write errors still propagate', async () => {
+    mockUpdate.mockRejectedValue(new Error('network blip'))
+    await expect(
+      sync(mockReq({
+        method: 'PUT',
+        body: { files: { 'bookmarks.json': { content: 'x' } } }
+      }) as any, mockRes())
+    ).rejects.toThrow('network blip')
   })
 })
 

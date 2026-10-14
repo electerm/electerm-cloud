@@ -167,8 +167,11 @@ async function createServer (): Promise<void> {
   global.viteInst = vite
 
   app.use(logger('tiny'))
-  app.use(express.json())
-  app.use(express.urlencoded({ extended: true }))
+  // Mirror the Vercel production body limit (4.5MB): express.json defaults to
+  // 100kb, which would reject large sync uploads locally with a body-parser
+  // 413 before they ever reach the api/sync size guard.
+  app.use(express.json({ limit: '4.5mb' }))
+  app.use(express.urlencoded({ extended: true, limit: '4.5mb' }))
   app.set('views', viewPath)
   app.set('view engine', 'pug')
 

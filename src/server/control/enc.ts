@@ -5,16 +5,31 @@
  * with the stored ciphertext is detected on read instead of silently
  * decrypting to garbage.
  *
- * Records written by older versions used AES-192-CBC with no MAC. They stay
- * readable: dec() dispatches on the 'g1:' format marker, so existing data
- * needs no re-encryption migration. Note this means rolling back to the old
- * code after a GCM write would mis-read the new records, so deploy dec-side
- * compatibility first.
+ * Encoding matters for size: DynamoDB caps a stored item at 400KB, and sync
+ * payloads are large (the electerm client already gcm-encrypts bookmarks and
+ * profiles before upload, ~2x with hex framing). Hex output on top of that
+ * pushed a 206KB payload to a ~412KB item — over the limit, surfacing as an
+ * opaque 500. New records therefore use base64 (~1.37x) instead of hex (2x).
+ *
+ * Three on-disk formats coexist, dispatched by marker, so existing data
+ * needs no re-encryption migration:
+ *   - 'g2:' base64 aes-256-gcm   (current)
+ *   - 'g1:' hex aes-256-gcm      (written before the base64 switch)
+ *   - no marker, hex aes-192-cbc (legacy, unauthenticated)
+ * Note rolling back to pre-g1 code after a g2 write would mis-read new
+ * records, so deploy dec-side compatibility first.
  */
 
 import crypto from 'crypto'
 
-const gcmMarker = 'g1:'
+const gcmMarker = 'g2:'
+const gcmHexMarker = 'g1:'
+
+// 16-byte auth tag rendered as base64 (24 chars, padded) / hex (32 chars)
+const tagLen: Record<string, number> = {
+  [gcmMarker]: 24,
+  [gcmHexMarker]: 32
+}
 
 async function scryptAsync (password: string, salt: string, keylen: number): Promise<Buffer> {
   return await new Promise((resolve, reject) =>
@@ -35,10 +50,10 @@ export const enc = async function (
 ): Promise<{ encrypted: string, iv: string, salt: string }> {
   const key = await scryptAsync(password, salt, 32)
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv)
-  let encrypted = cipher.update(str, 'utf8', 'hex')
-  encrypted += cipher.final('hex')
-  encrypted += cipher.getAuthTag().toString('hex')
-  // marker + ciphertext + 16-byte auth tag (hex)
+  let encrypted = cipher.update(str, 'utf8', 'base64')
+  encrypted += cipher.final('base64')
+  encrypted += cipher.getAuthTag().toString('base64')
+  // marker + ciphertext + 16-byte auth tag (base64)
   return { encrypted: gcmMarker + encrypted, iv: iv.toString('hex'), salt }
 }
 
@@ -50,15 +65,19 @@ export const dec = async function (
   algorithm: string = 'aes-192-cbc'
 ): Promise<string> {
   const iv = Buffer.from(ivStr, 'hex')
-  if (encrypted.startsWith(gcmMarker)) {
+  const marker = encrypted.startsWith(gcmMarker)
+    ? gcmMarker
+    : encrypted.startsWith(gcmHexMarker) ? gcmHexMarker : ''
+  if (marker !== '') {
     // authenticated format: fail loudly on tampered ciphertext or tag
+    const encoding = marker === gcmMarker ? 'base64' : 'hex'
     const key = await scryptAsync(password, salt, 32)
-    const body = encrypted.slice(gcmMarker.length)
-    const tag = Buffer.from(body.slice(-32), 'hex')
-    const data = body.slice(0, -32)
+    const body = encrypted.slice(marker.length)
+    const tag = Buffer.from(body.slice(-tagLen[marker]), encoding)
+    const data = body.slice(0, -tagLen[marker])
     const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv)
     decipher.setAuthTag(tag)
-    let decrypted = decipher.update(data, 'hex', 'utf8')
+    let decrypted = decipher.update(data, encoding, 'utf8')
     decrypted += decipher.final('utf8')
     return decrypted
   }
