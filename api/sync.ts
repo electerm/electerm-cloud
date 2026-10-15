@@ -3,22 +3,23 @@ import { updateData, getData } from '../src/server/control/data-control'
 import { verifyJwt } from '../src/server/control/jwt'
 import { getToken } from '../src/server/control/token'
 import { UserModel } from '../src/server/models/db'
+import {
+  MAX_SYNC_PAYLOAD,
+  MAX_SYNC_PAYLOAD_KB,
+  SYNC_WARN_RATIO,
+  TOO_LARGE_MSG,
+  isItemTooLarge,
+  isThrottled,
+  payloadBytes,
+  storedItemBytes
+} from '../src/server/control/sync-limits'
 
-// DynamoDB caps a stored item at 400KB. Two layers inflate the payload:
-// the electerm client encrypts bookmarks/profiles with aes-256-gcm before
-// upload (hex framing, ~2x), and the server re-encrypts at rest (base64,
-// ~1.37x). Payloads that used to fit can exceed the limit and fail with an
-// opaque 500, so reject early with a clear message instead. 280KB leaves
-// ~27KB headroom under the 400KB item cap after server-side encoding.
-const MAX_SYNC_PAYLOAD = 280 * 1024
-
-// DynamoDB rejects oversized items with a ValidationException whose message
-// mentions the item size; surface it as a 413 instead of letting it bubble up
-// as a platform 500. Matched on message text only — the error class differs
-// between the raw SDK and dynamoose's wrappers.
-function isItemTooLarge (e: any): boolean {
-  const msg = String(e?.message ?? '')
-  return /item size|maximum allowable|too large/i.test(msg)
+// Published on every response so a client can learn the limit instead of
+// hardcoding it. electerm's own pre-check still carries a copy of the number
+// (it has to warn before it has ever talked to the server), so keep both in
+// step when this changes.
+function publishLimits (res: VercelResponse): void {
+  res.setHeader('X-Sync-Max-KB', String(MAX_SYNC_PAYLOAD_KB))
 }
 
 export default async function syncHandler (req: VercelRequest, res: VercelResponse): Promise<void> {
@@ -45,22 +46,41 @@ export default async function syncHandler (req: VercelRequest, res: VercelRespon
     return
   }
   const { dataId } = token
+  publishLimits(res)
   if (method === 'POST') {
     res.send('test ok')
     return
   }
   if (method === 'PUT') {
     const payload = JSON.stringify(req.body)
-    if (Buffer.byteLength(payload, 'utf8') > MAX_SYNC_PAYLOAD) {
-      res.status(413).send(`sync data too large, max ${MAX_SYNC_PAYLOAD / 1024}KB`)
+    const bytes = payloadBytes(payload)
+    if (bytes > MAX_SYNC_PAYLOAD) {
+      res.status(413).send(TOO_LARGE_MSG)
       return
+    }
+    // Size of the row this will become, known before the write is attempted.
+    // Reported so the client can warn on the *next* sync rather than the user
+    // discovering it as a failure.
+    const itemKB = Math.ceil(storedItemBytes(payload) / 1024)
+    res.setHeader('X-Sync-Item-KB', String(itemKB))
+    if (bytes > MAX_SYNC_PAYLOAD * SYNC_WARN_RATIO) {
+      res.setHeader('X-Sync-Warn', 'payload-near-limit')
     }
     try {
       const data = await updateData(dataId, payload)
       res.send(data)
     } catch (e) {
       if (isItemTooLarge(e)) {
-        res.status(413).send(`sync data too large, max ${MAX_SYNC_PAYLOAD / 1024}KB`)
+        res.status(413).send(TOO_LARGE_MSG)
+        return
+      }
+      if (isThrottled(e)) {
+        // The write itself was fine; the table's provisioned write capacity
+        // was not. Name both numbers so the message is actionable rather than
+        // another anonymous 500 — this is the error users were hitting.
+        res.status(429).send(
+          `sync server busy, stored ${itemKB}KB of ${MAX_SYNC_PAYLOAD_KB}KB max, retry later`
+        )
         return
       }
       throw e

@@ -178,6 +178,121 @@ describe('api/sync PUT', () => {
   })
 })
 
+// A body whose JSON.stringify is exactly `bytes` long, so the cap boundary can
+// be tested without off-by-one guesswork. All ASCII, so bytes === characters.
+function bodyOfBytes (bytes: number) {
+  const prefix = '{"files":{"bookmarks.json":{"content":"'
+  const suffix = '"}}}'
+  return JSON.parse(
+    prefix + 'x'.repeat(bytes - prefix.length - suffix.length) + suffix
+  )
+}
+
+describe('api/sync PUT size accounting', () => {
+  it('accepts a body exactly at the cap, and refuses one byte over', async () => {
+    mockUpdate.mockResolvedValue('ok')
+    const atCap = mockRes()
+    await sync(mockReq({ method: 'PUT', body: bodyOfBytes(280 * 1024) }) as any, atCap)
+    expect(atCap.statusCode).toBe(0)
+    expect(mockUpdate).toHaveBeenCalledTimes(1)
+
+    const over = mockRes()
+    await sync(mockReq({ method: 'PUT', body: bodyOfBytes(280 * 1024 + 1) }) as any, over)
+    expect(over.statusCode).toBe(413)
+    // still only the one successful write
+    expect(mockUpdate).toHaveBeenCalledTimes(1)
+  })
+
+  it('names the max in the refusal', async () => {
+    const res = mockRes()
+    await sync(mockReq({ method: 'PUT', body: bodyOfBytes(300 * 1024) }) as any, res)
+    expect(res.statusCode).toBe(413)
+    expect(res.body).toBe('sync data too large, max 280KB')
+  })
+
+  it('publishes the limit on every response', async () => {
+    mockUpdate.mockResolvedValue('ok')
+    const put = mockRes()
+    await sync(mockReq({ method: 'PUT', body: encryptedSyncPayload() }) as any, put)
+    expect(put.headers['X-Sync-Max-KB']).toBe('280')
+
+    mockGet.mockResolvedValue({ id: 'data-1', data: '{}', userId: 'user-1' })
+    const get = mockRes()
+    await sync(mockReq({ method: 'GET' }) as any, get)
+    expect(get.headers['X-Sync-Max-KB']).toBe('280')
+  })
+
+  it('reports the stored item size, which gzip keeps far below the payload', async () => {
+    mockUpdate.mockResolvedValue('ok')
+    const body = {
+      description: 'sync electerm data',
+      files: {
+        'bookmarks.json': {
+          content: JSON.stringify(
+            Array.from({ length: 400 }, (_, i) => ({
+              id: `bm${i}`,
+              title: `server-${i}`,
+              host: `10.0.${i % 250}.${(i * 7) % 250}`,
+              username: 'deploy',
+              authType: 'password',
+              password: `pw-${i.toString(36)}`,
+              port: 22,
+              type: 'ssh'
+            }))
+          )
+        }
+      }
+    }
+    const res = mockRes()
+    await sync(mockReq({ method: 'PUT', body }) as any, res)
+    expect(res.statusCode).toBe(0)
+    const itemKB = Number(res.headers['X-Sync-Item-KB'])
+    const payloadKB = Math.ceil(Buffer.byteLength(JSON.stringify(body), 'utf8') / 1024)
+    expect(itemKB).toBeGreaterThan(0)
+    // ~67KB of bookmarks becomes a single-digit-KB row, i.e. a single-digit
+    // WCU write. This is the whole point of compressing before storing.
+    expect(itemKB).toBeLessThan(payloadKB / 5)
+    expect(itemKB).toBeLessThan(20)
+    // comfortably under the cap, so no warning
+    expect(res.headers['X-Sync-Warn']).toBeUndefined()
+  })
+
+  it('flags a payload close to the cap', async () => {
+    mockUpdate.mockResolvedValue('ok')
+    const res = mockRes()
+    await sync(mockReq({
+      method: 'PUT',
+      body: bodyOfBytes(Math.floor(280 * 1024 * 0.8) + 1)
+    }) as any, res)
+    expect(res.statusCode).toBe(0)
+    expect(res.headers['X-Sync-Warn']).toBe('payload-near-limit')
+  })
+
+  it('429 with an actionable message when the table is throttled', async () => {
+    // The exact shape from the production Vercel log. Before this mapping it
+    // fell through to `throw e` and reached the client as an opaque 500.
+    const throttle: any = new Error(
+      'The level of configured provisioned throughput for the table was exceeded.'
+    )
+    throttle.name = 'ProvisionedThroughputExceededException'
+    throttle.__type = 'com.amazonaws.dynamodb.v20120810#ProvisionedThroughputExceededException'
+    throttle.ThrottlingReasons = [{
+      reason: 'TableWriteProvisionedThroughputExceeded',
+      resource: 'arn:aws:dynamodb:us-east-1:489011764402:table/ElectermCloudProdData'
+    }]
+    mockUpdate.mockRejectedValue(throttle)
+    const res = mockRes()
+    await sync(mockReq({
+      method: 'PUT',
+      body: { files: { 'bookmarks.json': { content: 'x'.repeat(1024) } } }
+    }) as any, res)
+    expect(res.statusCode).toBe(429)
+    expect(res.body).toContain('retry later')
+    // both numbers, so the message is actionable
+    expect(res.body).toMatch(/stored \d+KB of 280KB max/)
+  })
+})
+
 describe('api/sync GET', () => {
   it('returns the stored data as-is', async () => {
     const stored = JSON.stringify(encryptedSyncPayload())
