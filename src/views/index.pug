@@ -8,10 +8,8 @@ html
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     meta(name='author' content='ZHAO Xudong')
     link(rel='icon' href='https://electerm.org/favicon.ico' type='image/x-icon')
+    include partials/theme-head
     style.
-      body {
-        background: #ffffff;
-      }
       #content-loading {
         text-align: center;
         padding: 30px 10px;
@@ -42,8 +40,8 @@ html
         align-items: center;
         justify-content: center;
         padding: 8px 20px;
-        background: #f5f7fa;
-        border-top: 1px solid #e4e4e4;
+        background: var(--color-bg-light);
+        border-top: 1px solid var(--color-border);
       }
       .ethical-ad-wrapper.ethical-ad-active {
         display: flex;
@@ -58,7 +56,7 @@ html
           padding: 0;
           border: none;
           max-width: 300px;
-          background: #fff;
+          background: var(--color-bg);
           border-radius: 10px;
           box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
         }
@@ -87,8 +85,8 @@ html
         align-items: center;
         justify-content: center;
         padding: 8px 20px;
-        background: #f5f7fa;
-        border-top: 1px solid #e4e4e4;
+        background: var(--color-bg-light);
+        border-top: 1px solid var(--color-border);
       }
       .carbon-ad-wrapper.carbon-ad-active {
         display: flex;
@@ -103,7 +101,7 @@ html
           padding: 0;
           border: none;
           max-width: 300px;
-          background: #fff;
+          background: var(--color-bg);
           border-radius: 10px;
           box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
         }
@@ -115,6 +113,9 @@ html
       link(rel='stylesheet', href=cssUrl)
 
   body
+    .app-toolbar.app-preferences
+      #app-controls
+      include partials/theme-toggle
     #content-loading
       .pd3
         img.iblock(src='https://electerm.org/electerm.png', alt='', height=80)
@@ -173,11 +174,10 @@ html
 
     - if (dev)
       script(type='module').
-        import RefreshRuntime from '/@react-refresh'
-        RefreshRuntime.injectIntoGlobalHook(window)
+        import { injectIntoGlobalHook } from '/@react-refresh'
+        injectIntoGlobalHook(window)
         window.$RefreshReg$ = () => {}
         window.$RefreshSig$ = () => (type) => type
-        window.__vite_plugin_react_preamble_installed__ = true
       script(src='/@vite/client', type='module')
       script(src=jsUrl, type='module')
     - else

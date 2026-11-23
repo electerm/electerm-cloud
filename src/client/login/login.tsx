@@ -11,6 +11,7 @@ import Me from '../me/me'
 import Links from '../common/links'
 import Footer from '../common/footer'
 import LangSelect from '../locales/lang-select'
+import AppControls from '../common/app-controls'
 import Logo from '../common/logo'
 import { t } from '../locales/lang'
 
@@ -77,9 +78,7 @@ export default function Login (): JSX.Element {
   }
   return (
     <div className='wrap'>
-      <div className='pd1y'>
-        <LangSelect />
-      </div>
+      <AppControls><LangSelect /></AppControls>
       <Logo />
       <Spin spinning={loading}>
         <div className='pd3y'>

@@ -10,6 +10,7 @@ header.site-header
       a.header-link(href=headerUrls.desktop target='_blank' rel='noopener noreferrer')= t(headerLinks.desktop)
       a.header-link(href=headerUrls.online target='_blank' rel='noopener noreferrer')= t(headerLinks.online)
       a.header-link(href=headerUrls.github target='_blank' rel='noopener noreferrer')= t(headerLinks.github)
+    include theme-toggle
     .header-lang
       if lang === 'en'
         - var cnPath = currentPath === '/' ? '/zh-cn' : '/zh-cn' + currentPath

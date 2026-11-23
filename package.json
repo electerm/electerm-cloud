@@ -46,7 +46,7 @@
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vercel/node": "^2.15.10",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^6.3.0",
     "antd": "^5.29.3",
     "classnames": "^2.5.1",
     "dotenv": "^16.6.1",

@@ -1,0 +1,9 @@
+meta(name='theme-color' content='#0f172a')
+script.
+  try {
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.dataset.theme = 'light'
+      document.querySelector('meta[name="theme-color"]').content = '#ffffff'
+    }
+  } catch {}
+link(rel='stylesheet' href='/theme.css')

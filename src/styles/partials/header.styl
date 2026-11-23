@@ -7,7 +7,7 @@
   top 0
   z-index 100
   backdrop-filter blur(8px)
-  background rgba(255, 255, 255, 0.95)
+  background var(--color-header)
 
 .header-inner
   max-width $max-width
@@ -88,3 +88,17 @@
 
   .header-link
     font-size 0.8rem
+
+@media (max-width: 540px)
+  .header-inner
+    height auto
+    flex-wrap wrap
+    padding-top 6px
+  .header-nav
+    order 1
+    flex-basis 100%
+    padding-bottom 6px
+  .header-logo
+    margin-right auto
+  .header-lang
+    margin-left 0

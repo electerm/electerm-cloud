@@ -1,0 +1,62 @@
+:root {
+  color-scheme: dark;
+  --color-primary: #60a5fa;
+  --color-primary-dark: #93c5fd;
+  --color-text: #f1f5f9;
+  --color-text-light: #cbd5e1;
+  --color-text-lighter: #94a3b8;
+  --color-bg: #0f172a;
+  --color-bg-light: #1e293b;
+  --color-border: #334155;
+  --color-border-light: #334155;
+  --color-on-primary: #07111f;
+  --color-danger: #fca5a5;
+  --color-danger-bg: #451a22;
+  --color-header: rgba(15,23,42,.92);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-text: #0f172a;
+  --color-text-light: #475569;
+  --color-text-lighter: #64748b;
+  --color-bg: #ffffff;
+  --color-bg-light: #f8fafc;
+  --color-border: #cbd5e1;
+  --color-border-light: #e2e8f0;
+  --color-on-primary: #ffffff;
+  --color-danger: #b91c1c;
+  --color-danger-bg: #fff1f0;
+  --color-header: rgba(255,255,255,.92);
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+:root:not([data-theme="light"]) img[src="https://electerm.org/electerm.png"] {
+  filter: invert(1);
+}
+
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: var(--color-text-light);
+  background: transparent;
+  cursor: pointer;
+}
+
+.theme-toggle:hover { background: var(--color-bg-light); }
+.theme-toggle:focus-visible { outline: 2px solid var(--color-primary); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-icon-moon, [data-theme="light"] .theme-icon-sun { display: none; }
+[data-theme="light"] .theme-icon-moon { display: block; }
