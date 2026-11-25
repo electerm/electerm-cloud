@@ -60,7 +60,8 @@ export const footerSections = {
       { url: 'https://electerm.org', title: { en: 'electerm', cn: 'electerm' } },
       { url: 'https://github.com/electerm/electerm-web', title: { en: 'electerm-web', cn: 'electerm-web' } },
       { url: 'https://github.com/electerm/electerm-web-docker', title: { en: 'electerm-web-docker', cn: 'electerm-web-docker' } },
-      { url: 'https://theme.electerm.org', title: { en: 'electerm theme', cn: 'electerm 主题' } }
+      { url: 'https://theme.electerm.org', title: { en: 'electerm theme', cn: 'electerm 主题' } },
+      { url: 'https://widgets.electerm.org', title: { en: 'electerm widgets', cn: 'electerm widget' } }
     ]
   }
 }
